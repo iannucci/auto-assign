@@ -157,6 +157,34 @@ $E_R$   & \textbf{180}   & 190   & 304   & 304
 
 The cheapest option is $S_L \to E_R$ (or equivalently $E_R \to S_L$) at 180\,m: enter on the left, cross three times as runs alternate, exit on the right. The algorithm never computes this matrix at runtime --- it is precomputed in $O(n)$ time from the sorted address sequence.
 
+\subsubsection{Real Segment Example}
+
+Fig.~\ref{fig:diag-subseg} shows a real segment (Starr King Circle, Fairmeadow) with addresses classified by side. The segment has 19 addresses (8 left, 11 right), length $D = 243$\,m, and 14 runs. The cost matrix yields cheapest traversal $S_R \to E_L = 373$\,m (through-traversal with 13 crossings at $w = 10$\,m: $243 + 13 \times 10 = 373$\,m). The U-turn alternative would cost $2 \times 243 + 10 = 496$\,m --- 33\% more. Despite having 14 runs (dense alternation), zigzag through-traversal wins because the segment is long enough that the backtrack penalty outweighs the crossing cost.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=\columnwidth,
+    height=0.6\columnwidth,
+    xlabel={Longitude},
+    ylabel={Latitude},
+    tick label style={font=\tiny},
+    label style={font=\small},
+    title style={font=\small\bfseries},
+    title={Starr King Circle: Segment with Two Sub-Segments},
+    legend style={at={(0.02,0.98)},anchor=north west,font=\small},
+]
+\addplot[black, very thick, opacity=0.4] table[x=lon,y=lat] {data/diag1-centerline.dat};
+\addplot[only marks, mark=*, mark size=2.5pt, prodblue] table[x=lon,y=lat] {data/diag1-left-addrs.dat};
+\addplot[only marks, mark=triangle*, mark size=2.5pt, unprodred] table[x=lon,y=lat] {data/diag1-right-addrs.dat};
+\legend{Road centerline, Left side (8), Right side (11)}
+\end{axis}
+\end{tikzpicture}
+\caption{Starr King Circle segment (243\,m, 19 addresses). \textcolor{prodblue}{Blue circles} = left-side addresses (8). \textcolor{unprodred}{Red triangles} = right-side addresses (11). Black line = road centerline from OSM. Side classification uses the cross product of the road direction vector and the address displacement vector (Eq.~\ref{eq:side}). The 14 address runs make this a candidate for U-turn, but the cost matrix selects zigzag (373\,m vs.\ 496\,m) because the segment is long enough.}
+\label{fig:diag-subseg}
+\end{figure}
+
 \subsubsection{Zigzag vs.\ U-Turn}
 
 The matrix automatically selects between zigzag (through-traversal with crossings) and U-turn (one side out, cross, other side back). In our dataset of 3,663 segments with addresses on both sides:
@@ -225,7 +253,38 @@ where $|P_k|$ is the address count in partition $k$ and $\beta \approx 1.0$ is t
 
 \subsection{Data}
 
-Segments are extracted from OpenStreetMap via \texttt{osm2pgsql} (Geofabrik California PBF, 1.3\,GB) filtered to Palo Alto ($37.35$--$37.48^\circ$N, $122.05$--$122.20^\circ$W). From 35,912 OSM road ways and 146,957 nodes, we identify 54,854 intersections and build 64,482 segments. Of these, 7,430 have at least one snapped address. Road-network shortest paths are precomputed by Dijkstra within each neighborhood (2--41\,s depending on size).
+Segments are extracted from OpenStreetMap via \texttt{osm2pgsql} (Geofabrik California PBF, 1.3\,GB) filtered to Palo Alto ($37.35$--$37.48^\circ$N, $122.05$--$122.20^\circ$W). From 35,912 OSM road ways and 146,957 nodes, we identify 54,854 intersections and build 64,482 segments. Of these, 7,430 have at least one snapped address. Road-network shortest paths are precomputed by Dijkstra within each neighborhood (2--14\,s depending on size).
+
+\subsubsection{Road-Following Transitions}
+
+Inter-segment transitions --- the \emph{unproductive} component of Eq.~\ref{eq:walk} --- are computed as shortest paths on the road network graph, not as straight-line distances. Fig.~\ref{fig:diag-road} illustrates a transition between two non-adjacent segments in Fairmeadow. The ESW exits Roosevelt Circle and must reach East Meadow Drive; the road-following path traverses 5 road edges through 4 intersections, covering 540\,m. The straight-line (haversine) distance is only 346\,m --- a 56\% underestimate. This difference is typical: road-network distances average 1.3--1.6$\times$ haversine in our data, with the ratio increasing for paths that must navigate around blocks or cul-de-sacs.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=\columnwidth,
+    height=0.65\columnwidth,
+    xlabel={Longitude},
+    ylabel={Latitude},
+    tick label style={font=\tiny},
+    label style={font=\small},
+    title style={font=\small\bfseries},
+    title={Road-Following vs.\ Straight-Line Transition},
+    legend style={at={(0.02,0.02)},anchor=south west,font=\small},
+]
+\addplot[prodblue, very thick, opacity=0.8] table[x=lon,y=lat] {data/diag2b-segA.dat};
+\addplot[prodblue, very thick, opacity=0.8] table[x=lon,y=lat] {data/diag2b-segB.dat};
+\addplot[unprodred, thick] table[x=lon,y=lat] {data/diag2b-road-path.dat};
+\addplot[gray, dashed, thick] table[x=lon,y=lat] {data/diag2b-straight.dat};
+\addplot[only marks, mark=*, mark size=1pt, prodblue] table[x=lon,y=lat] {data/diag2-segA-addrs.dat};
+\addplot[only marks, mark=*, mark size=1pt, prodblue] table[x=lon,y=lat] {data/diag2-segB-addrs.dat};
+\legend{Segments (productive), , Road path (540\,m), Straight line (346\,m)}
+\end{axis}
+\end{tikzpicture}
+\caption{Transition from Roosevelt Circle to East Meadow Drive (Fairmeadow). \textcolor{prodblue}{Blue} = the two address-bearing segments. \textcolor{unprodred}{Red} = actual road-following path (540\,m through 4 intersections). Gray dashed = straight-line distance (346\,m). The road path is 56\% longer because the ESW must navigate around a cul-de-sac. Using haversine distances would undercount this transition by 194\,m, biasing the algorithm toward scattered partitions that incur many such detours.}
+\label{fig:diag-road}
+\end{figure}
 
 %% ==================================================================
 \section{Algorithms}
