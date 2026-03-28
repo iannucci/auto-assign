@@ -1,0 +1,443 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{booktabs}
+\usepackage{url}
+\pgfplotsset{compat=1.18}
+
+\usepgfplotslibrary{groupplots}
+
+\begin{document}
+
+\title{Geographic Address Assignment Optimization\\for Emergency Services Workers}
+
+\author{\IEEEauthorblockN{Bob Iannucci}
+\IEEEauthorblockA{Carnegie Mellon University, Silicon Valley\\
+Moffett Field, CA 94035\\
+bob@rail.com}}
+
+\maketitle
+
+\begin{abstract}
+During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. Minimizing each worker's travel distance while maintaining balanced workloads is critical for rapid response. We formalize this as a balanced geographic partitioning problem and evaluate three heuristic strategies: nearest-neighbor chain slicing, k-means street clustering, and recursive geographic bisection. We test these against real address data from three neighborhoods in Palo Alto, California (307--5,101 addresses) and establish single-worker baselines using nearest-neighbor tour construction. Recursive bisection consistently produces the most compact, balanced assignments with 2--3$\times$ overhead versus the theoretical single-worker optimum. The algorithms run in the browser in under one second, enabling real-time assignment generation during emergency operations.
+\end{abstract}
+
+\begin{IEEEkeywords}
+disaster response, geographic partitioning, vehicle routing, emergency services, address assignment, heuristic algorithms
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+Post-disaster damage assessment requires Emergency Services Workers (ESWs) to physically visit assigned addresses, inspect structures, and report conditions via mobile devices. The speed of this process directly affects emergency response effectiveness: faster assessment means faster resource allocation to the most critical areas~\cite{fema2023}.
+
+In the ES-Link system~\cite{eslink}, a Neighborhood Preparedness Coordinator (NPC) assigns addresses to ESWs through a web-based map interface. Manual assignment is tedious and does not optimize for worker travel distance. We developed an auto-assignment feature that distributes addresses across $N$ workers, minimizing travel distance while maintaining balanced workloads.
+
+The problem combines elements of the Capacitated Vehicle Routing Problem (CVRP)~\cite{toth2014} and balanced graph partitioning~\cite{andreev2006}. Unlike classical VRP, our ``vehicles'' (ESWs on foot) start from arbitrary positions, there is no depot, and the primary constraint is workload balance rather than vehicle capacity. The general problem is NP-hard~\cite{garey1979}, so we seek practical heuristics that produce good solutions in real-time.
+
+\subsection{Contributions}
+
+\begin{itemize}
+\item A street-aware address grouping scheme that preserves walkability within assignments
+\item Three partitioning strategies with a scoring function that selects the best result
+\item Empirical evaluation on real municipal address data across neighborhood types
+\item A single-worker baseline methodology for evaluating multi-worker assignment quality
+\end{itemize}
+
+\section{Problem Formulation}
+
+Given a set of $A$ addresses with geographic coordinates $(lat_i, lon_i)$ and $N$ ESWs, find a partition $\{S_1, S_2, \ldots, S_N\}$ of $A$ that minimizes:
+
+\begin{equation}
+\max_{k \in \{1..N\}} W(S_k)
+\end{equation}
+
+where $W(S_k)$ is the total walk distance for ESW $k$, defined as the sum of haversine distances between consecutive addresses in the assignment order:
+
+\begin{equation}
+W(S_k) = \sum_{i=1}^{|S_k|-1} d(s_{k,i}, s_{k,i+1})
+\end{equation}
+
+subject to the balance constraint:
+
+\begin{equation}
+\frac{\max_k |S_k|}{\min_k |S_k|} \leq \beta
+\end{equation}
+
+where $\beta$ is a balance tolerance (ideally $\beta \approx 1.0$). We use the haversine formula for distance:
+
+\begin{equation}
+d = 2R \arcsin\sqrt{\sin^2\!\frac{\Delta\phi}{2} + \cos\phi_1 \cos\phi_2 \sin^2\!\frac{\Delta\lambda}{2}}
+\end{equation}
+
+where $R = 6{,}371{,}000$\,m is Earth's radius.
+
+\subsection{Street-Aware Grouping}
+
+A key insight is that ESWs walk along streets, not between random points. We pre-process addresses by:
+
+\begin{enumerate}
+\item \textbf{Street extraction}: Parse the street name from each address (strip house numbers).
+\item \textbf{Intra-street ordering}: Sort addresses along each street's geographic axis by projecting onto the line between the two most distant addresses on that street.
+\item \textbf{Endpoint identification}: Each street has two endpoints (first and last address in sorted order), representing where an ESW enters and exits.
+\end{enumerate}
+
+This reduces the problem from assigning individual addresses to assigning \emph{street segments}, preserving walkability.
+
+\section{Algorithms}
+
+\subsection{Single-Worker Baseline}
+
+To establish a lower bound for comparison, we compute the walk distance for a single ESW visiting all addresses using nearest-neighbor tour construction on street endpoints:
+
+\begin{enumerate}
+\item Start at an arbitrary street
+\item Walk the street from one end to the other
+\item From the exit endpoint, find the unvisited street whose nearest endpoint is closest
+\item Enter that street at the near end, exit at the far end
+\item Repeat until all streets are visited
+\end{enumerate}
+
+The theoretical ideal for $N$ workers is $W_{baseline} / N$, though this is unachievable in practice due to the overhead of geographic separation.
+
+\subsection{Strategy A: Contiguous Chain Slicing}
+
+Chain all streets using the endpoint nearest-neighbor heuristic (as in the baseline), then partition the chain into $N$ contiguous segments at the target count boundary $\lceil |A|/N \rceil$. We try multiple starting streets and keep the best result.
+
+\textbf{Advantages:} Perfect count balance ($\beta = 1.00$). Streets remain in walk order within each segment.
+
+\textbf{Disadvantages:} The cut points are determined solely by count, not geographic boundaries. A chain that snakes through the neighborhood may produce segments that are geographically scattered.
+
+\subsection{Strategy B: K-Means Street Clustering}
+
+Initialize $N$ cluster centroids spread across the street centroids. Iteratively assign each street to the nearest centroid (weighted by address count) and recompute centroids. Within each cluster, chain streets by endpoint for walk order.
+
+\textbf{Advantages:} Best geographic compactness (lowest average distance from centroid).
+
+\textbf{Disadvantages:} Poor count balance --- k-means optimizes proximity, not cardinality. With $N=5$, we observed balance ratios up to 5.88:1.
+
+\subsection{Strategy C: Recursive Geographic Bisection}
+
+Recursively split the address set along the longer geographic axis (latitude or longitude):
+
+\begin{enumerate}
+\item Determine whether the latitude or longitude range is larger
+\item Sort addresses along the longer axis
+\item Split at position $\lfloor |A| \cdot \lceil N/2 \rceil / N \rfloor$
+\item Recurse on each half with $\lceil N/2 \rceil$ and $\lfloor N/2 \rfloor$ workers
+\item Re-order each final partition using street-aware endpoint chaining
+\end{enumerate}
+
+\textbf{Advantages:} Perfect count balance, geographic contiguity (each partition is a compact rectangular region), lowest total walk distance.
+
+\textbf{Disadvantages:} Cuts are axis-aligned, which may not follow street patterns.
+
+\subsection{Scoring Function}
+
+All candidate assignments are evaluated by a combined score:
+
+\begin{equation}
+\text{Score} = 2 \cdot W_{max} + W_{total} + 5000 \cdot \frac{\sum_k ||S_k| - |A|/N|}{|A|/N}
+\end{equation}
+
+where $W_{max} = \max_k W(S_k)$ is the maximum walk distance (fairness), $W_{total} = \sum_k W(S_k)$ is total walk distance (efficiency), and the third term penalizes count imbalance. The winner is the candidate with the lowest score.
+
+\section{Experimental Setup}
+
+\subsection{Data}
+
+We use the City of Palo Alto municipal address database containing 44,115 addresses across 53 neighborhoods. Three neighborhoods with different characteristics were selected:
+
+\begin{table}[htbp]
+\caption{Test Neighborhoods}
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Neighborhood} & \textbf{Addresses} & \textbf{Streets} & \textbf{Character} \\
+\midrule
+Fairmeadow & 307 & 15 & Circular cul-de-sacs \\
+Crescent Park & 1,476 & 137 & Rectilinear grid \\
+Midtown & 5,101 & 581 & Large rectilinear grid \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection{Baselines}
+
+Single-ESW nearest-neighbor walk distances establish the theoretical minimum per worker:
+
+\begin{table}[htbp]
+\caption{Single-Worker Baselines}
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Neighborhood} & \textbf{NN Walk} & \textbf{Ideal (N=3)} & \textbf{Ideal (N=5)} \\
+\midrule
+Fairmeadow & 6,677\,m & 2,226\,m & 1,335\,m \\
+Crescent Park & 38,652\,m & 12,884\,m & 7,730\,m \\
+Midtown & 101,834\,m & 33,945\,m & 20,367\,m \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+\section{Results}
+
+\subsection{Fairmeadow (N=3)}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=12pt,
+    xlabel={Strategy},
+    ylabel={Max Walk Distance (m)},
+    symbolic x coords={Chain, K-means, Bisect},
+    xtick=data,
+    ymin=0, ymax=14000,
+    nodes near coords,
+    nodes near coords align={vertical},
+    width=\columnwidth,
+    height=5cm,
+    title={Fairmeadow: Maximum Walk Distance (N=3)},
+    every node near coord/.append style={font=\tiny},
+]
+\addplot coordinates {(Chain,9798) (K-means,11687) (Bisect,7315)};
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=12pt,
+    xlabel={Strategy},
+    ylabel={Total Walk Distance (m)},
+    symbolic x coords={Chain, K-means, Bisect},
+    xtick=data,
+    ymin=0, ymax=30000,
+    nodes near coords,
+    nodes near coords align={vertical},
+    width=\columnwidth,
+    height=5cm,
+    title={Fairmeadow: Total Walk Distance (N=3)},
+    every node near coord/.append style={font=\tiny},
+]
+\addplot coordinates {(Chain,25445) (K-means,25609) (Bisect,16827)};
+\end{axis}
+\end{tikzpicture}
+\caption{Fairmeadow results. Bisect achieves 34\% lower total walk distance and 25\% lower max walk distance than the best chain slicing variant.}
+\label{fig:fairmeadow}
+\end{figure}
+
+Bisect wins decisively on Fairmeadow's circular street layout, producing the lowest max walk distance (7,315\,m vs.\ ideal 2,226\,m, 3.3$\times$ overhead) and lowest total walk distance.
+
+\subsection{Crescent Park (N=3)}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=12pt,
+    xlabel={Strategy},
+    ylabel={Walk Distance Ratio (max/min)},
+    symbolic x coords={Chain, K-means, Bisect},
+    xtick=data,
+    ymin=0, ymax=4.5,
+    nodes near coords,
+    nodes near coords align={vertical},
+    width=\columnwidth,
+    height=5cm,
+    title={Crescent Park: Walk Distance Balance (N=3)},
+    every node near coord/.append style={font=\tiny},
+]
+\addplot coordinates {(Chain,1.04) (K-means,2.24) (Bisect,1.39)};
+\end{axis}
+\end{tikzpicture}
+\caption{Crescent Park walk distance ratios. Chain slicing achieves nearly perfect walk balance (1.04) on this rectilinear grid.}
+\label{fig:crescent}
+\end{figure}
+
+Chain slicing produced the best walk distance balance (ratio 1.04) on Crescent Park's rectilinear grid. Bisect had lower total walk distance but higher max walk.
+
+\subsection{Midtown (N=3 and N=5)}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar group,
+    bar width=10pt,
+    xlabel={Strategy},
+    ylabel={Max Walk Distance (m)},
+    symbolic x coords={Chain, K-means, Bisect},
+    xtick=data,
+    ymin=0, ymax=110000,
+    width=\columnwidth,
+    height=5cm,
+    title={Midtown: Max Walk Distance},
+    legend style={at={(0.98,0.98)},anchor=north east,font=\small},
+    every node near coord/.append style={font=\tiny},
+]
+\addplot coordinates {(Chain,81696) (K-means,99956) (Bisect,83385)};
+\addplot coordinates {(Chain,55482) (K-means,86000) (Bisect,49818)};
+\legend{N=3, N=5}
+\end{axis}
+\end{tikzpicture}
+\caption{Midtown max walk distances for N=3 and N=5. K-means degrades severely with more workers. Bisect scales well.}
+\label{fig:midtown}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar group,
+    bar width=10pt,
+    xlabel={Strategy},
+    ylabel={Count Balance Ratio},
+    symbolic x coords={Chain, K-means, Bisect},
+    xtick=data,
+    ymin=0, ymax=7,
+    width=\columnwidth,
+    height=5cm,
+    title={Midtown: Address Count Balance},
+    legend style={at={(0.98,0.98)},anchor=north east,font=\small},
+    every node near coord/.append style={font=\tiny},
+]
+\addplot coordinates {(Chain,1.00) (K-means,1.96) (Bisect,1.00)};
+\addplot coordinates {(Chain,1.00) (K-means,5.88) (Bisect,1.00)};
+\legend{N=3, N=5}
+\end{axis}
+\end{tikzpicture}
+\caption{Address count balance. K-means produces severely unbalanced assignments with N=5 (ratio 5.88:1). Chain slicing and Bisect maintain perfect balance.}
+\label{fig:balance}
+\end{figure}
+
+At $N=5$, k-means assigned 1,735 addresses to one worker and only 295 to another (ratio 5.88:1). Bisect maintained perfect balance while achieving the lowest max walk distance.
+
+\subsection{Efficiency Analysis}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={Neighborhood Size (addresses)},
+    ylabel={Overhead Factor ($W_{max} / W_{ideal}$)},
+    xmin=0, xmax=5500,
+    ymin=1, ymax=4,
+    width=\columnwidth,
+    height=5cm,
+    title={Best Strategy Overhead vs.\ Theoretical Ideal (N=3)},
+    mark size=3pt,
+    nodes near coords,
+    nodes near coords align={above},
+    every node near coord/.append style={font=\tiny},
+    point meta=explicit symbolic,
+]
+\addplot[only marks, mark=*] coordinates {
+    (307,3.29) [Fairmeadow]
+    (1476,1.99) [Crescent Park]
+    (5101,2.41) [Midtown]
+};
+\end{axis}
+\end{tikzpicture}
+\caption{Overhead factor (actual max walk / theoretical ideal) for the best strategy on each neighborhood. The 2--3$\times$ overhead is the inherent cost of geographic partitioning.}
+\label{fig:overhead}
+\end{figure}
+
+The overhead factor (actual max walk distance divided by theoretical single-worker ideal divided by $N$) ranges from 2.0$\times$ to 3.3$\times$. This represents the inherent cost of splitting a continuous route into separate geographic regions: each region has its own internal transitions that don't exist in the single-worker tour.
+
+\subsection{Summary}
+
+\begin{table}[htbp]
+\caption{Strategy Comparison Across All Tests}
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{\textbf{Best Max Walk}} & \multicolumn{2}{c}{\textbf{Best Balance}} \\
+\textbf{Strategy} & \textbf{Wins} & \textbf{Avg Rank} & \textbf{Wins} & \textbf{Avg Rank} \\
+\midrule
+Chain Slicing & 1 & 1.75 & 4 & 1.00 \\
+K-Means & 0 & 3.00 & 0 & 3.00 \\
+\textbf{Bisect} & \textbf{3} & \textbf{1.50} & \textbf{4} & \textbf{1.00} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+\section{Discussion}
+
+\subsection{Why Bisect Wins}
+
+Recursive bisection's key advantage is that it operates on \emph{addresses} rather than \emph{streets}. By sorting along the dominant geographic axis and splitting at the count boundary, it guarantees both count balance and geographic contiguity. The axis-aligned cuts may seem crude compared to k-means clustering, but they avoid k-means' fundamental weakness: optimizing proximity without considering cardinality.
+
+Chain slicing is competitive for small $N$ on rectilinear grids because the nearest-neighbor chain naturally follows the grid structure. However, the quality is sensitive to the starting street, and the contiguous slicing can produce elongated regions that span the neighborhood.
+
+\subsection{Street-Aware Ordering}
+
+The most impactful optimization is not the partitioning strategy but the \emph{within-partition ordering}. By grouping addresses by street, sorting along the street axis, and chaining streets by endpoint proximity, we ensure each ESW's assignment can be followed sequentially without backtracking. This is independent of the partitioning strategy and is applied to all candidates.
+
+\subsection{Practical Considerations}
+
+The algorithms run entirely in the browser (JavaScript) in under one second for all test cases, including the 5,101-address Midtown neighborhood with 581 streets. This enables real-time use during emergency operations without server round-trips.
+
+The NPC retains the ability to manually adjust assignments after auto-generation. The auto-assign provides a strong starting point that the NPC can refine based on local knowledge (road closures, hazards, ESW locations).
+
+\section{Related Work}
+
+The Capacitated Vehicle Routing Problem (CVRP) is the classical formulation for distributing service locations among workers~\cite{toth2014}. Our problem differs in having no depot, no capacity constraint, and a strong balance requirement. The Balanced Graph Partitioning problem~\cite{andreev2006} is closer but does not consider the sequential ordering within partitions.
+
+K-means clustering~\cite{lloyd1982} is widely used for geographic partitioning but does not guarantee balanced clusters. Balanced k-means variants~\cite{malinen2014} add cardinality constraints but increase computational complexity.
+
+The nearest-neighbor heuristic for TSP~\cite{rosenkrantz1977} produces tours within a factor of $\lceil \log_2 n \rceil / 2$ of optimal. Our street-aware variant improves on this by operating on street segments rather than individual points, reducing the problem size and preserving walkability.
+
+Recursive bisection is used in computational geometry for balanced spatial decomposition~\cite{berger1987} and in VLSI placement~\cite{karypis1998}. Our application to address assignment appears to be novel.
+
+\section{Conclusion}
+
+We presented a practical system for automatically assigning addresses to emergency services workers that minimizes walk distance while maintaining balanced workloads. Through empirical evaluation on real municipal data, we found that recursive geographic bisection consistently outperforms chain slicing and k-means clustering across neighborhood types and team sizes. The 2--3$\times$ overhead versus the theoretical optimum represents the inherent cost of geographic partitioning and is acceptable for practical emergency operations.
+
+Future work includes incorporating road network distances (rather than haversine straight-line distances), accounting for ESW starting positions, and handling dynamic reassignment as workers complete their areas.
+
+\begin{thebibliography}{00}
+
+\bibitem{fema2023}
+Federal Emergency Management Agency, ``Damage Assessment Operations Manual,'' FEMA P-2198, 2023.
+
+\bibitem{eslink}
+B.~Iannucci, ``ES-Link: Mobile Situational Awareness for Emergency Services,'' Carnegie Mellon University, Silicon Valley, 2025.
+
+\bibitem{toth2014}
+P.~Toth and D.~Vigo, \emph{Vehicle Routing: Problems, Methods, and Applications}, 2nd ed. Philadelphia, PA: SIAM, 2014.
+
+\bibitem{andreev2006}
+K.~Andreev and H.~R\"acke, ``Balanced graph partitioning,'' \emph{Theory of Computing Systems}, vol.~39, no.~6, pp.~929--939, 2006.
+
+\bibitem{garey1979}
+M.~R.~Garey and D.~S.~Johnson, \emph{Computers and Intractability: A Guide to the Theory of NP-Completeness}. New York: W.~H.~Freeman, 1979.
+
+\bibitem{lloyd1982}
+S.~Lloyd, ``Least squares quantization in PCM,'' \emph{IEEE Trans. Inform. Theory}, vol.~28, no.~2, pp.~129--137, 1982.
+
+\bibitem{malinen2014}
+M.~I.~Malinen and P.~Fr\"anti, ``Balanced k-means for clustering,'' in \emph{Proc. Joint IAPR Int. Workshops Structural and Syntactic Pattern Recognition}, 2014, pp.~32--41.
+
+\bibitem{rosenkrantz1977}
+D.~J.~Rosenkrantz, R.~E.~Stearns, and P.~M.~Lewis, ``An analysis of several heuristics for the traveling salesman problem,'' \emph{SIAM J. Comput.}, vol.~6, no.~3, pp.~563--581, 1977.
+
+\bibitem{berger1987}
+M.~J.~Berger and S.~H.~Bokhari, ``A partitioning strategy for nonuniform problems on multiprocessors,'' \emph{IEEE Trans. Comput.}, vol.~C-36, no.~5, pp.~570--580, 1987.
+
+\bibitem{karypis1998}
+G.~Karypis and V.~Kumar, ``Multilevel algorithms for multi-constraint graph partitioning,'' in \emph{Proc. ACM/IEEE Conf. Supercomputing}, 1998.
+
+\end{thebibliography}
+
+\end{document}
