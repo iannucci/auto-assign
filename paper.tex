@@ -322,6 +322,76 @@ Chain slicing produced the best walk distance balance (ratio 1.04) on Crescent P
 
 At $N=5$, k-means assigned 1,735 addresses to one worker and only 295 to another (ratio 5.88:1). Bisect maintained perfect balance while achieving the lowest max walk distance.
 
+\subsection{Visual Comparison}
+
+Fig.~\ref{fig:maps-fm} shows the geographic distribution of assignments for Fairmeadow using each strategy. Each color represents one ESW's assignment. K-means produces compact clusters but with severe count imbalance. Chain slicing produces scattered assignments (note the interleaving). Bisect produces contiguous rectangular regions.
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=3 by 1, horizontal sep=0.8cm},
+    width=0.36\textwidth,
+    height=0.3\textwidth,
+    xlabel={Longitude},
+    ylabel={Latitude},
+    scatter,
+    only marks,
+    scatter src=explicit,
+    scatter/classes={0={mark=*,draw=black,fill=red!70,mark size=1.2pt},
+                     1={mark=*,draw=black,fill=blue!70,mark size=1.2pt},
+                     2={mark=*,draw=black,fill=green!70!black,mark size=1.2pt}},
+    tick label style={font=\tiny},
+    label style={font=\small},
+    title style={font=\small\bfseries},
+]
+\nextgroupplot[title={K-Means (The Ugly)}]
+\addplot table[x=lon,y=lat,meta=cluster] {data/fm-kmeans.dat};
+
+\nextgroupplot[title={Chain Slicing (The Bad)}]
+\addplot table[x=lon,y=lat,meta=cluster] {data/fm-chain.dat};
+
+\nextgroupplot[title={Bisect (The Good)}]
+\addplot table[x=lon,y=lat,meta=cluster] {data/fm-bisect.dat};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Fairmeadow (307 addresses, 3 ESWs): Geographic distribution of assignments. Left: K-means produces compact but unbalanced clusters (112, 68, 127 addresses). Center: Chain slicing interleaves geographically --- note addresses of the same color scattered across the neighborhood. Right: Bisect produces three contiguous regions with balanced counts (103, 102, 102).}
+\label{fig:maps-fm}
+\end{figure*}
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=3 by 1, horizontal sep=0.8cm},
+    width=0.36\textwidth,
+    height=0.3\textwidth,
+    xlabel={Longitude},
+    ylabel={Latitude},
+    scatter,
+    only marks,
+    scatter src=explicit,
+    scatter/classes={0={mark=*,draw=black,fill=red!70,mark size=0.6pt},
+                     1={mark=*,draw=black,fill=blue!70,mark size=0.6pt},
+                     2={mark=*,draw=black,fill=green!70!black,mark size=0.6pt}},
+    tick label style={font=\tiny},
+    label style={font=\small},
+    title style={font=\small\bfseries},
+]
+\nextgroupplot[title={K-Means}]
+\addplot table[x=lon,y=lat,meta=cluster] {data/mt-kmeans.dat};
+
+\nextgroupplot[title={Chain Slicing}]
+\addplot table[x=lon,y=lat,meta=cluster] {data/mt-chain.dat};
+
+\nextgroupplot[title={Bisect}]
+\addplot table[x=lon,y=lat,meta=cluster] {data/mt-bisect.dat};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Midtown (5,101 addresses, 3 ESWs): K-means assigns 2,278 addresses to one worker and only 1,164 to another. Chain slicing has balanced counts but geographically interleaved regions. Bisect produces three contiguous balanced regions with clear geographic separation.}
+\label{fig:maps-mt}
+\end{figure*}
+
 \subsection{Efficiency Analysis}
 
 \begin{figure}[htbp]
