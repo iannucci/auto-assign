@@ -31,7 +31,7 @@ bob@rail.com}}
 \maketitle
 
 \begin{abstract}
-During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. Minimizing the worst-case worker walking distance while balancing workloads is critical for rapid response. We model this as a balanced partitioning problem over \emph{road-network segments} --- uninterrupted stretches of roadway between intersections --- with walking distances constrained to the street network. Each segment carries a precomputed cost matrix that captures all traversal options as a function of entry/exit port, street width, and address distribution. We evaluate four partitioning strategies across 33 neighborhoods in Palo Alto, California (54--1,476 addresses, 9--289 road segments) at team sizes $N = 3, 5, 7, 10$, yielding 124 test cases. No single algorithm dominates: the winning strategy depends on team size $N$ --- 2-opt local search wins at small $N$ ($\leq 5$), recursive bisection wins at large $N$ ($\geq 7$). Compared to random assignment, the oracle approach reduces worst-case walking distance by 37\% on average. We achieve overhead ratios averaging $1.5\times$ the theoretical ideal. Unproductive walking (inter-segment transitions) accounts for 46\% of total distance on average, identifying it as the dominant optimization target.
+During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. Minimizing the worst-case worker walking distance while balancing workloads is critical for rapid response. We model this as a balanced partitioning problem over \emph{road-network segments} --- uninterrupted stretches of roadway between intersections --- with walking distances constrained to the street network. Each segment carries a precomputed cost matrix that captures all traversal options as a function of entry/exit port, street width, and address distribution. We evaluate four partitioning strategies across 33 neighborhoods in Palo Alto, California (54--1,476 addresses, 9--289 road segments) at team sizes $N = 3, 5, 7, 10$, yielding 124 test cases. No single algorithm dominates: the winning strategy depends on team size $N$ --- 2-opt local search wins at small $N$ ($\leq 5$), recursive bisection wins at large $N$ ($\geq 7$). Compared to random assignment, the oracle approach reduces worst-case walking distance by 37\% on average. We achieve overhead ratios averaging $1.5\times$ the theoretical ideal. Unproductive walking (inter-segment transitions) accounts for 46\% of total distance on average. A second study reformulates the objective as minimizing worst-case \emph{finish time} from fire station huddle points, incorporating per-address assessment time. When assessment time dominates walking ($\sim$8$\times$), the strategy choice matters less than address count balance.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -58,6 +58,7 @@ A key constraint distinguishes our problem from the standard VRP: \textbf{ESWs m
 \item[\textbf{C3.}] A walking metric that decomposes total distance into productive and unproductive components, enabling comparison to a theoretical ideal (Section~\ref{sec:metric}).
 \item[\textbf{C4.}] Empirical evaluation across 33 neighborhoods at $N = 3, 5, 7, 10$ showing the winning strategy depends on team size, with 2-opt dominating small teams and bisection dominating large teams (Section~\ref{sec:results}).
 \item[\textbf{C5.}] An oracle algorithm that runs all strategies and selects the best, reducing worst-case walk by 37\% vs.\ random assignment, in under one second (Section~\ref{sec:oracle}).
+\item[\textbf{C6.}] A time-based reformulation using fire station huddle points showing that when assessment time dominates walking, the strategy choice matters less than address count balance (Section~\ref{sec:study2}).
 \end{enumerate}
 
 %% ==================================================================
@@ -511,7 +512,7 @@ Figs.~\ref{fig:trails-fm} and \ref{fig:trails-cp} show per-ESW walking trails fo
 \addplot[unprodred, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-esw2-transitions.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow (307 addresses, $N=3$, NN chain winner, $\rho = 1.60$). Each panel is one ESW's route. \textcolor{prodblue}{Blue} = productive (within-segment). \textcolor{unprodred}{Red dashed} = unproductive (transitions). Gray dots = all addresses. Fairmeadow's compact cul-de-sac layout yields the lowest overhead ratio in our study: most transitions are short hops between adjacent segments. ESW~3 has only 6 segments, reflecting a cul-de-sac cluster that is naturally isolated.}
+\caption{Fairmeadow (307 addresses, $N=3$, 2-opt winner). Each panel is one ESW's route. \textcolor{prodblue}{Blue} = productive walking within road segments. \textcolor{unprodred}{Red dashed} = unproductive transitions following the road network. Gray dots = all addresses. Fairmeadow's compact cul-de-sac layout keeps transitions short. ESW~3 has only 6 segments, reflecting a naturally isolated cul-de-sac cluster.}
 \label{fig:trails-fm}
 \end{figure*}
 
@@ -544,7 +545,7 @@ Figs.~\ref{fig:trails-fm} and \ref{fig:trails-cp} show per-ESW walking trails fo
 \addplot[unprodred, thick, opacity=0.4, dashed] table[x=lon,y=lat] {data/crescentpark-esw2-transitions.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Crescent Park (1,476 addresses, $N=3$, RH chain winner, $\rho = 1.82$). The right-hand rule's spiral pattern produces geographically contiguous assignments on this rectilinear grid. \textcolor{unprodred}{Red} transitions are short and local (36\% unproductive), reflecting the benefit of the RH heuristic's directional coherence on grid layouts.}
+\caption{Crescent Park (1,476 addresses, $N=3$, 2-opt winner). The 2-opt-improved chain produces geographically contiguous assignments on this rectilinear grid. \textcolor{unprodred}{Red} transition paths follow actual streets through intersections --- not straight-line jumps --- reflecting road-network-constrained routing.}
 \label{fig:trails-cp}
 \end{figure*}
 
@@ -715,7 +716,9 @@ We presented a practical system for assigning addresses to emergency services wo
 
 \textbf{C5 (Oracle algorithm).} Running all four strategies completes in $<$1\,s for neighborhoods up to 1,476 addresses, enabling real-time use during emergency operations. The $N$-dependent winner pattern provides practitioners with a simple rule: use 2-opt for small teams, bisection for large teams, or the oracle when in doubt.
 
-Study~II extends this framework by reformulating the objective around finish-time balance with a shared starting point, addressing two key limitations of Study~I. Future work includes: field validation with ESW teams, incorporating road-closure data, per-address assessment time weights, and testing on cities with different street geometries.
+\textbf{C6 (Time-based reformulation).} Study~II shows that when per-address assessment time dominates walking time ($\sim$8$\times$ at $t_{\text{assess}} = 5$\,min), Study~I's chain+slice approach wins 65\% of cases even under the time metric --- because address count balance matters more than walking optimization. BFS+SA from fire station huddle points provides value at larger $N$ where chain+slice produces empty partitions. This finding allows communities to choose their approach based on their assessment protocol: walking-optimized for rapid visual sweeps, time-balanced for detailed assessments.
+
+Future work includes: field validation with ESW teams, incorporating road-closure data, per-address assessment time weights, and testing on cities with different street geometries.
 
 \begin{thebibliography}{00}
 
