@@ -31,7 +31,7 @@ bob@rail.com}}
 \maketitle
 
 \begin{abstract}
-During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. Minimizing the worst-case worker walking distance while balancing workloads is critical for rapid response. We model this as a balanced partitioning problem over \emph{road-network segments} --- uninterrupted stretches of roadway between intersections --- with walking distances constrained to the street network. Each segment carries a precomputed cost matrix that captures all traversal options as a function of entry/exit point, street width, and address distribution. We evaluate three partitioning strategies across 10 neighborhoods in Palo Alto, California (54--1,476 addresses, 14--256 road segments). The right-hand-rule chain achieves the lowest worst-case walking distance in 55\% of test cases, producing assignments within 1.6--2.8$\times$ of the theoretical ideal. Unproductive walking (inter-segment transitions) accounts for 24--54\% of total distance, identifying it as the dominant optimization target. We recommend an oracle approach that runs all strategies and selects the best in under one second.
+During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. Minimizing the worst-case worker walking distance while balancing workloads is critical for rapid response. We model this as a balanced partitioning problem over \emph{road-network segments} --- uninterrupted stretches of roadway between intersections --- with walking distances constrained to the street network. Each segment carries a precomputed cost matrix that captures all traversal options as a function of entry/exit port, street width, and address distribution. We evaluate four partitioning strategies across 33 neighborhoods in Palo Alto, California (54--1,476 addresses, 9--289 road segments) at team sizes $N = 3, 5, 7, 10$, yielding 124 test cases. No single algorithm dominates: the winning strategy depends on team size $N$ --- 2-opt local search wins at small $N$ ($\leq 5$), recursive bisection wins at large $N$ ($\geq 7$). Compared to random assignment, the oracle approach reduces worst-case walking distance by 37\% on average. We achieve overhead ratios averaging $1.5\times$ the theoretical ideal. Unproductive walking (inter-segment transitions) accounts for 46\% of total distance on average, identifying it as the dominant optimization target.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -56,8 +56,8 @@ A key constraint distinguishes our problem from the standard VRP: \textbf{ESWs m
 \item[\textbf{C1.}] A road-network segment model with a geometric pipeline for address snapping and side-of-street classification (Section~\ref{sec:model}).
 \item[\textbf{C2.}] A per-segment cost matrix that captures all traversal options as an emergent property of address geometry (Section~\ref{sec:costmatrix}).
 \item[\textbf{C3.}] A walking metric that decomposes total distance into productive and unproductive components, enabling comparison to a theoretical ideal (Section~\ref{sec:metric}).
-\item[\textbf{C4.}] Empirical evaluation across 10 neighborhoods showing the right-hand-rule chain wins 55\% of cases at 1.6--2.8$\times$ overhead (Section~\ref{sec:results}).
-\item[\textbf{C5.}] An oracle algorithm completing in under one second (Section~\ref{sec:oracle}).
+\item[\textbf{C4.}] Empirical evaluation across 33 neighborhoods at $N = 3, 5, 7, 10$ showing the winning strategy depends on team size, with 2-opt dominating small teams and bisection dominating large teams (Section~\ref{sec:results}).
+\item[\textbf{C5.}] An oracle algorithm that runs all strategies and selects the best, reducing worst-case walk by 37\% vs.\ random assignment, in under one second (Section~\ref{sec:oracle}).
 \end{enumerate}
 
 %% ==================================================================
@@ -345,6 +345,18 @@ Split segments by centroid along the longer geographic axis (latitude or longitu
 
 \textbf{Complexity:} $O(M \log N)$ for splitting, plus $O((M/N)^3)$ for NN within each group.
 
+\subsection{Strategy D: 2-Opt Local Search}
+
+Starting from the best NN chain (Strategy~A), iteratively improve segment ordering by reversing sub-chains. For each pair $(i, j)$ in the chain, reverse the sub-chain $[i..j]$ if the reversal reduces total walk distance. When a sub-chain is reversed, each segment's traversal direction flips: the entry and exit ports swap, and the segment cost is re-read from the cost matrix with transposed indices. Transition costs between the reversed segments and their neighbors are recomputed via the road-network distance matrix. Iterate until no improving swap exists (or 500 passes).
+
+\textbf{Why 2-opt helps:} The NN chain is greedy --- it selects the next segment by minimizing immediate cost without considering downstream consequences. 2-opt repairs these local mistakes by finding pairs of transitions that form a ``cross'' (where reversing the intermediate sub-chain ``uncrosses'' them, reducing total distance). On our data, 2-opt reduces worst-case walk by 3.2\% on average and up to 41.3\% in the best case.
+
+\textbf{Complexity:} $O(M^2)$ per pass, typically converging in $O(M)$ passes, giving $O(M^3)$ total.
+
+\subsection{Random Baseline}
+
+To quantify the value of optimization, we also evaluate random assignment: shuffle segments, partition by address count, then order each partition with NN chaining. We run 50 random trials and report the average worst-case walk. The oracle improves over random by 37\% on average.
+
 \subsection{Scoring Function}
 \label{sec:scoring}
 
@@ -399,63 +411,44 @@ The three terms serve distinct purposes:
 \label{sec:results}
 %% ==================================================================
 
-We evaluate across 11 Palo Alto neighborhoods (54--1,476 addresses, 14--256 segments). All distances use the road-network metric (Eq.~\ref{eq:walk}). In figures, the \textcolor{idealgreen}{green dashed line} marks the theoretical ideal $W^*$ (Eq.~\ref{eq:ideal}).
+We evaluate four strategies (NN chain, RH chain, Bisect, 2-opt) plus a random baseline across 33 Palo Alto neighborhoods (54--1,476 addresses, 9--289 segments) at team sizes $N = 3, 5, 7, 10$, yielding 124 test cases. All distances use the road-network metric (Eq.~\ref{eq:walk}) with road-following inter-segment paths.
 
-\subsection{Per-Neighborhood Results}
+\subsection{Winner Distribution by Team Size}
 
-Table~\ref{tab:detail} shows all three strategies on each neighborhood at $N = 3$, with the oracle winner starred.
-
-\begin{table*}[htbp]
-\caption{Strategy Comparison Across 11 Neighborhoods ($N = 3$). $W_{\max}$ = worst-case ESW walk. $W^{\text{unprod}}\%$ = fraction of total walk that is unproductive. $\rho$ = overhead ratio vs.\ theoretical ideal $W^*$. Winner starred.}
-\label{tab:detail}
-\begin{center}
-\begin{tabular}{l r r | r r r | r r r | r r r | r}
-\toprule
-& & & \multicolumn{3}{c|}{\textbf{NN Chain}} & \multicolumn{3}{c|}{\textbf{RH Chain}} & \multicolumn{3}{c|}{\textbf{Bisect}} & \\
-\textbf{Neighborhood} & \textbf{Addrs} & \textbf{Segs} & $W_{\max}$ & Unprod\% & $\rho$ & $W_{\max}$ & Unprod\% & $\rho$ & $W_{\max}$ & Unprod\% & $\rho$ & \textbf{Margin} \\
-\midrule
-Greater Miranda    & 54   & 14  & 1039 & 44.8 & 2.43 & 993* & 48.7 & 2.32 & 689  & 27.3 & 1.61 & 50.8\% \\
-Classic Commun.    & 104  & 17  & 764  & 29.2 & 1.59 & 837* & 35.4 & 1.74 & 708  & 19.7 & 1.47 & 18.2\% \\
-Palo Alto Central  & 145  & 11  & 377* & 24.2 & 1.69 & 536  & 39.5 & 2.40 & 560  & 54.5 & 2.51 & 48.5\% \\
-Greenacres II      & 264  & 45  & 4380 & 56.4 & 2.47 & 4754 & 52.7 & 2.68 & 3825*& 51.9 & 2.16 & 24.3\% \\
-Adobe Meadows      & 316  & 72  & 5510 & 50.4 & 2.35 & 5133*& 41.4 & 2.19 & 5749 & 44.5 & 2.45 & 12.0\% \\
-Leland Manor       & 508  & 106 & 7236 & 47.7 & 1.94 & 6943*& 38.8 & 1.86 & 7535 & 43.4 & 2.02 & 8.5\%  \\
-Monroe Park        & 621  & 80  & 6582 & 50.7 & 2.87 & 6188 & 52.3 & 2.70 & 6355*& 48.1 & 2.77 & 6.4\%  \\
-Duveneck/St.~Fran. & 966  & 126 & 11080& 39.7 & 1.66 & 10605*&33.3 & 1.60 & 12062& 40.9 & 1.81 & 13.7\% \\
-Crescent Park      & 1476 & 256 & 19128& 38.0 & 1.93 & 18109*&36.1 & 1.82 & 18847& 39.1 & 1.90 & 5.6\%  \\
-Fairmeadow         & 307  & 43  & 3571*& 29.0 & 1.60 & 3592 & 31.5 & 1.61 & 3944 & 32.8 & 1.76 & 10.4\% \\
-\bottomrule
-\end{tabular}
-\end{center}
-\end{table*}
-
-\textbf{Key observations:}
-\begin{itemize}
-\item \textbf{No single algorithm dominates.} NN wins on 2, RH on 7, Bisect on 2 neighborhoods. The margin between best and worst ranges from 5.6\% (Crescent Park) to 50.8\% (Greater Miranda), confirming that algorithm selection matters.
-\item \textbf{RH chain excels on larger neighborhoods} ($>$300 addresses), where its spiral pattern keeps partitions geographically contiguous. NN wins on compact neighborhoods where locality is inherent.
-\item \textbf{Overhead ratios $\rho$ range from 1.60$\times$ to 2.87$\times$.} The 60--187\% overhead versus the theoretical ideal represents the unavoidable cost of partitioning a single walk into $N$ independent walks.
-\item \textbf{Unproductive walking ranges from 24\% to 54\%.} Greenacres~II (45 segments, elongated layout) has the highest unproductive ratio; Palo Alto Central (11 segments, compact) has the lowest.
-\end{itemize}
-
-\subsection{Winner Distribution}
+The most striking finding is the \textbf{dependence of the winning strategy on team size $N$} (Table~\ref{tab:wins}).
 
 \begin{table}[htbp]
-\caption{Strategy Wins Across 10 Neighborhoods}
+\caption{Strategy Wins by Team Size (124 test cases across 33 neighborhoods)}
 \label{tab:wins}
 \begin{center}
-\begin{tabular}{lcc|c}
+\begin{tabular}{lcccc|c}
 \toprule
-\textbf{Strategy} & $N{=}3$ & $N{=}5$ & \textbf{Total} \\
+\textbf{Strategy} & $N{=}3$ & $N{=}5$ & $N{=}7$ & $N{=}10$ & \textbf{Total} \\
 \midrule
-Chain NN & 2 & 3 & 5 (25\%) \\
-\textbf{Chain RH} & \textbf{6} & \textbf{5} & \textbf{11 (55\%)} \\
-Bisect & 2 & 2 & 4 (20\%) \\
+\textbf{2-opt} & \textbf{18} & \textbf{13} & 2 & 2 & 35 (28\%) \\
+RH Chain & 8 & 8 & 10 & 7 & 33 (27\%) \\
+NN Chain & 2 & 3 & 2 & 2 & 9 (7\%) \\
+\textbf{Bisect} & 5 & 9 & \textbf{15} & \textbf{18} & \textbf{47 (38\%)} \\
 \bottomrule
 \end{tabular}
 \end{center}
 \end{table}
 
-\subsection{Productive vs.\ Unproductive Decomposition}
+2-opt dominates at small $N$ ($\leq 5$), where segment ordering within each partition matters most. Bisection dominates at large $N$ ($\geq 7$), where geographic compactness of each partition is paramount. Bisection's 38\% overall win rate is statistically significant ($z = 3.3$, $p < 0.001$ vs.\ $H_0 = 25\%$). The practical implication: \textbf{select the strategy based on team size}, or use the oracle.
+
+\subsection{Improvement Over Baselines}
+
+\textbf{vs.\ random assignment:} The oracle reduces worst-case walk by \textbf{37\%} on average compared to random assignment (best of 50 random shuffles).
+
+\textbf{2-opt vs.\ NN chain:} 2-opt improves over NN by 3.2\% on average and up to \textbf{41.3\%} in the best case. For Crescent Park at $N = 3$: NN $W_{\max} = 19{,}128$\,m, 2-opt $W_{\max} = 15{,}679$\,m --- an 18\% reduction.
+
+\textbf{Walking time:} At 5\,km/h, worst-case ESW walk times range from 2 to 310 minutes. For typical neighborhoods ($<$500 addresses) at $N = 3$: 30--90 minutes.
+
+\subsection{Overhead vs.\ Theoretical Ideal}
+
+Using the tighter bound (single-worker chain cost / $N$), overhead ratios $\rho$ average \textbf{1.49$\times$} (range 0.94--3.58). Values below 1.0 occur when bisection finds partitions that avoid costly transitions present in the single-worker chain.
+
+\subsection{Productive vs.\ Unproductive Walking}
 
 Fig.~\ref{fig:prod-unprod} shows the walk distance decomposition for the best strategy on each neighborhood.
 
@@ -482,7 +475,7 @@ Fig.~\ref{fig:prod-unprod} shows the walk distance decomposition for the best st
 \legend{Productive, Unproductive}
 \end{axis}
 \end{tikzpicture}
-\caption{Walk distance decomposition ($N=3$, best strategy). \textcolor{prodblue}{Blue} = productive walking (within segments, visiting addresses). \textcolor{unprodred}{Red} = unproductive walking (inter-segment transitions, no addresses visited). Unproductive walking averages 39.8\% of total, ranging from 24\% (Palo Alto Central, 11 compact segments) to 54\% (Greenacres~II, 45 segments in an elongated layout). This decomposition --- enabled by the metric in Eq.~\ref{eq:walk} --- identifies unproductive walking as the dominant optimization target: reducing it by even 10\% would have more impact than switching between the best and second-best algorithm.}
+\caption{Walk distance decomposition ($N=3$, best strategy) for 7 representative neighborhoods. \textcolor{prodblue}{Blue} = productive walking (within segments). \textcolor{unprodred}{Red} = unproductive (inter-segment transitions). Across all 124 test cases, unproductive walking averages 46\% (range 3--87\%). This decomposition identifies transition reduction as the dominant optimization target.}
 \label{fig:prod-unprod}
 \end{figure}
 
@@ -573,35 +566,37 @@ For Fairmeadow ($\rho = 1.60$): $W^* = 2{,}236$\,m, $W_{\max} = 3{,}571$\,m. The
 
 To validate the road-network model, we compare algorithm rankings under haversine distances (as used in prior work) vs.\ road-network distances (our model). Under haversine, transition distances are straight-line, ignoring that the ESW must walk along streets.
 
-In our earlier haversine-based study across 41 neighborhoods, bisect dominated at $N = 5$ (21/41 wins) and NN chain at $N = 3$ (18/41). Under road-network distances, the ranking shifts decisively: RH chain wins 55\% overall. The reason: haversine underestimates the penalty for geographically scattered partitions. A partition that ``jumps'' across 4 blocks measures as 200\,m by haversine but requires 600\,m on the road network (walking around blocks). RH chain avoids these jumps through directional coherence.
+In our earlier haversine-based study across 41 neighborhoods, bisect dominated at $N = 5$ (21/41 wins) and NN chain at $N = 3$ (18/41). Under road-network distances, the ranking shifts: 2-opt and bisection share dominance, NN chain drops to 7\%. Haversine underestimates the cost of transitions that must navigate around blocks (Fig.~\ref{fig:diag-road} shows a 56\% underestimate). Algorithms producing geographically scattered partitions are penalized more heavily under the road-network metric, validating the constrained model.
 
-This validates the road-network model: \textbf{the choice of distance metric changes which algorithm wins.}
+\subsection{Limitations}
 
-\subsection{Sensitivity to $N$}
+\textbf{Single city.} All neighborhoods are in Palo Alto --- an affluent suburb with regular grids, cul-de-sacs, and flat terrain. Results may differ in dense urban, rural, or irregular-street environments. We hypothesize that bisection would perform relatively better in grid cities (axis-aligned cuts match street patterns) and worse in irregular layouts.
 
-Table~\ref{tab:wins} shows RH dominance holds at both $N = 3$ and $N = 5$. As $N$ increases, the overhead ratio $\rho$ generally decreases because each partition covers a smaller geographic area with shorter transitions. For Crescent Park: $\rho_{N=3} = 1.82$, $\rho_{N=5} = 1.14$ (a 37\% reduction). However, this is not universal: for neighborhoods with irregular geometry, increasing $N$ can increase $\rho$ by forcing awkward partition boundaries.
+\textbf{Distance, not time.} We optimize walking distance. Walking speed varies with terrain, fatigue, and equipment. On flat terrain (Palo Alto), distance is a reasonable proxy; in hilly or obstructed environments, a time-based metric would be needed.
+
+\textbf{No field validation.} ESWs have not yet been observed using these assignments. A structured field trial is the most important next step.
+
+\textbf{Equal service time.} All addresses are treated equally. Multi-unit buildings, commercial properties, and high-rises require different assessment times.
 
 %% ==================================================================
 \section{Discussion}
 %% ==================================================================
 
-\subsection{Why the Right-Hand Rule Dominates}
+\subsection{Why the Winner Depends on Team Size}
 
-With street-constrained distances, the cost of a scattered partition is high: the ESW must walk along the road network between distant segments, often traversing blocks with no addresses. The RH chain's spiral produces partitions where consecutive segments are adjacent, minimizing transitions.
-
-NN chaining achieves similar locality on small neighborhoods but tends to ``snake'' through larger ones: having visited the nearest segment, it may return to a distant part of the neighborhood for the next-nearest, producing interleaved partitions. Bisect produces compact regions but its axis-aligned cuts can force transitions across the entire neighborhood.
+At small $N$ ($\leq 5$), each partition contains many segments, and the quality of the \emph{ordering} within each partition dominates the cost. 2-opt local search directly improves this ordering by swapping segment pairs to reduce transitions. At large $N$ ($\geq 7$), partitions are smaller, ordering matters less, and the quality of the \emph{partition boundaries} dominates. Bisection excels here because its axis-aligned cuts produce compact geographic regions where most segments are adjacent. The RH chain is competitive across all $N$ because its spiral pattern balances both concerns.
 
 \subsection{The Unproductive Walking Bottleneck}
 
-That 39.8\% of walking is unproductive has two implications:
+That 46\% of walking is unproductive has two implications:
 
-\textbf{For algorithm design:} The dominant optimization target is not within-segment traversal (which the cost matrix already optimizes to near-optimality) but segment \emph{ordering}. This suggests that future work should focus on solving a variant of TSP on segment endpoints, rather than refining the partitioning heuristic.
+\textbf{For algorithm design:} The success of 2-opt at small $N$ confirms that segment ordering is the key lever. The cost matrix already optimizes within-segment traversal to near-optimality; the remaining gains are in inter-segment routing. Future work should explore more sophisticated TSP variants on segment endpoints.
 
 \textbf{For practitioners:} When manually adjusting assignments, prioritize geographic contiguity (\textcolor{unprodred}{minimizing red transitions} in Figs.~\ref{fig:trails-fm}--\ref{fig:trails-cp}) over address-count balance. A slightly unbalanced but contiguous assignment produces less total walking.
 
 \subsection{Practical Considerations}
 
-The oracle executes in the browser in $<$1\,s for neighborhoods up to 256 segments (1,476 addresses). The one-time Dijkstra precomputation (2--14\,s per neighborhood) can be cached. The NPC retains the ability to manually adjust assignments after auto-generation.
+The oracle (including 2-opt) executes in the browser in $<$1\,s for neighborhoods up to 289 segments (1,476 addresses). The one-time Dijkstra precomputation (1--14\,s per neighborhood) can be cached. The NPC retains the ability to manually adjust assignments after auto-generation.
 
 %% ==================================================================
 \section{Related Work}
@@ -611,7 +606,7 @@ The Capacitated Vehicle Routing Problem (CVRP)~\cite{toth2014} distributes servi
 
 Postal delivery route optimization~\cite{eiselt1995} is the most closely analogous domain: letter carriers walk along street segments visiting addresses on both sides, with route design that must balance workload and minimize deadheading (our ``unproductive walking''). Our cost matrix formulation is equivalent to the carrier's side-of-street decision at each block. Census enumeration area delineation~\cite{taylor2012} similarly partitions addresses into balanced geographic groups, though without the sequential ordering requirement.
 
-K-means~\cite{lloyd1982} and balanced variants~\cite{malinen2014} cluster geographically but ignore street connectivity. The nearest-neighbor TSP heuristic~\cite{rosenkrantz1977} produces $O(\log n)$-competitive tours. Our within-segment problem is a special case of the TSP on parallel lines~\cite{chung1988}.
+K-means~\cite{lloyd1982} and balanced variants~\cite{malinen2014} cluster geographically but ignore street connectivity. The nearest-neighbor TSP heuristic~\cite{rosenkrantz1977} produces $O(\log n)$-competitive tours. Our within-segment problem is a special case of the TSP on parallel lines~\cite{frederickson1978}.
 
 Recursive bisection~\cite{berger1987, karypis1998} is standard for balanced spatial decomposition. Our application to road-network segments with port-aware traversal costs appears novel.
 
@@ -621,17 +616,17 @@ Recursive bisection~\cite{berger1987, karypis1998} is standard for balanced spat
 
 We presented a practical system for assigning addresses to emergency services workers that minimizes worst-case walking distance using road-network-constrained routing. We summarize the evidence for each contribution:
 
-\textbf{C1 (Segment model).} Decomposing the OSM road network into 64,482 segments with geometric address snapping (41,854 addresses, median snap distance 22.9\,m, 99\% within 50\,m) provides a physically accurate model of how ESWs walk.
+\textbf{C1 (Segment model).} Decomposing the OSM road network into 64,482 segments with geometric address snapping (41,854 addresses, median snap distance 22.9\,m, 99\% within 50\,m) provides a physically accurate model of how ESWs walk. The diagnostic figures (Figs.~\ref{fig:diag-subseg}--\ref{fig:diag-road}) verify geometric correctness.
 
-\textbf{C2 (Cost matrix).} The $4 \times 4$ matrix captures zigzag, U-turn, through-walk, and out-and-back in a unified formulation. Empirically, 97\% of segments favor zigzag; the 3\% favoring U-turn (short, dense, many alternating addresses) are identified automatically. The worked example (Section~\ref{sec:example}) shows how a single 150\,m segment produces traversal costs from 180\,m to 314\,m depending on port choice --- a 74\% variation that justifies the matrix.
+\textbf{C2 (Cost matrix).} The $4 \times 4$ matrix captures zigzag, U-turn, through-walk, and out-and-back in a unified formulation. 97\% of segments favor zigzag; the 3\% favoring U-turn are identified automatically. Port choice produces 74\% cost variation on a single segment (Section~\ref{sec:example}), justifying the matrix.
 
-\textbf{C3 (Walking metric).} Decomposing into productive and unproductive components reveals that \textbf{39.8\% of walking is unproductive}, identifying inter-segment transition reduction as the dominant optimization target. Eliminating transitions alone would reduce overhead from 1.6--2.8$\times$ to $1.1$--$1.3\times$.
+\textbf{C3 (Walking metric).} Decomposing into productive and unproductive components reveals that \textbf{46\% of walking is unproductive on average}, confirming that inter-segment transition reduction is the dominant optimization target. Road-following distances average 1.3--1.6$\times$ haversine (Fig.~\ref{fig:diag-road}), validating the constrained model.
 
-\textbf{C4 (Empirical evaluation).} Across 10 neighborhoods (54--1,476 addresses), RH chain wins 55\%, achieving $\rho = 1.6$--$2.8$. No single algorithm dominates: margins between best and worst range from 5.6\% to 50.8\%, justifying the oracle. Road-network distances change the winning algorithm compared to haversine (Section~\ref{sec:haversine-vs-road}), validating the constrained model.
+\textbf{C4 (Empirical evaluation).} Across 33 neighborhoods at $N = 3, 5, 7, 10$ (124 test cases), no single algorithm dominates. The winning strategy depends on team size: \textbf{2-opt wins at small $N$} (55\% at $N = 3$), \textbf{bisection wins at large $N$} (62\% at $N = 10$). The oracle reduces worst-case walk by 37\% vs.\ random assignment, achieving average overhead of 1.49$\times$ vs.\ the theoretical ideal.
 
-\textbf{C5 (Oracle algorithm).} Running all strategies completes in $<$1\,s for 1,476 addresses, enabling real-time use during emergency operations.
+\textbf{C5 (Oracle algorithm).} Running all four strategies completes in $<$1\,s for neighborhoods up to 1,476 addresses, enabling real-time use during emergency operations. The $N$-dependent winner pattern provides practitioners with a simple rule: use 2-opt for small teams, bisection for large teams, or the oracle when in doubt.
 
-Future work includes: solving a TSP variant on segment endpoints to directly minimize unproductive walking; accounting for ESW starting positions; dynamic reassignment as workers complete areas; and incorporating road-closure data.
+Future work includes: field validation with ESW teams; extending to time-based metrics with terrain and fatigue modeling; incorporating road-closure data; and testing on cities with different street geometries.
 
 \begin{thebibliography}{00}
 
@@ -665,8 +660,8 @@ M.~I.~Malinen and P.~Fr\"anti, ``Balanced k-means for clustering,'' in \emph{Pro
 \bibitem{rosenkrantz1977}
 D.~J.~Rosenkrantz, R.~E.~Stearns, and P.~M.~Lewis, ``An analysis of several heuristics for the traveling salesman problem,'' \emph{SIAM J. Comput.}, vol.~6, no.~3, pp.~563--581, 1977.
 
-\bibitem{chung1988}
-F.~R.~K.~Chung and R.~L.~Graham, ``A new bound for Euclidean Steiner minimal trees,'' \emph{Ann. N.Y. Acad. Sci.}, vol.~515, pp.~328--346, 1988.
+\bibitem{frederickson1978}
+G.~N.~Frederickson, M.~S.~Hecht, and C.~E.~Kim, ``Approximation algorithms for some routing problems,'' \emph{SIAM J. Comput.}, vol.~7, no.~2, pp.~178--193, 1978.
 
 \bibitem{berger1987}
 M.~J.~Berger and S.~H.~Bokhari, ``A partitioning strategy for nonuniform problems on multiprocessors,'' \emph{IEEE Trans. Comput.}, vol.~C-36, no.~5, pp.~570--580, 1987.
