@@ -1,0 +1,43 @@
+# Server Command Log — Auto-Assign Road Network Extraction
+# Date: 2026-03-28
+# Purpose: Extract OSM road network and address data for sub-segment analysis
+# All commands run via SSH unless otherwise noted.
+
+# --- Local (macbook) ---
+# Verify server connectivity
+$ ping -c 1 sitrep.rail.com
+# PING sitrep.rail.com (172.20.110.13): 56 data bytes — 0.598 ms
+
+# Verify SSH and Node.js availability
+$ ssh bob@sitrep.rail.com "source ~/.nvm/nvm.sh; node --version"
+# v24.13.0
+
+# --- sitrep.rail.com (bob) ---
+# Clone auto-assign repo
+$ cd ~ && git clone https://github.com/iannucci/auto-assign.git
+
+# Install Node.js dependencies
+$ cd ~/auto-assign && npm init -y && npm install pg
+
+# --- sitrep.rail.com (bob) ---
+# Check available databases
+$ PGPASSWORD='***' psql -h postgres.rail.com -U postgres -l -t
+# situational_awareness, mattermost, postgres (no separate gis database)
+
+# Check for OSM tables — none found in situational_awareness
+$ PGPASSWORD='***' psql -h postgres.rail.com -U postgres -d situational_awareness \
+    -t -c "SELECT tablename FROM pg_tables WHERE tablename LIKE 'planet_osm%'"
+# (empty)
+
+# PostGIS extension IS available
+$ PGPASSWORD='***' psql -h postgres.rail.com -U postgres -d situational_awareness \
+    -t -c "SELECT extname FROM pg_extension WHERE extname='postgis'"
+# postgis
+
+# Found California OSM PBF extract (1.3 GB, dated 2026-03-25)
+$ ls -lh /srv/data/california-latest.osm.pbf
+# -rw-r--r-- 1 root root 1.3G Mar 25 11:14
+
+# --- sitrep.rail.com (root) ---
+# Install osm2pgsql for OSM data import
+$ apt-get update -qq && apt-get install -y -qq osm2pgsql
