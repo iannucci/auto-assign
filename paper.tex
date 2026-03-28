@@ -406,11 +406,11 @@ The three terms serve distinct purposes:
 \textbf{Runtime.} For $M$ segments and $I$ intersection nodes: Dijkstra precomputation is $O(I \cdot (I + E) \log I)$ where $E$ is edge count (one-time, 2--41\,s in practice). The oracle body is $O(M^3)$ for each chain strategy (dominated by $M$ starting segments $\times$ $M^2$ chain construction). For Crescent Park ($M = 256$), the oracle completes in $<$1\,s after precomputation.
 
 %% ==================================================================
-\section{Results (C4)}
+\section{Study~I: Minimizing Worst-Case Walk Distance (C4)}
 \label{sec:results}
 %% ==================================================================
 
-We evaluate four strategies (NN chain, RH chain, Bisect, 2-opt) plus a random baseline across 33 Palo Alto neighborhoods (54--1,476 addresses, 9--289 segments) at team sizes $N = 3, 5, 7, 10$, yielding 124 test cases. All distances use the road-network metric (Eq.~\ref{eq:walk}) with road-following inter-segment paths.
+Study~I evaluates the algorithms of Section~III under the walk-distance metric (Eq.~\ref{eq:walk}), where the objective is to minimize the worst-case ESW walking distance subject to address-count balance. ESWs are assumed to begin at their first assigned segment (starting-point costs are not modeled). Four strategies (NN chain, RH chain, Bisect, 2-opt) plus a random baseline are tested across 33 Palo Alto neighborhoods (54--1,476 addresses, 9--289 segments) at team sizes $N = 3, 5, 7, 10$, yielding 124 test cases. All distances use the road-network metric with road-following inter-segment paths.
 
 \subsection{Winner Distribution by Team Size}
 
@@ -567,15 +567,72 @@ To validate the road-network model, we compare algorithm rankings under haversin
 
 In our earlier haversine-based study across 41 neighborhoods, bisect dominated at $N = 5$ (21/41 wins) and NN chain at $N = 3$ (18/41). Under road-network distances, the ranking shifts: 2-opt and bisection share dominance, NN chain drops to 7\%. Haversine underestimates the cost of transitions that must navigate around blocks (Fig.~\ref{fig:diag-road} shows a 56\% underestimate). Algorithms producing geographically scattered partitions are penalized more heavily under the road-network metric, validating the constrained model.
 
-\subsection{Limitations}
+\subsection{Study~I Limitations}
 
-\textbf{Single city.} All neighborhoods are in Palo Alto --- an affluent suburb with regular grids, cul-de-sacs, and flat terrain. Results may differ in dense urban, rural, or irregular-street environments. We hypothesize that bisection would perform relatively better in grid cities (axis-aligned cuts match street patterns) and worse in irregular layouts.
+Two limitations of Study~I motivate Study~II:
 
-\textbf{Distance, not time.} We optimize walking distance. Walking speed varies with terrain, fatigue, and equipment. On flat terrain (Palo Alto), distance is a reasonable proxy; in hilly or obstructed environments, a time-based metric would be needed.
+\textbf{No starting point.} Study~I assumes ESWs begin at their first assigned segment. In practice, all ESWs start from a shared staging area (the ``huddle''). The walk from huddle to first segment is unproductive unless the ESW can survey addresses en route.
 
-\textbf{No field validation.} ESWs have not yet been observed using these assignments. A structured field trial is the most important next step.
+\textbf{Distance, not time.} Study~I minimizes distance, but the operational concern is \emph{time}: all ESWs should finish at approximately the same time so that complete damage data is available as early as possible. Each address requires a fixed assessment time ($t_{\text{assess}}$) that typically dominates walking time. This means the algorithm should allow count \emph{imbalance} if it produces time \emph{balance}: an ESW with compact segments can handle more addresses than one who must walk far.
 
-\textbf{Equal service time.} All addresses are treated equally. Multi-unit buildings, commercial properties, and high-rises require different assessment times.
+Study~II addresses both limitations.
+
+%% ==================================================================
+\section{Study~II: Time-Based Assignment from a Huddle Point}
+\label{sec:study2}
+%% ==================================================================
+
+Study~II reformulates the objective to minimize the worst-case \emph{finish time} across all ESWs, with all workers starting from a shared huddle point $H$.
+
+\subsection{Time Metric}
+
+The finish time for ESW $k$ is:
+\begin{equation}
+T_k = \frac{d_{\text{road}}(H, \text{first}_k) + W_k^{\text{prod}} + W_k^{\text{unprod}}}{v} + |P_k| \cdot t_{\text{assess}}
+\label{eq:time}
+\end{equation}
+
+where $v$ is walking speed (5\,km/h $= 83.3$\,m/min), $d_{\text{road}}(H, \text{first}_k)$ is the road-network distance from the huddle to ESW $k$'s first segment, and $t_{\text{assess}}$ is the per-address assessment time. The objective is:
+
+\begin{equation}
+\min_{\{P_1,\ldots,P_N\}} \max_k T_k
+\label{eq:time-obj}
+\end{equation}
+
+Note that address-count balance is no longer a constraint --- it is subsumed by the objective. An ESW with short walking distance can absorb more addresses; one who must walk far gets fewer. The algorithm discovers the right balance automatically.
+
+\textbf{Assessment dominance.} For a typical neighborhood (300 addresses, $N = 3$, $t_{\text{assess}} = 5$\,min), each ESW assesses $\sim$100 addresses ($500$\,min) and walks $\sim$5\,km ($60$\,min). Assessment time is $8\times$ walking time. This means the algorithm should primarily balance address count, with walking distance as a tiebreaker --- almost the reverse of Study~I.
+
+\subsection{Assignment Strategies}
+
+Unlike Study~I (which builds a global chain and slices), Study~II builds each ESW's assignment outward from the huddle point $H$.
+
+\subsubsection{BFS (Breadth-First from Huddle)}
+
+All $N$ ESWs start at $H$. In each round, for each ESW $k$, add the available segment that minimizes ESW $k$'s marginal time increase:
+
+\begin{equation}
+\Delta T_k = \frac{d_{\text{road}}(\text{frontier}_k, \text{entry}_s) + C(\text{in}_s, \text{out}_s)}{v} + n_s \cdot t_{\text{assess}}
+\label{eq:marginal}
+\end{equation}
+
+where $\text{frontier}_k$ is ESW $k$'s current exit port and $n_s$ is the segment's address count. Repeat until all segments are assigned. This naturally produces ``pizza slice'' partitions radiating from $H$.
+
+\subsubsection{DFS (Depth-First, One ESW at a Time)}
+
+Compute a target finish time $T^* = (\text{total walk time} + A \cdot t_{\text{assess}}) / N$. For ESW 1, starting at $H$, greedily add segments (nearest to current frontier) until $T_1 \approx T^*$. Repeat for ESW 2 from $H$ with remaining segments, through ESW $N$. Risk: the last ESW gets scattered remnants.
+
+\subsubsection{SA Post-Processing}
+
+After BFS or DFS, apply simulated annealing with \emph{boundary transfers}: move a segment at the edge of one ESW's territory to an adjacent ESW. Accept if $\max_k T_k$ decreases; otherwise accept with Boltzmann probability $e^{-\Delta / T_{\text{cool}}}$. Only two ESWs' times change per move, making evaluation cheap.
+
+\subsubsection{Productive Walk-from-Huddle}
+
+A refinement: when an ESW walks from $H$ to their assigned territory, they may pass through segments belonging to their assignment. These segments can be surveyed en route, converting unproductive walk-to-first into productive work. The BFS strategy handles this naturally: the first segments assigned to each ESW are those nearest $H$, so the walk-from-huddle is automatically productive.
+
+\subsection{Results}
+
+\emph{Study~II results will be presented here after simulation. Key questions: Does BFS or DFS produce better time balance? How much does SA improve the initial assignment? Does the time-based metric produce materially different partitions than Study~I's distance-based metric?}
 
 %% ==================================================================
 \section{Discussion}
@@ -596,6 +653,14 @@ That 46\% of walking is unproductive has two implications:
 \subsection{Practical Considerations}
 
 The oracle (including 2-opt) executes in the browser in $<$1\,s for neighborhoods up to 289 segments (1,476 addresses). The one-time Dijkstra precomputation (1--14\,s per neighborhood) can be cached. The NPC retains the ability to manually adjust assignments after auto-generation.
+
+\subsection{Limitations}
+
+\textbf{Single city.} All neighborhoods are in Palo Alto --- an affluent suburb with regular grids, cul-de-sacs, and flat terrain. Results may differ in dense urban, rural, or irregular-street environments.
+
+\textbf{No field validation.} ESWs have not yet been observed using these assignments. A structured field trial is the most important next step.
+
+\textbf{Equal service time.} All addresses are treated equally. Multi-unit buildings and high-rises require different assessment times, which Study~II's time metric could accommodate with per-address weights.
 
 %% ==================================================================
 \section{Related Work}
@@ -625,7 +690,7 @@ We presented a practical system for assigning addresses to emergency services wo
 
 \textbf{C5 (Oracle algorithm).} Running all four strategies completes in $<$1\,s for neighborhoods up to 1,476 addresses, enabling real-time use during emergency operations. The $N$-dependent winner pattern provides practitioners with a simple rule: use 2-opt for small teams, bisection for large teams, or the oracle when in doubt.
 
-Future work includes: field validation with ESW teams; extending to time-based metrics with terrain and fatigue modeling; incorporating road-closure data; and testing on cities with different street geometries.
+Study~II extends this framework by reformulating the objective around finish-time balance with a shared starting point, addressing two key limitations of Study~I. Future work includes: field validation with ESW teams, incorporating road-closure data, per-address assessment time weights, and testing on cities with different street geometries.
 
 \begin{thebibliography}{00}
 
