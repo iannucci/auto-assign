@@ -1,0 +1,499 @@
+{
+  "stations": [
+    {
+      "id": 1,
+      "name": "Station 1",
+      "address": "301 Alma St",
+      "lat": 37.4439,
+      "lon": -122.163
+    },
+    {
+      "id": 2,
+      "name": "Station 2",
+      "address": "2675 Hanover St",
+      "lat": 37.4178,
+      "lon": -122.1408
+    },
+    {
+      "id": 3,
+      "name": "Station 3",
+      "address": "799 Embarcadero Rd",
+      "lat": 37.4475,
+      "lon": -122.1482
+    },
+    {
+      "id": 4,
+      "name": "Station 4",
+      "address": "3600 Middlefield Rd",
+      "lat": 37.4192,
+      "lon": -122.1098
+    },
+    {
+      "id": 5,
+      "name": "Station 5",
+      "address": "600 Arastradero Rd",
+      "lat": 37.4018,
+      "lon": -122.1498
+    },
+    {
+      "id": 6,
+      "name": "Station 6",
+      "address": "711 Serra St",
+      "lat": 37.429,
+      "lon": -122.169
+    }
+  ],
+  "neighborhoodAssignments": [
+    {
+      "hood": "Adobe Meadows",
+      "addrs": 316,
+      "lat": 37.42513805981014,
+      "lon": -122.108896154114,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 665
+    },
+    {
+      "hood": "Barron Park",
+      "addrs": 1538,
+      "lat": 37.41234580032513,
+      "lon": -122.13258376729505,
+      "station": 2,
+      "stationName": "Station 2",
+      "stationLat": 37.4178,
+      "stationLon": -122.1408,
+      "distToStation": 946
+    },
+    {
+      "hood": "Baylands",
+      "addrs": 324,
+      "lat": 37.44532091358027,
+      "lon": -122.11307924043209,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 2919
+    },
+    {
+      "hood": "Charleston Gardens",
+      "addrs": 194,
+      "lat": 37.419609956701024,
+      "lon": -122.10693206288659,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 257
+    },
+    {
+      "hood": "Charleston Meadows",
+      "addrs": 694,
+      "lat": 37.41353635778092,
+      "lon": -122.12118365662825,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 1186
+    },
+    {
+      "hood": "Charleston Terrace",
+      "addrs": 765,
+      "lat": 37.41936689019605,
+      "lon": -122.10503864431351,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 421
+    },
+    {
+      "hood": "Classic Communities",
+      "addrs": 104,
+      "lat": 37.43733436826925,
+      "lon": -122.11217983942305,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 2027
+    },
+    {
+      "hood": "College Terrace",
+      "addrs": 1188,
+      "lat": 37.421448930471364,
+      "lon": -122.15104562971392,
+      "station": 2,
+      "stationName": "Station 2",
+      "stationLat": 37.4178,
+      "stationLon": -122.1408,
+      "distToStation": 992
+    },
+    {
+      "hood": "Commercial",
+      "addrs": 267,
+      "lat": 37.43796482284645,
+      "lon": -122.16594084419474,
+      "station": 1,
+      "stationName": "Station 1",
+      "stationLat": 37.4439,
+      "stationLon": -122.163,
+      "distToStation": 709
+    },
+    {
+      "hood": "Community Center",
+      "addrs": 489,
+      "lat": 37.44679040245398,
+      "lon": -122.14512935194271,
+      "station": 3,
+      "stationName": "Station 3",
+      "stationLat": 37.4475,
+      "stationLon": -122.1482,
+      "distToStation": 282
+    },
+    {
+      "hood": "Crescent Park",
+      "addrs": 1476,
+      "lat": 37.452355278523,
+      "lon": -122.14920991903745,
+      "station": 3,
+      "stationName": "Station 3",
+      "stationLat": 37.4475,
+      "stationLon": -122.1482,
+      "distToStation": 547
+    },
+    {
+      "hood": "Crest Park Duv St Fran",
+      "addrs": 567,
+      "lat": 37.45082004268079,
+      "lon": -122.13230939523815,
+      "station": 3,
+      "stationName": "Station 3",
+      "stationLat": 37.4475,
+      "stationLon": -122.1482,
+      "distToStation": 1451
+    },
+    {
+      "hood": "Downtown North",
+      "addrs": 1969,
+      "lat": 37.4485351597256,
+      "lon": -122.16349163595808,
+      "station": 1,
+      "stationName": "Station 1",
+      "stationLat": 37.4439,
+      "stationLon": -122.163,
+      "distToStation": 517
+    },
+    {
+      "hood": "Duv St Fran",
+      "addrs": 966,
+      "lat": 37.44595304492757,
+      "lon": -122.13108554772273,
+      "station": 3,
+      "stationName": "Station 3",
+      "stationLat": 37.4475,
+      "stationLon": -122.1482,
+      "distToStation": 1521
+    },
+    {
+      "hood": "Evergreen",
+      "addrs": 539,
+      "lat": 37.428705034693905,
+      "lon": -122.14687830964776,
+      "station": 2,
+      "stationName": "Station 2",
+      "stationLat": 37.4178,
+      "stationLon": -122.1408,
+      "distToStation": 1326
+    },
+    {
+      "hood": "Evergreen Park",
+      "addrs": 62,
+      "lat": 37.42785388387095,
+      "lon": -122.14099672580646,
+      "station": 2,
+      "stationName": "Station 2",
+      "stationLat": 37.4178,
+      "stationLon": -122.1408,
+      "distToStation": 1118
+    },
+    {
+      "hood": "Fairmeadow",
+      "addrs": 307,
+      "lat": 37.41805831368078,
+      "lon": -122.11905403355053,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 827
+    },
+    {
+      "hood": "Greater Miranda",
+      "addrs": 54,
+      "lat": 37.393325638888875,
+      "lon": -122.12875611666668,
+      "station": 5,
+      "stationName": "Station 5",
+      "stationLat": 37.4018,
+      "stationLon": -122.1498,
+      "distToStation": 2084
+    },
+    {
+      "hood": "Greenacres I",
+      "addrs": 108,
+      "lat": 37.404688481481486,
+      "lon": -122.12480412870372,
+      "station": 2,
+      "stationName": "Station 2",
+      "stationLat": 37.4178,
+      "stationLon": -122.1408,
+      "distToStation": 2030
+    },
+    {
+      "hood": "Greenacres II",
+      "addrs": 264,
+      "lat": 37.40441638030303,
+      "lon": -122.12987393333341,
+      "station": 2,
+      "stationName": "Station 2",
+      "stationLat": 37.4178,
+      "stationLon": -122.1408,
+      "distToStation": 1774
+    },
+    {
+      "hood": "Greenhouse",
+      "addrs": 230,
+      "lat": 37.41925308652172,
+      "lon": -122.10368644695653,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 540
+    },
+    {
+      "hood": "Greenmeadow",
+      "addrs": 466,
+      "lat": 37.41379482961375,
+      "lon": -122.10974590214592,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 601
+    },
+    {
+      "hood": "Leland Manor/Garland",
+      "addrs": 508,
+      "lat": 37.440868725196886,
+      "lon": -122.13524732401575,
+      "station": 3,
+      "stationName": "Station 3",
+      "stationLat": 37.4475,
+      "stationLon": -122.1482,
+      "distToStation": 1361
+    },
+    {
+      "hood": "Los Altos",
+      "addrs": 10043,
+      "lat": 37.3776405127056,
+      "lon": -122.103333128338,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 4656
+    },
+    {
+      "hood": "Mayfield",
+      "addrs": 1145,
+      "lat": 37.42564999720538,
+      "lon": -122.14263505082991,
+      "station": 2,
+      "stationName": "Station 2",
+      "stationLat": 37.4178,
+      "stationLon": -122.1408,
+      "distToStation": 888
+    },
+    {
+      "hood": "Meadow Park",
+      "addrs": 142,
+      "lat": 37.42209573169017,
+      "lon": -122.10790834718308,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 363
+    },
+    {
+      "hood": "Midtown",
+      "addrs": 5101,
+      "lat": 37.4308217090962,
+      "lon": -122.12543743315018,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 1891
+    },
+    {
+      "hood": "Monroe Park",
+      "addrs": 621,
+      "lat": 37.40866314154595,
+      "lon": -122.1190003967797,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 1426
+    },
+    {
+      "hood": "Oak Creek",
+      "addrs": 689,
+      "lat": 37.43707094426708,
+      "lon": -122.18074407097231,
+      "station": 6,
+      "stationName": "Station 6",
+      "stationLat": 37.429,
+      "stationLon": -122.169,
+      "distToStation": 1371
+    },
+    {
+      "hood": "Old Palo Alto",
+      "addrs": 1530,
+      "lat": 37.43552634254903,
+      "lon": -122.14364859679709,
+      "station": 3,
+      "stationName": "Station 3",
+      "stationLat": 37.4475,
+      "stationLon": -122.1482,
+      "distToStation": 1391
+    },
+    {
+      "hood": "Palo Alto",
+      "addrs": 77,
+      "lat": 37.41140815844156,
+      "lon": -122.12706091428566,
+      "station": 2,
+      "stationName": "Station 2",
+      "stationLat": 37.4178,
+      "stationLon": -122.1408,
+      "distToStation": 1406
+    },
+    {
+      "hood": "Palo Alto Central",
+      "addrs": 145,
+      "lat": 37.42845195172418,
+      "lon": -122.142072806207,
+      "station": 2,
+      "stationName": "Station 2",
+      "stationLat": 37.4178,
+      "stationLon": -122.1408,
+      "distToStation": 1190
+    },
+    {
+      "hood": "Palo Alto Hills",
+      "addrs": 85,
+      "lat": 37.37332971411765,
+      "lon": -122.17307253411762,
+      "station": 5,
+      "stationName": "Station 5",
+      "stationLat": 37.4018,
+      "stationLon": -122.1498,
+      "distToStation": 3775
+    },
+    {
+      "hood": "Palo Alto Orchard",
+      "addrs": 230,
+      "lat": 37.40696855434785,
+      "lon": -122.12262329130441,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 1770
+    },
+    {
+      "hood": "Palo Verde",
+      "addrs": 1065,
+      "lat": 37.43014458751171,
+      "lon": -122.11281563577462,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 1246
+    },
+    {
+      "hood": "Research Park",
+      "addrs": 584,
+      "lat": 37.40919564982878,
+      "lon": -122.1427434570206,
+      "station": 2,
+      "stationName": "Station 2",
+      "stationLat": 37.4178,
+      "stationLon": -122.1408,
+      "distToStation": 972
+    },
+    {
+      "hood": "Southgate",
+      "addrs": 268,
+      "lat": 37.43275662798506,
+      "lon": -122.15140803544777,
+      "station": 1,
+      "stationName": "Station 1",
+      "stationLat": 37.4439,
+      "stationLon": -122.163,
+      "distToStation": 1607
+    },
+    {
+      "hood": "Stanford",
+      "addrs": 1737,
+      "lat": 37.422509782498594,
+      "lon": -122.16387743051243,
+      "station": 6,
+      "stationName": "Station 6",
+      "stationLat": 37.429,
+      "stationLon": -122.169,
+      "distToStation": 852
+    },
+    {
+      "hood": "University South",
+      "addrs": 3023,
+      "lat": 37.44466679831324,
+      "lon": -122.1563548768439,
+      "station": 1,
+      "stationName": "Station 1",
+      "stationLat": 37.4439,
+      "stationLon": -122.163,
+      "distToStation": 593
+    },
+    {
+      "hood": "Ventura",
+      "addrs": 1654,
+      "lat": 37.41990104250327,
+      "lon": -122.1314410962517,
+      "station": 2,
+      "stationName": "Station 2",
+      "stationLat": 37.4178,
+      "stationLon": -122.1408,
+      "distToStation": 859
+    },
+    {
+      "hood": "Walnut Grove",
+      "addrs": 138,
+      "lat": 37.41581011304347,
+      "lon": -122.11502436304347,
+      "station": 4,
+      "stationName": "Station 4",
+      "stationLat": 37.4192,
+      "stationLon": -122.1098,
+      "distToStation": 596
+    }
+  ]
+}
