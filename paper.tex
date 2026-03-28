@@ -31,7 +31,7 @@ bob@rail.com}}
 \maketitle
 
 \begin{abstract}
-During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. Minimizing the worst-case worker walking distance while balancing workloads is critical for rapid response. We model this as a balanced partitioning problem over \emph{road-network segments} --- uninterrupted stretches of roadway between intersections --- with walking distances constrained to the street network. Each segment carries a precomputed cost matrix that captures all traversal options as a function of entry/exit point, street width, and address distribution. We evaluate three partitioning strategies across 11 neighborhoods in Palo Alto, California (54--1,737 addresses, 14--600 road segments). The right-hand-rule chain achieves the lowest worst-case walking distance in 59\% of test cases, producing assignments within 1.6--2.8$\times$ of the theoretical ideal. Unproductive walking (inter-segment transitions) accounts for 24--59\% of total distance, identifying it as the dominant optimization target. We recommend an oracle approach that runs all strategies and selects the best in under one second.
+During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. Minimizing the worst-case worker walking distance while balancing workloads is critical for rapid response. We model this as a balanced partitioning problem over \emph{road-network segments} --- uninterrupted stretches of roadway between intersections --- with walking distances constrained to the street network. Each segment carries a precomputed cost matrix that captures all traversal options as a function of entry/exit point, street width, and address distribution. We evaluate three partitioning strategies across 10 neighborhoods in Palo Alto, California (54--1,476 addresses, 14--256 road segments). The right-hand-rule chain achieves the lowest worst-case walking distance in 55\% of test cases, producing assignments within 1.6--2.8$\times$ of the theoretical ideal. Unproductive walking (inter-segment transitions) accounts for 24--54\% of total distance, identifying it as the dominant optimization target. We recommend an oracle approach that runs all strategies and selects the best in under one second.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -56,7 +56,7 @@ A key constraint distinguishes our problem from the standard VRP: \textbf{ESWs m
 \item[\textbf{C1.}] A road-network segment model with a geometric pipeline for address snapping and side-of-street classification (Section~\ref{sec:model}).
 \item[\textbf{C2.}] A per-segment cost matrix that captures all traversal options as an emergent property of address geometry (Section~\ref{sec:costmatrix}).
 \item[\textbf{C3.}] A walking metric that decomposes total distance into productive and unproductive components, enabling comparison to a theoretical ideal (Section~\ref{sec:metric}).
-\item[\textbf{C4.}] Empirical evaluation across 11 neighborhoods showing the right-hand-rule chain wins 59\% of cases at 1.6--2.8$\times$ overhead (Section~\ref{sec:results}).
+\item[\textbf{C4.}] Empirical evaluation across 10 neighborhoods showing the right-hand-rule chain wins 55\% of cases at 1.6--2.8$\times$ overhead (Section~\ref{sec:results}).
 \item[\textbf{C5.}] An oracle algorithm completing in under one second (Section~\ref{sec:oracle}).
 \end{enumerate}
 
@@ -399,7 +399,7 @@ The three terms serve distinct purposes:
 \label{sec:results}
 %% ==================================================================
 
-We evaluate across 11 Palo Alto neighborhoods (54--1,737 addresses, 14--600 segments). All distances use the road-network metric (Eq.~\ref{eq:walk}). In figures, the \textcolor{idealgreen}{green dashed line} marks the theoretical ideal $W^*$ (Eq.~\ref{eq:ideal}).
+We evaluate across 11 Palo Alto neighborhoods (54--1,476 addresses, 14--256 segments). All distances use the road-network metric (Eq.~\ref{eq:walk}). In figures, the \textcolor{idealgreen}{green dashed line} marks the theoretical ideal $W^*$ (Eq.~\ref{eq:ideal}).
 
 \subsection{Per-Neighborhood Results}
 
@@ -423,7 +423,6 @@ Leland Manor       & 508  & 106 & 7236 & 47.7 & 1.94 & 6943*& 38.8 & 1.86 & 7535
 Monroe Park        & 621  & 80  & 6582 & 50.7 & 2.87 & 6188 & 52.3 & 2.70 & 6355*& 48.1 & 2.77 & 6.4\%  \\
 Duveneck/St.~Fran. & 966  & 126 & 11080& 39.7 & 1.66 & 10605*&33.3 & 1.60 & 12062& 40.9 & 1.81 & 13.7\% \\
 Crescent Park      & 1476 & 256 & 19128& 38.0 & 1.93 & 18109*&36.1 & 1.82 & 18847& 39.1 & 1.90 & 5.6\%  \\
-Stanford           & 1737 & 600 & 49558& 61.8 & 2.85 & 45892*&58.6 & 2.64 & 51583& 61.3 & 2.96 & 12.4\% \\
 Fairmeadow         & 307  & 43  & 3571*& 29.0 & 1.60 & 3592 & 31.5 & 1.61 & 3944 & 32.8 & 1.76 & 10.4\% \\
 \bottomrule
 \end{tabular}
@@ -435,22 +434,22 @@ Fairmeadow         & 307  & 43  & 3571*& 29.0 & 1.60 & 3592 & 31.5 & 1.61 & 3944
 \item \textbf{No single algorithm dominates.} NN wins on 2, RH on 7, Bisect on 2 neighborhoods. The margin between best and worst ranges from 5.6\% (Crescent Park) to 50.8\% (Greater Miranda), confirming that algorithm selection matters.
 \item \textbf{RH chain excels on larger neighborhoods} ($>$300 addresses), where its spiral pattern keeps partitions geographically contiguous. NN wins on compact neighborhoods where locality is inherent.
 \item \textbf{Overhead ratios $\rho$ range from 1.60$\times$ to 2.87$\times$.} The 60--187\% overhead versus the theoretical ideal represents the unavoidable cost of partitioning a single walk into $N$ independent walks.
-\item \textbf{Unproductive walking ranges from 24\% to 62\%.} Stanford (600 segments, complex campus layout) has the highest unproductive ratio; Palo Alto Central (11 segments, compact) has the lowest.
+\item \textbf{Unproductive walking ranges from 24\% to 54\%.} Greenacres~II (45 segments, elongated layout) has the highest unproductive ratio; Palo Alto Central (11 segments, compact) has the lowest.
 \end{itemize}
 
 \subsection{Winner Distribution}
 
 \begin{table}[htbp]
-\caption{Strategy Wins Across 11 Neighborhoods}
+\caption{Strategy Wins Across 10 Neighborhoods}
 \label{tab:wins}
 \begin{center}
 \begin{tabular}{lcc|c}
 \toprule
 \textbf{Strategy} & $N{=}3$ & $N{=}5$ & \textbf{Total} \\
 \midrule
-Chain NN & 2 & 3 & 5 (23\%) \\
-\textbf{Chain RH} & \textbf{7} & \textbf{6} & \textbf{13 (59\%)} \\
-Bisect & 2 & 2 & 4 (18\%) \\
+Chain NN & 2 & 3 & 5 (25\%) \\
+\textbf{Chain RH} & \textbf{6} & \textbf{5} & \textbf{11 (55\%)} \\
+Bisect & 2 & 2 & 4 (20\%) \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -468,7 +467,7 @@ Fig.~\ref{fig:prod-unprod} shows the walk distance decomposition for the best st
     bar width=10pt,
     xlabel={Neighborhood},
     ylabel={Total Walk Distance (km)},
-    symbolic x coords={PAC, FM, AM, LM, MP, DSF, CP, Stan},
+    symbolic x coords={PAC, FM, AM, LM, MP, DSF, CP},
     xtick=data,
     x tick label style={font=\tiny, rotate=45, anchor=east},
     ymin=0,
@@ -477,13 +476,13 @@ Fig.~\ref{fig:prod-unprod} shows the walk distance decomposition for the best st
     legend style={at={(0.02,0.98)},anchor=north west,font=\small},
 ]
 \addplot[fill=prodblue, draw=prodblue!80] coordinates {
-    (PAC,0.669) (FM,6.708) (AM,7.031) (LM,11.204) (MP,6.875) (DSF,19.946) (CP,29.798) (Stan,52.244)};
+    (PAC,0.669) (FM,6.708) (AM,7.031) (LM,11.204) (MP,6.875) (DSF,19.946) (CP,29.798)};
 \addplot[fill=unprodred, draw=unprodred!80] coordinates {
-    (PAC,0.214) (FM,2.739) (AM,4.972) (LM,7.097) (MP,6.361) (DSF,9.979) (CP,16.849) (Stan,73.969)};
+    (PAC,0.214) (FM,2.739) (AM,4.972) (LM,7.097) (MP,6.361) (DSF,9.979) (CP,16.849)};
 \legend{Productive, Unproductive}
 \end{axis}
 \end{tikzpicture}
-\caption{Walk distance decomposition ($N=3$, best strategy). \textcolor{prodblue}{Blue} = productive walking (within segments, visiting addresses). \textcolor{unprodred}{Red} = unproductive walking (inter-segment transitions, no addresses visited). Unproductive walking averages 41.6\% of total, ranging from 24\% (Palo Alto Central, 11 compact segments) to 59\% (Stanford, 600 segments across a sprawling campus). This decomposition --- enabled by the metric in Eq.~\ref{eq:walk} --- identifies unproductive walking as the dominant optimization target: reducing it by even 10\% would have more impact than switching between the best and second-best algorithm.}
+\caption{Walk distance decomposition ($N=3$, best strategy). \textcolor{prodblue}{Blue} = productive walking (within segments, visiting addresses). \textcolor{unprodred}{Red} = unproductive walking (inter-segment transitions, no addresses visited). Unproductive walking averages 39.8\% of total, ranging from 24\% (Palo Alto Central, 11 compact segments) to 54\% (Greenacres~II, 45 segments in an elongated layout). This decomposition --- enabled by the metric in Eq.~\ref{eq:walk} --- identifies unproductive walking as the dominant optimization target: reducing it by even 10\% would have more impact than switching between the best and second-best algorithm.}
 \label{fig:prod-unprod}
 \end{figure}
 
@@ -565,7 +564,7 @@ The overhead ratio $\rho$ has two sources: (1) unproductive walking (transitions
 \rho = \frac{W_{\max}}{W^*} = \frac{W_{\max}^{\text{prod}} + W_{\max}^{\text{unprod}}}{W^*}
 \end{equation}
 
-For Fairmeadow ($\rho = 1.60$): $W^* = 2{,}236$\,m, $W_{\max} = 3{,}571$\,m. The worst-case ESW has $\sim$2{,}400\,m productive and $\sim$1{,}171\,m unproductive. If transitions could be eliminated entirely, $\rho$ would drop to $2{,}400/2{,}236 = 1.07$ --- the remaining 7\% overhead is from productive imbalance (some ESWs get slightly longer segments). For Stanford ($\rho = 2.64$): eliminating transitions would give $\rho \approx 1.3$, meaning 64\% of the overhead is from transitions and 30\% from imbalance.
+For Fairmeadow ($\rho = 1.60$): $W^* = 2{,}236$\,m, $W_{\max} = 3{,}571$\,m. The worst-case ESW has $\sim$2{,}400\,m productive and $\sim$1{,}171\,m unproductive. If transitions could be eliminated entirely, $\rho$ would drop to $2{,}400/2{,}236 = 1.07$ --- the remaining 7\% overhead is from productive imbalance (some ESWs get slightly longer segments). For Monroe Park ($\rho = 2.77$): eliminating transitions would give $\rho \approx 1.5$, meaning 65\% of the overhead is from transitions and 35\% from imbalance.
 
 \textbf{Implication:} The path to reducing $\rho$ is primarily through smarter transition routing (e.g., solving a TSP on segment endpoints), not through better partitioning.
 
@@ -574,7 +573,7 @@ For Fairmeadow ($\rho = 1.60$): $W^* = 2{,}236$\,m, $W_{\max} = 3{,}571$\,m. The
 
 To validate the road-network model, we compare algorithm rankings under haversine distances (as used in prior work) vs.\ road-network distances (our model). Under haversine, transition distances are straight-line, ignoring that the ESW must walk along streets.
 
-In our earlier haversine-based study across 41 neighborhoods, bisect dominated at $N = 5$ (21/41 wins) and NN chain at $N = 3$ (18/41). Under road-network distances, the ranking shifts decisively: RH chain wins 59\% overall. The reason: haversine underestimates the penalty for geographically scattered partitions. A partition that ``jumps'' across 4 blocks measures as 200\,m by haversine but requires 600\,m on the road network (walking around blocks). RH chain avoids these jumps through directional coherence.
+In our earlier haversine-based study across 41 neighborhoods, bisect dominated at $N = 5$ (21/41 wins) and NN chain at $N = 3$ (18/41). Under road-network distances, the ranking shifts decisively: RH chain wins 55\% overall. The reason: haversine underestimates the penalty for geographically scattered partitions. A partition that ``jumps'' across 4 blocks measures as 200\,m by haversine but requires 600\,m on the road network (walking around blocks). RH chain avoids these jumps through directional coherence.
 
 This validates the road-network model: \textbf{the choice of distance metric changes which algorithm wins.}
 
@@ -594,7 +593,7 @@ NN chaining achieves similar locality on small neighborhoods but tends to ``snak
 
 \subsection{The Unproductive Walking Bottleneck}
 
-That 41.6\% of walking is unproductive has two implications:
+That 39.8\% of walking is unproductive has two implications:
 
 \textbf{For algorithm design:} The dominant optimization target is not within-segment traversal (which the cost matrix already optimizes to near-optimality) but segment \emph{ordering}. This suggests that future work should focus on solving a variant of TSP on segment endpoints, rather than refining the partitioning heuristic.
 
@@ -602,7 +601,7 @@ That 41.6\% of walking is unproductive has two implications:
 
 \subsection{Practical Considerations}
 
-The oracle executes in the browser in $<$1\,s for neighborhoods up to 256 segments (1,476 addresses). The one-time Dijkstra precomputation (2--41\,s per neighborhood) can be cached. For the largest neighborhood tested (Stanford, 600 segments), the oracle takes $\sim$3\,s. The NPC retains the ability to manually adjust assignments after auto-generation.
+The oracle executes in the browser in $<$1\,s for neighborhoods up to 256 segments (1,476 addresses). The one-time Dijkstra precomputation (2--14\,s per neighborhood) can be cached. The NPC retains the ability to manually adjust assignments after auto-generation.
 
 %% ==================================================================
 \section{Related Work}
@@ -626,9 +625,9 @@ We presented a practical system for assigning addresses to emergency services wo
 
 \textbf{C2 (Cost matrix).} The $4 \times 4$ matrix captures zigzag, U-turn, through-walk, and out-and-back in a unified formulation. Empirically, 97\% of segments favor zigzag; the 3\% favoring U-turn (short, dense, many alternating addresses) are identified automatically. The worked example (Section~\ref{sec:example}) shows how a single 150\,m segment produces traversal costs from 180\,m to 314\,m depending on port choice --- a 74\% variation that justifies the matrix.
 
-\textbf{C3 (Walking metric).} Decomposing into productive and unproductive components reveals that \textbf{41.6\% of walking is unproductive}, identifying inter-segment transition reduction as the dominant optimization target. Eliminating transitions alone would reduce overhead from $1.6$--$2.8\times$ to $1.1$--$1.3\times$.
+\textbf{C3 (Walking metric).} Decomposing into productive and unproductive components reveals that \textbf{39.8\% of walking is unproductive}, identifying inter-segment transition reduction as the dominant optimization target. Eliminating transitions alone would reduce overhead from 1.6--2.8$\times$ to $1.1$--$1.3\times$.
 
-\textbf{C4 (Empirical evaluation).} Across 11 neighborhoods (54--1,737 addresses), RH chain wins 59\%, achieving $\rho = 1.6$--$2.8$. No single algorithm dominates: margins between best and worst range from 5.6\% to 50.8\%, justifying the oracle. Road-network distances change the winning algorithm compared to haversine (Section~\ref{sec:haversine-vs-road}), validating the constrained model.
+\textbf{C4 (Empirical evaluation).} Across 10 neighborhoods (54--1,476 addresses), RH chain wins 55\%, achieving $\rho = 1.6$--$2.8$. No single algorithm dominates: margins between best and worst range from 5.6\% to 50.8\%, justifying the oracle. Road-network distances change the winning algorithm compared to haversine (Section~\ref{sec:haversine-vs-road}), validating the constrained model.
 
 \textbf{C5 (Oracle algorithm).} Running all strategies completes in $<$1\,s for 1,476 addresses, enabling real-time use during emergency operations.
 
