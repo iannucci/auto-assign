@@ -64,25 +64,42 @@ We model the street network as a graph $G = (V, E)$ extracted from OpenStreetMap
 
 ESWs are constrained to walk along streets at all times. They may walk house-to-house within a sub-segment, turn a corner at an intersection, or cross a street (U-turn), but may not jump over houses or pass through properties.
 
-\subsection{Sub-Segment Traversal Cost}
+\subsection{Segment Traversal Cost}
 
-An ESW must enter and exit each sub-segment at an intersection endpoint. There are four traversal options, each with a different walk distance:
+Each segment endpoint has two \emph{ports} --- one per sidewalk --- giving four ports per segment: $S_L, S_R, E_L, E_R$. An ESW enters at one port and exits at another. The minimum traversal cost depends on which ports are used and the distribution of addresses on each side.
+
+Within a segment, the ESW proceeds monotonically (never backtracks), crossing the street as needed to reach addresses on the opposite side. Backtracking is always dominated by crossing when the street width $w$ is less than twice the along-street gap between consecutive addresses --- which holds for virtually all residential streets.
+
+Addresses sorted by position form \emph{runs} --- maximal consecutive groups on the same side. Let $r$ be the number of runs. The cost for a through-traversal entering on side $s$ and exiting on side $e$ is:
 
 \begin{equation}
-c(ss, \text{in}, \text{out}) = \begin{cases}
-D & \text{if } \text{in} = S, \text{out} = E \\
-D & \text{if } \text{in} = E, \text{out} = S \\
-2 \cdot t_n \cdot D & \text{if } \text{in} = \text{out} = S \\
-2(1-t_1) \cdot D & \text{if } \text{in} = \text{out} = E
-\end{cases}
-\label{eq:subseg-cost}
+C(S_s, E_e) = D + k(s, e) \cdot w
+\label{eq:through-cost}
 \end{equation}
 
-where $t_1$ and $t_n$ are the positions of the first and last address. Through-traversal ($S \to E$ or $E \to S$) walks the full segment length $D$. Out-and-back ($S \to S$ or $E \to E$) walks only to the farthest address and returns, which is significantly cheaper when addresses cluster near one end.
+where $k(s,e) = (r-1) + [s \neq \text{side of first run}] + [e \neq \text{side of last run}]$ counts the mandatory side-changes plus entry/exit adjustments. The Iverson brackets are 0 or 1.
+
+For out-and-back traversals, the return leg carries no addresses, so zero crossings on return:
+
+\begin{equation}
+C(S_s, S_e) = 2 \cdot t_n \cdot D + k_{\text{out}}(s) \cdot w
+\label{eq:outback-cost}
+\end{equation}
+
+The exit side $e$ is free on the return --- the ESW walks back on whichever sidewalk connects best to the next segment.
+
+The full $4 \times 4$ cost matrix for each segment is precomputed in $O(n)$ time from the address sequence. This formulation subsumes the split/merge decision automatically:
+
+\begin{itemize}
+\item \textbf{Dense alternating addresses} ($r$ large): Through-traversal cost $D + r \cdot w$ becomes expensive. The optimizer routes the ESW down one side ($S_L \to E_L$, cost $D$), crosses once at $E$, and assigns the return side as a separate traversal --- the U-turn pattern emerges from the cost matrix without explicit sub-segment splitting.
+\item \textbf{Addresses grouped by side} ($r$ small): Through-traversal at $D + k \cdot w$ is cheap. The zigzag pattern is optimal.
+\item \textbf{Single-sided segment} ($r = 1$): Zero crossings. The matrix reduces to the four cases $\{D, D, 2t_n D, 2(1-t_1)D\}$.
+\item \textbf{Cul-de-sac} ($S = E$): Ports collapse to $\{S_L, S_R\}$. All traversals are out-and-back.
+\end{itemize}
 
 \subsection{Objective}
 
-Given $M$ sub-segments and $N$ ESWs, find a partition $\{P_1, P_2, \ldots, P_N\}$ of the sub-segments, an ordering within each partition, and entry/exit choices for each sub-segment, that minimize:
+Given $M$ segments (each with a precomputed $4 \times 4$ cost matrix) and $N$ ESWs, find a partition $\{P_1, P_2, \ldots, P_N\}$ of the segments, an ordering within each partition, and port choices for each segment, that minimize:
 
 \begin{equation}
 \max_{k \in \{1..N\}} W(P_k)
@@ -91,23 +108,17 @@ Given $M$ sub-segments and $N$ ESWs, find a partition $\{P_1, P_2, \ldots, P_N\}
 where the total walk distance for ESW $k$ is:
 
 \begin{equation}
-W(P_k) = \underbrace{\sum_{i=1}^{|P_k|} c(ss_i, \text{in}_i, \text{out}_i)}_{\text{productive (intra-sub-segment)}} + \underbrace{\sum_{i=1}^{|P_k|-1} d_{\text{road}}(\text{out}_i, \text{in}_{i+1})}_{\text{unproductive (inter-sub-segment)}}
+W(P_k) = \underbrace{\sum_{i=1}^{|P_k|} C(\text{in}_i, \text{out}_i)}_{\text{productive (within-segment)}} + \underbrace{\sum_{i=1}^{|P_k|-1} d_{\text{road}}(\text{out}_i, \text{in}_{i+1})}_{\text{unproductive (between-segment)}}
 \label{eq:total-walk}
 \end{equation}
 
-The first sum is \emph{productive} walking (visiting addresses). The second sum is \emph{unproductive} walking (traveling between sub-segments along the road network). A good assignment minimizes unproductive walking.
+The first sum is \emph{productive} walking (visiting addresses within segments). The second sum is \emph{unproductive} walking (traveling between segments along the road network). A good assignment minimizes unproductive walking while balancing the total.
 
 The balance constraint requires:
 \begin{equation}
 \frac{\max_k |P_k|}{\min_k |P_k|} \leq \beta
 \end{equation}
-where $|P_k|$ is the total number of addresses in ESW $k$'s assigned sub-segments and $\beta \approx 1.0$.
-
-\subsection{Special Cases}
-
-\textbf{Paired sub-segments.} When an ESW is assigned both sides of the same segment, the optimal traversal is the U-turn: walk $S \to E$ on one side, cross the street at $E$ (negligible distance), walk $E \to S$ on the other side. Total: $2D$ with zero unproductive distance. This U-turn pattern, which our earlier study found to reduce walk distance by 33--71\%, arises naturally from the sub-segment formulation.
-
-\textbf{Cul-de-sacs.} When $S = E$ (dead-end street), through-traversal and out-and-back are equivalent. The ESW enters and exits at the single intersection.
+where $|P_k|$ is the total number of addresses in ESW $k$'s assigned segments and $\beta \approx 1.0$.
 
 \subsection{Data Sources}
 

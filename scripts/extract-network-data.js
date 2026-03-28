@@ -252,32 +252,143 @@ async function main() {
     }
     console.log(`  ${addressSnapping.length} addresses snapped (${addresses.length - addressSnapping.length} too far)`);
 
-    // 6. Build sub-segments: group by (segmentId, side), order by t
-    const subSegMap = new Map();
+    // 6. Group addresses by segment, compute cost matrices
+    // Street widths by OSM road class (meters, approximate)
+    const STREET_WIDTH = {
+        motorway: 20, motorway_link: 10, trunk: 18, trunk_link: 10,
+        primary: 16, primary_link: 10, secondary: 14, secondary_link: 10,
+        tertiary: 12, tertiary_link: 10, residential: 10,
+        unclassified: 8, service: 6, living_street: 6
+    };
+
+    const segAddrs = new Map(); // segId -> [{gid, side, t}]
     for (const as of addressSnapping) {
-        const key = `${as.segmentId}:${as.side}`;
-        if (!subSegMap.has(key)) subSegMap.set(key, []);
-        subSegMap.get(key).push(as);
+        if (!segAddrs.has(as.segmentId)) segAddrs.set(as.segmentId, []);
+        segAddrs.get(as.segmentId).push(as);
     }
 
-    const subSegments = [];
-    let ssId = 0;
-    for (const [key, entries] of subSegMap) {
-        entries.sort((a, b) => a.t - b.t);
-        const [segIdStr, side] = key.split(":");
-        const segId = parseInt(segIdStr);
-        const seg = segments[segId];
-        subSegments.push({
-            id: ssId++,
-            segmentId: segId,
-            side,
-            streetName: seg.name,
-            highway: seg.highway,
-            gids: entries.map(e => e.gid),
-            count: entries.length
-        });
+    // Compute 4x4 cost matrix for each segment with addresses
+    // Ports: 0=S_left, 1=S_right, 2=E_left, 3=E_right
+    function computeCostMatrix(seg, addrs) {
+        const D = seg.distance;
+        const w = STREET_WIDTH[seg.highway] || 10;
+        const isCulDeSac = seg.startNode === seg.endNode;
+
+        // Sort addresses by position along segment
+        const sorted = [...addrs].sort((a, b) => a.t - b.t);
+        const tFirst = sorted[0].t;
+        const tLast = sorted[sorted.length - 1].t;
+
+        // Count runs (maximal consecutive groups on same side)
+        let runs = 1;
+        let firstRunSide = sorted[0].side;
+        let lastRunSide = sorted[0].side;
+        for (let i = 1; i < sorted.length; i++) {
+            if (sorted[i].side !== sorted[i-1].side) {
+                runs++;
+                lastRunSide = sorted[i].side;
+            }
+        }
+        const mandatoryCrossings = runs - 1;
+
+        // Through-traversal S→E: cost = D + k·w
+        // k = mandatoryCrossings + (entry adjustment) + (exit adjustment)
+        function throughCost(entrySide, exitSide) {
+            let k = mandatoryCrossings;
+            if (entrySide !== firstRunSide) k++;
+            if (exitSide !== lastRunSide) k++;
+            return D + k * w;
+        }
+
+        // Out-and-back S→S: cost = 2·tLast·D + k_out·w
+        // k_out = crossings going out only (return is free)
+        function outBackFromS(entrySide) {
+            let k = mandatoryCrossings;
+            if (entrySide !== firstRunSide) k++;
+            return 2 * tLast * D + k * w;
+        }
+
+        // Out-and-back E→E: cost = 2·(1-tFirst)·D + k_out·w
+        function outBackFromE(entrySide) {
+            // Walking from E toward S, the runs are in reverse order
+            let k = mandatoryCrossings;
+            if (entrySide !== lastRunSide) k++;
+            return 2 * (1 - tFirst) * D + k * w;
+        }
+
+        // Build 4x4 matrix: [S_L, S_R, E_L, E_R] x [S_L, S_R, E_L, E_R]
+        // matrix[entry][exit] = minimum traversal cost
+        const matrix = Array.from({length: 4}, () => Array(4).fill(Infinity));
+
+        if (isCulDeSac) {
+            // S = E, only out-and-back possible
+            // Ports 0,1 = S_left,S_right; ports 2,3 alias to same
+            for (const es of ["left", "right"]) {
+                const ei = es === "left" ? 0 : 1;
+                const cost = outBackFromS(es);
+                // Can exit on either side (return is free)
+                matrix[ei][0] = matrix[ei][1] = cost;
+                matrix[ei][2] = matrix[ei][3] = cost; // E = S for cul-de-sac
+            }
+        } else {
+            // Through-traversals S→E
+            for (const es of ["left", "right"]) {
+                for (const xs of ["left", "right"]) {
+                    const ei = es === "left" ? 0 : 1;   // S_left=0, S_right=1
+                    const xi = xs === "left" ? 2 : 3;   // E_left=2, E_right=3
+                    matrix[ei][xi] = throughCost(es, xs);
+                }
+            }
+            // Through-traversals E→S
+            for (const es of ["left", "right"]) {
+                for (const xs of ["left", "right"]) {
+                    const ei = es === "left" ? 2 : 3;   // E_left=2, E_right=3
+                    const xi = xs === "left" ? 0 : 1;   // S_left=0, S_right=1
+                    matrix[ei][xi] = throughCost(es, xs); // symmetric cost
+                }
+            }
+            // Out-and-back from S
+            for (const es of ["left", "right"]) {
+                const ei = es === "left" ? 0 : 1;
+                const cost = outBackFromS(es);
+                matrix[ei][0] = Math.min(matrix[ei][0], cost);
+                matrix[ei][1] = Math.min(matrix[ei][1], cost);
+            }
+            // Out-and-back from E
+            for (const es of ["left", "right"]) {
+                const ei = es === "left" ? 2 : 3;
+                const cost = outBackFromE(es);
+                matrix[ei][2] = Math.min(matrix[ei][2], cost);
+                matrix[ei][3] = Math.min(matrix[ei][3], cost);
+            }
+        }
+
+        return {
+            matrix,
+            runs,
+            streetWidth: w,
+            tFirst, tLast,
+            addressOrder: sorted.map(a => ({ gid: a.gid, side: a.side, t: a.t }))
+        };
     }
-    console.log(`  ${subSegments.length} sub-segments built`);
+
+    let segsWithAddrs = 0, segsWithBothSides = 0;
+    for (const seg of segments) {
+        const addrs = segAddrs.get(seg.id);
+        if (!addrs || addrs.length === 0) continue;
+        segsWithAddrs++;
+        const sides = new Set(addrs.map(a => a.side));
+        if (sides.size === 2) segsWithBothSides++;
+        const cm = computeCostMatrix(seg, addrs);
+        seg.costMatrix = cm.matrix;
+        seg.traversalInfo = {
+            runs: cm.runs, streetWidth: cm.streetWidth,
+            tFirst: cm.tFirst, tLast: cm.tLast,
+            addressOrder: cm.addressOrder
+        };
+        seg.addressCount = addrs.length;
+    }
+    console.log(`  ${segsWithAddrs} segments with addresses (${segsWithBothSides} have addresses on both sides)`);
 
     // 7. Build segment adjacency (shared intersection nodes)
     const nodeToSegs = new Map();
@@ -316,11 +427,21 @@ async function main() {
         `p95=${snapDists[Math.floor(snapDists.length*0.95)]}m, ` +
         `max=${snapDists[snapDists.length-1]}m`);
 
-    // Sub-segment size stats
-    const ssCounts = subSegments.map(s => s.count);
-    ssCounts.sort((a, b) => a - b);
-    console.log(`Sub-segments: ${subSegments.length}, median size=${ssCounts[Math.floor(ssCounts.length/2)]}, ` +
-        `max=${ssCounts[ssCounts.length-1]}`);
+    // Cost matrix stats: show how many segments favor zigzag vs U-turn
+    let zigzagWins = 0, uturnWins = 0;
+    for (const seg of segments) {
+        if (!seg.costMatrix || !seg.traversalInfo || seg.traversalInfo.runs <= 1) continue;
+        // Compare best through-traversal cost vs best U-turn-style cost
+        // Through (zigzag): min of matrix[0..1][2..3] (S→E entries)
+        const throughMin = Math.min(
+            seg.costMatrix[0][2], seg.costMatrix[0][3],
+            seg.costMatrix[1][2], seg.costMatrix[1][3]);
+        // U-turn equivalent: through one side + cross + return other side
+        // This is approximated by 2*D + w, but we compare raw matrix values
+        if (throughMin < 2 * seg.distance) zigzagWins++;
+        else uturnWins++;
+    }
+    console.log(`Segments with both sides: zigzag-preferred=${zigzagWins}, U-turn-preferred=${uturnWins}`);
 
     // 9. Save
     const output = {
@@ -331,7 +452,8 @@ async function main() {
             intersections: intersections.size,
             ways: ways.length,
             segments: segments.length,
-            subSegments: subSegments.length,
+            segsWithAddresses: segsWithAddrs,
+            segsWithBothSides: segsWithBothSides,
             addresses: addresses.length,
             snapped: addressSnapping.length,
             adjacencies: segAdjacency.length
@@ -339,14 +461,20 @@ async function main() {
         // Compact node storage: array of [id, lat, lon]
         nodes: [...nodeCoords].map(([id, c]) => [id, c.lat, c.lon]),
         intersections: [...intersections],
-        segments: segments.map(s => ({
+        segments: segments.filter(s => s.addressCount > 0).map(s => ({
             id: s.id, name: s.name, highway: s.highway,
             startNode: s.startNode, endNode: s.endNode,
-            // Compact: just [lat, lon] pairs for the polyline
             polyline: s.nodes.map(n => [n.lat, n.lon]),
+            distance: s.distance,
+            addressCount: s.addressCount,
+            costMatrix: s.costMatrix,
+            traversalInfo: s.traversalInfo
+        })),
+        // Also include segments without addresses for road-network routing
+        roadSegments: segments.filter(s => !s.addressCount).map(s => ({
+            id: s.id, startNode: s.startNode, endNode: s.endNode,
             distance: s.distance
         })),
-        subSegments,
         segmentAdjacency: segAdjacency,
         addresses,
         addressSnapping
