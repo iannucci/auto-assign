@@ -632,7 +632,32 @@ A refinement: when an ESW walks from $H$ to their assigned territory, they may p
 
 \subsection{Results}
 
-\emph{Study~II results will be presented here after simulation. Key questions: Does BFS or DFS produce better time balance? How much does SA improve the initial assignment? Does the time-based metric produce materially different partitions than Study~I's distance-based metric?}
+We test BFS, DFS, BFS+SA, and Study~I's chain+slice (evaluated with the time metric) across 10 neighborhoods at $N = 3, 5$ (20 test cases), with $t_{\text{assess}} = 5$\,min and walking speed 5\,km/h. Huddle points are the nearest intersection node to each neighborhood's serving fire station (6 Palo Alto Fire Department stations, assigned by centroid proximity).
+
+\begin{table}[htbp]
+\caption{Study~II Strategy Wins (Time Metric)}
+\label{tab:study2wins}
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+\textbf{Strategy} & \textbf{Wins (of 20)} \\
+\midrule
+\textbf{Chain+Slice (Study~I)} & \textbf{13 (65\%)} \\
+BFS+SA & 4 (20\%) \\
+DFS & 3 (15\%) \\
+BFS (raw) & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+\textbf{Assessment time dominates.} At $t_{\text{assess}} = 5$\,min, assessment time is $\sim$8$\times$ walking time for typical neighborhoods. The time metric is therefore dominated by address count balance, which chain+slice handles naturally through its $\lceil A/N \rceil$ slicing. BFS tends to produce unbalanced address counts (e.g., 7/17/10/4/16 for $N = 5$), creating large time spreads.
+
+\textbf{BFS+SA recovers balance.} SA boundary transfers improve BFS by 7.7\% on average, primarily by transferring segments from overloaded ESWs to underloaded ones. BFS+SA wins when chain+slice fails --- specifically when the chain produces an empty partition at $N = 5$ (e.g., Classic Communities: 21/31/33/19/0).
+
+\textbf{DFS suffers from the dregs problem.} The last ESW in DFS consistently receives scattered remnants, producing time spreads of 100--500\,min (vs.\ 10--50\,min for chain+slice). DFS wins only on neighborhoods where the remnants happen to form a compact cluster.
+
+\textbf{Study~II conclusion:} When assessment time dominates walking time, the choice of assignment strategy is less consequential than in Study~I --- the primary lever is address count balance. Study~I's chain+slice, with its perfect count balance, remains competitive even under Study~II's time-based formulation. The new strategies (BFS+SA) provide value at larger $N$ where chain+slice can produce empty partitions, and in scenarios where $t_{\text{assess}}$ is small relative to walking time (e.g., drive-by visual inspections rather than detailed assessments).
 
 %% ==================================================================
 \section{Discussion}
