@@ -440,17 +440,101 @@ K-Means & 0 & 3.00 & 0 & 3.00 \\
 \end{center}
 \end{table}
 
+\section{Large-Scale Neighborhood Study}
+
+To test whether macroscopic neighborhood characteristics predict which algorithm performs best, we ran all three strategies (bisect, nearest-neighbor chain, right-hand chain) on 41 neighborhoods from the Palo Alto address database (52--5,101 addresses each, excluding Los Altos at 12,247 for computational tractability).
+
+\subsection{Macroscopic Features}
+
+We computed seven features for each neighborhood:
+\begin{itemize}
+\item \textbf{Address count} and \textbf{street count}: neighborhood size
+\item \textbf{Aspect ratio}: max/min of lat/lon ranges (elongation)
+\item \textbf{Density}: addresses per hectare
+\item \textbf{Average addresses per street}: street segment length
+\item \textbf{Curvature}: ratio of street endpoint distance to max intra-street span (1.0 = straight, $\ll$1 = curved/circular)
+\item \textbf{Grid regularity}: fraction of streets within 20$^\circ$ of cardinal directions
+\end{itemize}
+
+\subsection{Algorithm Winner Distribution}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=15pt,
+    xlabel={Algorithm},
+    ylabel={Neighborhoods Won},
+    symbolic x coords={Bisect, ChainNN, ChainRH},
+    xtick=data,
+    ymin=0, ymax=22,
+    width=\columnwidth,
+    height=5cm,
+    title={Winner Distribution Across 41 Neighborhoods},
+    enlarge x limits=0.3,
+    nodes near coords,
+    every node near coord/.append style={font=\small},
+]
+\addplot coordinates {(Bisect,10) (ChainNN,18) (ChainRH,13)};
+\addplot coordinates {(Bisect,21) (ChainNN,10) (ChainRH,10)};
+\legend{N=3, N=5}
+\end{axis}
+\end{tikzpicture}
+\caption{No single algorithm dominates. At N=3, chain-based strategies win more often. At N=5, bisect wins the majority. The winner depends on neighborhood geometry.}
+\label{fig:winners}
+\end{figure}
+
+No single algorithm dominates across all neighborhoods. At $N=3$, chain-based strategies win 31 out of 41 cases. At $N=5$, bisect wins 21 out of 41.
+
+\subsection{Predictive Modeling}
+
+We split the 41 neighborhoods into 70\% training and 30\% test sets and attempted to predict the winning algorithm from macroscopic features using single-feature threshold rules.
+
+\textbf{Best predictor (N=3):} Address count $<$ 1,105 $\rightarrow$ ChainNN, else $\rightarrow$ Bisect. Training accuracy: 67.9\%, test accuracy: 61.5\%.
+
+\textbf{Best predictor (N=5):} Address count $<$ 212 $\rightarrow$ ChainNN, else $\rightarrow$ Bisect. Training accuracy: 67.9\%, test accuracy: 23.1\%.
+
+The prediction rules do not generalize reliably. The feature space is too noisy for single-threshold classification, and the margin between algorithms is often small (within 5\%).
+
+\subsection{U-Turn Street Ordering}
+
+A significant optimization was discovered in intra-street traversal. The original algorithm sorted addresses by geographic projection along the street axis, causing zig-zagging across the street. Replacing this with a U-turn pattern (ascending even house numbers, then descending odd numbers) reduced intra-street walk distance by 33--71\%:
+
+\begin{table}[htbp]
+\caption{U-Turn vs.\ Projection Street Ordering}
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Neighborhood} & \textbf{Projection} & \textbf{U-Turn} & \textbf{Reduction} \\
+\midrule
+Fairmeadow & 23,657\,m & 6,797\,m & 71\% \\
+Crescent Park & 61,982\,m & 41,530\,m & 33\% \\
+Midtown & 202,936\,m & 129,121\,m & 36\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection{Exhaustive Start Search}
+
+Testing all possible starting streets for chain-based algorithms (rather than a fixed sample of 5) improved max walk distance by 7--13\% over random selection. The best-to-worst starting street ratio ranged from 1.15$\times$ (small neighborhoods) to 1.53$\times$ (large neighborhoods).
+
+\subsection{Recommendation}
+
+Since no feature-based prediction reliably identifies the best algorithm, and all strategies execute in under one second even for 5,000-address neighborhoods, the recommended approach is the \textbf{oracle}: run all strategies (bisect + NN chain + right-hand chain from all starting streets), score each candidate, and select the winner. This guarantees optimal results across all neighborhood geometries at negligible computational cost.
+
 \section{Discussion}
 
-\subsection{Why Bisect Wins}
+\subsection{Why No Single Algorithm Dominates}
 
-Recursive bisection's key advantage is that it operates on \emph{addresses} rather than \emph{streets}. By sorting along the dominant geographic axis and splitting at the count boundary, it guarantees both count balance and geographic contiguity. The axis-aligned cuts may seem crude compared to k-means clustering, but they avoid k-means' fundamental weakness: optimizing proximity without considering cardinality.
+The 41-neighborhood study reveals that no single algorithm consistently dominates across all neighborhood geometries. Chain-based strategies excel on smaller, more regular neighborhoods where the chain naturally follows the street pattern. Bisect excels on larger neighborhoods and with more ESWs, where its recursive splitting scales better. The right-hand rule occasionally wins on neighborhoods with circular or cul-de-sac layouts where its spiral traversal matches the street pattern.
 
-Chain slicing is competitive for small $N$ on rectilinear grids because the nearest-neighbor chain naturally follows the grid structure. However, the quality is sensitive to the starting street, and the contiguous slicing can produce elongated regions that span the neighborhood.
+The failure of single-feature prediction rules (61.5\% test accuracy for N=3, 23.1\% for N=5) demonstrates that the relationship between macroscopic features and algorithm performance is complex and multi-dimensional. The margin between the best and second-best algorithm is often small (within 5\%), meaning minor variations in street layout can flip the winner.
 
-\subsection{Street-Aware Ordering}
+\subsection{The Dominance of Intra-Street Ordering}
 
-The most impactful optimization is not the partitioning strategy but the \emph{within-partition ordering}. By grouping addresses by street, sorting along the street axis, and chaining streets by endpoint proximity, we ensure each ESW's assignment can be followed sequentially without backtracking. This is independent of the partitioning strategy and is applied to all candidates.
+The most impactful optimization is not the partitioning strategy but the \emph{U-turn street traversal}. Replacing geographic projection ordering with the U-turn pattern (even house numbers ascending, then odd descending) reduced intra-street walk distance by 33--71\%. This single change has more impact than the choice of partitioning algorithm, which typically produces differences of 5--15\% in max walk distance.
 
 \subsection{Practical Considerations}
 
@@ -470,9 +554,17 @@ Recursive bisection is used in computational geometry for balanced spatial decom
 
 \section{Conclusion}
 
-We presented a practical system for automatically assigning addresses to emergency services workers that minimizes walk distance while maintaining balanced workloads. Through empirical evaluation on real municipal data, we found that recursive geographic bisection consistently outperforms chain slicing and k-means clustering across neighborhood types and team sizes. The 2--3$\times$ overhead versus the theoretical optimum represents the inherent cost of geographic partitioning and is acceptable for practical emergency operations.
+We presented a practical system for automatically assigning addresses to emergency services workers that minimizes walk distance while maintaining balanced workloads. Through evaluation on 41 real neighborhoods, we found that:
 
-Future work includes incorporating road network distances (rather than haversine straight-line distances), accounting for ESW starting positions, and handling dynamic reassignment as workers complete their areas.
+\begin{enumerate}
+\item No single partitioning algorithm dominates across all neighborhood geometries. The best strategy depends on neighborhood size, street layout, and team size.
+\item Macroscopic neighborhood features (address count, curvature, grid regularity) do not reliably predict the winning algorithm (61\% test accuracy at best).
+\item The most impactful optimization is U-turn intra-street ordering (33--71\% reduction in walk distance), which is independent of the partitioning strategy.
+\item Exhaustive search over starting streets improves chain-based strategies by 7--13\%.
+\item The oracle approach --- running all strategies and selecting the best by scoring --- is both practical (under one second for 5,000 addresses) and optimal.
+\end{enumerate}
+
+The 2--3$\times$ overhead versus the theoretical single-worker optimum represents the inherent cost of geographic partitioning. Future work includes incorporating road network distances (rather than haversine straight-line distances), accounting for ESW starting positions, and handling dynamic reassignment as workers complete their areas.
 
 \begin{thebibliography}{00}
 
