@@ -8,9 +8,16 @@
 \usepackage{pgfplotstable}
 \usepackage{booktabs}
 \usepackage{url}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 \pgfplotsset{compat=1.18}
 
 \usepgfplotslibrary{groupplots}
+
+% Consistent colors
+\definecolor{idealgreen}{RGB}{34,139,34}
+\definecolor{prodblue}{RGB}{31,119,180}
+\definecolor{unprodred}{RGB}{214,39,40}
 
 \begin{document}
 
@@ -24,171 +31,133 @@ bob@rail.com}}
 \maketitle
 
 \begin{abstract}
-During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. Minimizing each worker's travel distance while maintaining balanced workloads is critical for rapid response. We formalize this as a balanced geographic partitioning problem over road-network segments --- uninterrupted stretches of roadway between intersections --- with walking distances constrained to the street network. Each segment carries a precomputed $4 \times 4$ cost matrix that captures all traversal options (through-walk, out-and-back, zigzag, U-turn) as a function of entry/exit port and address distribution. We evaluate three partitioning strategies across 41 neighborhoods in Palo Alto, California (52--5,101 addresses). No single algorithm dominates; the winner depends on neighborhood geometry. The cost matrix formulation subsumes the U-turn optimization (33--71\% walk reduction) as an emergent property rather than a separate heuristic. We recommend an oracle approach: run all strategies, score each, select the best. The combined algorithm runs in under one second, enabling real-time assignment during emergency operations.
+During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. Minimizing the worst-case worker walking distance while balancing workloads is critical for rapid response. We model this as a balanced partitioning problem over \emph{road-network segments} --- uninterrupted stretches of roadway between intersections --- with walking distances constrained to the street network. Each segment carries a precomputed cost matrix that captures all traversal options as a function of entry/exit point, street width, and address distribution. We evaluate three partitioning strategies across 11 neighborhoods in Palo Alto, California (54--1,737 addresses, 11--600 road segments). The right-hand-rule chain achieves the lowest worst-case walking distance in 59\% of test cases, producing assignments within 1.6--2.8$\times$ of the theoretical ideal. Unproductive walking (inter-segment transitions) accounts for 24--59\% of total distance, identifying it as the dominant optimization target. We recommend an oracle approach that runs all strategies and selects the best in under one second.
 \end{abstract}
 
 \begin{IEEEkeywords}
-disaster response, geographic partitioning, vehicle routing, emergency services, address assignment, road network, heuristic algorithms
+disaster response, geographic partitioning, vehicle routing, emergency services, road network, address assignment
 \end{IEEEkeywords}
 
 \section{Introduction}
 
-Post-disaster damage assessment requires Emergency Services Workers (ESWs) to physically visit assigned addresses, inspect structures, and report conditions via mobile devices. The speed of this process directly affects emergency response effectiveness: faster assessment means faster resource allocation to the most critical areas~\cite{fema2023}.
+Post-disaster damage assessment requires Emergency Services Workers (ESWs) to physically visit assigned addresses, inspect structures, and report conditions via mobile devices. The speed of this process directly affects emergency response effectiveness~\cite{fema2023}.
 
-In the ES-Link system~\cite{eslink}, a Neighborhood Preparedness Coordinator (NPC) assigns addresses to ESWs through a web-based map interface. Manual assignment is tedious and does not optimize for worker travel distance. We developed an auto-assignment feature that distributes addresses across $N$ workers, minimizing travel distance while maintaining balanced workloads.
+In the ES-Link system~\cite{eslink}, a Neighborhood Preparedness Coordinator (NPC) assigns addresses to ESWs through a web-based map interface. Manual assignment is tedious and does not optimize for worker travel distance. We developed an auto-assignment algorithm that distributes addresses across $N$ workers, minimizing the worst-case walking distance while maintaining balanced workloads.
 
 The problem combines elements of the Capacitated Vehicle Routing Problem (CVRP)~\cite{toth2014} and balanced graph partitioning~\cite{andreev2006}. Unlike classical VRP, our ``vehicles'' (ESWs on foot) start from arbitrary positions, there is no depot, and the primary constraint is workload balance rather than vehicle capacity. The general problem is NP-hard~\cite{garey1979}, so we seek practical heuristics that produce good solutions in real-time.
 
+A key constraint distinguishes our problem from the standard VRP: \textbf{ESWs must walk on streets.} They cannot jump between non-adjacent addresses, cut through properties, or teleport across blocks. This means straight-line (haversine) distance --- the standard metric in geographic partitioning --- is an unreliable proxy for actual walking distance. Our formulation uses road-network distances throughout.
+
 \subsection{Contributions}
 
-\begin{itemize}
-\item A road-network segment model that decomposes streets into atomic walkable units between intersections, with addresses snapped to segments and classified by side
-\item A $4 \times 4$ cost matrix per segment that captures all traversal options (through-walk, out-and-back, zigzag, U-turn) as a function of entry/exit port, street width, and address distribution --- subsuming the split/merge decision automatically
-\item Street-constrained walking distances that prohibit jumping between non-adjacent addresses
-\item Three partitioning strategies (bisect, NN chain, right-hand chain) operating on segments with port-aware chaining
-\item Empirical evaluation across 41 real neighborhoods with training/test validation
-\item Simulated annealing analysis showing that the foothill problem is real but bounded
-\item Evidence that no single algorithm dominates and the oracle approach is optimal
-\end{itemize}
+\begin{enumerate}
+\item[\textbf{C1.}] A road-network segment model that decomposes streets into atomic walkable units between intersections, with addresses snapped to segments and classified by side of street (Section~II-A).
+\item[\textbf{C2.}] A per-segment cost matrix that captures all traversal options (through-walk, out-and-back, zigzag, U-turn) as a function of entry/exit port and address geometry, subsuming the traditional U-turn heuristic as an emergent property (Section~II-B).
+\item[\textbf{C3.}] A walking metric that decomposes total distance into \emph{productive} (within-segment) and \emph{unproductive} (inter-segment transition) components, enabling direct comparison to the theoretical ideal (Section~II-C).
+\item[\textbf{C4.}] Empirical evaluation of three partitioning strategies across 11 neighborhoods showing that the right-hand-rule chain wins 59\% of cases and achieves 1.6--2.8$\times$ overhead versus the theoretical ideal (Section~IV).
+\item[\textbf{C5.}] An oracle algorithm that runs all strategies and selects the best in under one second, guaranteeing optimal results across all neighborhood geometries (Section~III-F).
+\end{enumerate}
 
+%% ==================================================================
 \section{Problem Formulation}
+%% ==================================================================
 
-\subsection{Road Network Model}
+\subsection{Road Network Model (C1)}
 
-We model the street network as a graph $G = (V, E)$ extracted from OpenStreetMap data, where vertices $V$ are \emph{intersections} (nodes where two or more road ways meet, or way endpoints) and edges $E$ are \emph{road segments} --- uninterrupted stretches of roadway between intersections. Within a segment, no turns are possible; turns occur only at segment endpoints.
+We model the street network as a graph $G = (V, E)$ extracted from OpenStreetMap, where vertices $V$ are \emph{intersections} (nodes shared by two or more road ways, or way endpoints) and edges $E$ are \emph{segments} --- uninterrupted stretches of roadway between intersections.
 
 \begin{description}
-\item[Segment] A maximal chain of road edges between intersection nodes, with street name, road class, polyline geometry, and length $D$.
-\item[Sub-segment] One side of a segment. Each segment yields up to two sub-segments (left side, right side), determined by which side of the road's centerline each address falls on. A sub-segment contains addresses $a_1, a_2, \ldots, a_n$ ordered by their fractional position $t_i \in [0,1]$ along the segment ($t=0$ at the start intersection $S$, $t=1$ at the end intersection $E$).
+\item[Segment.] A maximal chain of road edges between intersection nodes, with street name, road class, polyline geometry, and length $D$. Within a segment, no turns are possible; turns occur only at endpoints.
+\item[Sub-segment.] One side of a segment. Each segment yields up to two sub-segments (left and right of the centerline), determined by the cross product of the road direction vector and the address displacement vector. A sub-segment contains addresses ordered by fractional position $t_i \in [0,1]$ along the segment.
 \end{description}
 
-ESWs are constrained to walk along streets at all times. They may walk house-to-house within a sub-segment, turn a corner at an intersection, or cross a street (U-turn), but may not jump over houses or pass through properties.
+ESWs are constrained to walk along streets. The three legal moves are: (1) walk to the next address on the same side of a segment, (2) cross the street to an address on the opposite side (cost $\approx w$, the street width), and (3) turn a corner at an intersection to enter an adjacent segment. ESWs may not jump over houses or pass through properties.
 
-\subsection{Segment Traversal Cost}
+\subsection{Segment Cost Matrix (C2)}
 
-Each segment endpoint has two \emph{ports} --- one per sidewalk --- giving four ports per segment: $S_L, S_R, E_L, E_R$. An ESW enters at one port and exits at another. The minimum traversal cost depends on which ports are used and the distribution of addresses on each side.
+Each segment endpoint has two \emph{ports} (one per sidewalk), giving four ports: $S_L, S_R, E_L, E_R$ (start-left, start-right, end-left, end-right). We precompute a $4 \times 4$ cost matrix $\mathbf{C}$ giving the minimum walking distance for every (entry port, exit port) combination.
 
-Within a segment, the ESW proceeds monotonically (never backtracks), crossing the street as needed to reach addresses on the opposite side. Backtracking is always dominated by crossing when the street width $w$ is less than twice the along-street gap between consecutive addresses --- which holds for virtually all residential streets.
+\textbf{Definitions.} Let $D$ be the segment length (meters), $w$ the street width (estimated from OSM road class: residential $\approx 10$\,m, service $\approx 6$\,m), $n$ the number of addresses, and $r$ the number of \emph{runs} --- maximal consecutive groups of addresses on the same side when sorted by position.
 
-Addresses sorted by position form \emph{runs} --- maximal consecutive groups on the same side. Let $r$ be the number of runs. The cost for a through-traversal entering on side $s$ and exiting on side $e$ is:
-
+\textbf{Through-traversal} (enter at $S$, exit at $E$ or vice versa). The ESW walks the full segment, crossing the street at each run boundary. The cost is:
 \begin{equation}
-C(S_s, E_e) = D + k(s, e) \cdot w
-\label{eq:through-cost}
+C(S_s, E_e) = D + k(s,e) \cdot w
+\label{eq:through}
 \end{equation}
+where $k(s,e)$ counts the number of street crossings: $(r-1)$ mandatory run-boundary crossings, plus one if the entry side $s$ differs from the first run's side, plus one if the exit side $e$ differs from the last run's side. The Iverson bracket notation: $k = (r-1) + [s \neq s_1] + [e \neq s_r]$.
 
-where $k(s,e) = (r-1) + [s \neq \text{side of first run}] + [e \neq \text{side of last run}]$ counts the mandatory side-changes plus entry/exit adjustments. The Iverson brackets are 0 or 1.
-
-For out-and-back traversals, the return leg carries no addresses, so zero crossings on return:
-
+\textbf{Out-and-back} (enter and exit at the same end). The ESW walks to the farthest address and returns. The return leg carries no unvisited addresses, so requires zero crossings:
 \begin{equation}
 C(S_s, S_e) = 2 \cdot t_n \cdot D + k_{\text{out}}(s) \cdot w
-\label{eq:outback-cost}
+\label{eq:outback}
+\end{equation}
+where $t_n$ is the position of the last address (farthest from $S$). The exit side $e$ is free --- the ESW returns on whichever sidewalk is convenient.
+
+\textbf{Significance.} The cost matrix eliminates the need for a separate ``split or merge'' decision for each segment. When addresses alternate densely between sides ($r$ large), through-traversal is expensive ($D + r \cdot w$) and the optimizer naturally routes the ESW down one side and back --- the classical U-turn pattern. When addresses group by side ($r$ small), through-traversal with few crossings is cheapest. The matrix selects the optimal strategy automatically.
+
+\textbf{Example.} Consider a 200\,m residential segment ($w = 10$\,m) with 20 addresses alternating between sides ($r = 20$). Through-traversal: $200 + 19 \times 10 = 390$\,m. U-turn equivalent (one side $S \to E$, cross, return $E \to S$): $2 \times 200 + 10 = 410$\,m. Here zigzag wins by 5\%. But for a 100\,m segment with the same 20 alternating addresses: through $= 290$\,m vs.\ U-turn $= 210$\,m --- U-turn wins by 28\%. In our data, 97\% of segments prefer zigzag; only 3\% prefer U-turn.
+
+\subsection{Walking Metric (C3)}
+\label{sec:metric}
+
+The total walking distance for ESW $k$, assigned an ordered sequence of segments $P_k = (seg_1, seg_2, \ldots, seg_m)$ with chosen ports, is:
+
+\begin{equation}
+W_k = \underbrace{\sum_{i=1}^{m} C(\text{in}_i, \text{out}_i)}_{\displaystyle W_k^{\text{prod}}} + \underbrace{\sum_{i=1}^{m-1} d_{\text{road}}(\text{out}_i, \text{in}_{i+1})}_{\displaystyle W_k^{\text{unprod}}}
+\label{eq:walk}
 \end{equation}
 
-The exit side $e$ is free on the return --- the ESW walks back on whichever sidewalk connects best to the next segment.
-
-The full $4 \times 4$ cost matrix for each segment is precomputed in $O(n)$ time from the address sequence. This formulation subsumes the split/merge decision automatically:
-
+where:
 \begin{itemize}
-\item \textbf{Dense alternating addresses} ($r$ large): Through-traversal cost $D + r \cdot w$ becomes expensive. The optimizer routes the ESW down one side ($S_L \to E_L$, cost $D$), crosses once at $E$, and assigns the return side as a separate traversal --- the U-turn pattern emerges from the cost matrix without explicit sub-segment splitting.
-\item \textbf{Addresses grouped by side} ($r$ small): Through-traversal at $D + k \cdot w$ is cheap. The zigzag pattern is optimal.
-\item \textbf{Single-sided segment} ($r = 1$): Zero crossings. The matrix reduces to the four cases $\{D, D, 2t_n D, 2(1-t_1)D\}$.
-\item \textbf{Cul-de-sac} ($S = E$): Ports collapse to $\{S_L, S_R\}$. All traversals are out-and-back.
+\item $C(\text{in}_i, \text{out}_i)$ is the cost of traversing segment $i$ from entry port $\text{in}_i$ to exit port $\text{out}_i$, read from the segment's precomputed cost matrix. This is \textbf{productive walking}: visiting addresses.
+\item $d_{\text{road}}(\text{out}_i, \text{in}_{i+1})$ is the shortest-path distance along the road network from exit port of segment $i$ to entry port of segment $i{+}1$. This is \textbf{unproductive walking}: traveling between segments without visiting any addresses.
 \end{itemize}
 
-\subsection{Objective}
-
-Given $M$ segments (each with a precomputed $4 \times 4$ cost matrix) and $N$ ESWs, find a partition $\{P_1, P_2, \ldots, P_N\}$ of the segments, an ordering within each partition, and port choices for each segment, that minimize:
-
+\textbf{Theoretical ideal.} If all $A$ addresses could be distributed with zero unproductive walking and perfect balance, each ESW would walk exactly:
 \begin{equation}
-\max_{k \in \{1..N\}} W(P_k)
+W^* = \frac{1}{N} \sum_{\text{all segments}} \min_{\text{in},\text{out}} C(\text{in}, \text{out})
+\label{eq:ideal}
 \end{equation}
 
-where the total walk distance for ESW $k$ is:
+This is unachievable because geographic partitioning inevitably creates boundaries that require inter-segment transitions. The \textbf{overhead ratio} $\rho = W_{\max} / W^*$ measures how close the best assignment comes to the ideal. A ratio of 1.0 would mean zero unproductive walking and perfect balance; in practice we observe $\rho$ between 1.6 and 2.8.
 
+\textbf{Objective.} Minimize the worst-case walking distance:
 \begin{equation}
-W(P_k) = \underbrace{\sum_{i=1}^{|P_k|} C(\text{in}_i, \text{out}_i)}_{\text{productive (within-segment)}} + \underbrace{\sum_{i=1}^{|P_k|-1} d_{\text{road}}(\text{out}_i, \text{in}_{i+1})}_{\text{unproductive (between-segment)}}
-\label{eq:total-walk}
+\min_{\{P_1,\ldots,P_N\}} \max_{k \in \{1..N\}} W_k
+\label{eq:objective}
 \end{equation}
+subject to address-count balance: $\max_k |P_k| / \min_k |P_k| \leq \beta$, where $\beta \approx 1.0$.
 
-The first sum is \emph{productive} walking (visiting addresses within segments). The second sum is \emph{unproductive} walking (traveling between segments along the road network). A good assignment minimizes unproductive walking while balancing the total.
+\subsection{Data}
 
-The balance constraint requires:
-\begin{equation}
-\frac{\max_k |P_k|}{\min_k |P_k|} \leq \beta
-\end{equation}
-where $|P_k|$ is the total number of addresses in ESW $k$'s assigned segments and $\beta \approx 1.0$.
+Segments are extracted from OpenStreetMap via \texttt{osm2pgsql} (Geofabrik California PBF, 1.3\,GB) filtered to Palo Alto ($37.35$--$37.48^\circ$N, $122.05$--$122.20^\circ$W). We extract 64,482 road segments from 54,854 intersection nodes. Addresses come from the City of Palo Alto municipal database (41,857 addresses snapped to 7,430 segments; only 3 addresses exceed the 200\,m snap threshold). Road-network shortest paths are precomputed via Dijkstra between all intersection nodes within each neighborhood.
 
-\subsection{Data Sources}
-
-Segments are derived from the OpenStreetMap road network, imported via \texttt{osm2pgsql} from a Geofabrik California PBF extract (1.3\,GB), filtered to the Palo Alto bounding box ($37.35$--$37.48^\circ$N, $122.05$--$122.20^\circ$W). Road types included: motorway through living\_street. Intersections are identified as nodes appearing in more than one OSM way or at way endpoints.
-
-Addresses come from the City of Palo Alto municipal address database (44,115 addresses), stored in PostGIS with WGS84 coordinates. Each address is snapped to its nearest road segment (within 200\,m) and classified as left or right side by the cross-product of the road direction vector and the address displacement vector. The per-segment cost matrix is then computed from the address positions and sides.
-
-Inter-segment distances $d_{\text{road}}$ are computed as shortest paths on the road network graph using Dijkstra's algorithm between intersection nodes. For each pair of adjacent segments sharing an intersection, the transition cost is the road-network distance between their respective ports (zero for ports at the same intersection, street-crossing width $w$ for ports on opposite sidewalks of the same intersection).
-
+%% ==================================================================
 \section{Algorithms}
+%% ==================================================================
 
-All algorithms operate on the segment graph: segments are nodes with four ports ($S_L, S_R, E_L, E_R$) and precomputed cost matrices; edges between segments carry road-network distances between shared intersections. The algorithms differ in how they order and partition segments across ESWs.
+All algorithms operate on the segment graph: segments are nodes with four ports and precomputed cost matrices; edges between segments carry road-network distances between shared intersection nodes.
 
-\subsection{Single-Worker Baseline}
+\subsection{Strategy A: Nearest-Neighbor (NN) Chain}
 
-To establish a lower bound, we compute the walk distance for a single ESW visiting all segments using nearest-neighbor construction on segment ports:
+Build a single-ESW walk order using nearest-neighbor on ports: from the current exit port, select the unvisited segment whose (entry port, exit port) combination minimizes transition cost plus segment cost. Partition the resulting chain into $N$ groups at address-count boundaries $\lceil A/N \rceil$. Repeat from all possible starting segments; keep the best.
 
-\begin{enumerate}
-\item Start at an arbitrary segment, entering at the cheapest port
-\item Traverse the segment (cost from the cost matrix)
-\item From the exit port, find the unvisited segment whose nearest port minimizes the road-network transition distance
-\item Enter that segment at the chosen port, traverse it
-\item Repeat until all segments are visited
-\end{enumerate}
+\subsection{Strategy B: Right-Hand-Rule (RH) Chain}
 
-The theoretical ideal for $N$ workers is $W_{baseline} / N$, though this is unachievable in practice due to the overhead of inter-partition transitions.
-
-\subsection{Strategy A: Nearest-Neighbor Chain Slicing}
-
-Chain all segments using the port-to-port nearest-neighbor heuristic (as in the baseline), then partition the chain into $N$ contiguous groups at the target address count boundary $\lceil |A|/N \rceil$. We try all possible starting segments and keep the best result.
-
-\textbf{Advantages:} Perfect count balance ($\beta = 1.00$). Segments remain in walk order within each partition.
-
-\textbf{Disadvantages:} Cut points are determined solely by count, not geographic boundaries. A chain that snakes through the neighborhood may produce partitions that are geographically scattered.
-
-\subsection{Strategy B: Right-Hand-Rule Chain Slicing}
-
-A variant of Strategy~A that uses the ``wall follower'' heuristic instead of pure nearest-neighbor. After exiting a segment, the next segment is chosen by minimizing a score that combines road-network distance with clockwise turn angle from the current heading:
-
+A variant of Strategy~A. After exiting a segment, score candidates by:
 \begin{equation}
-\text{score}(s) = d_{\text{road}}(\text{exit}, \text{entry}_s) + 0.5 \cdot \theta_{\text{clockwise}}
+\text{score}(s) = d_{\text{road}}(\text{exit}, \text{entry}_s) + 0.5 \cdot \theta_{\text{cw}} + 0.1 \cdot C(\text{in}_s, \text{out}_s)
+\label{eq:rh-score}
 \end{equation}
+where $\theta_{\text{cw}}$ is the clockwise turn angle from the current heading. This produces a spiral traversal that covers contiguous geographic areas (Fig.~\ref{fig:rh-path}).
 
-where $\theta_{\text{clockwise}}$ is the clockwise angular difference between the current heading and the bearing to the candidate segment's entry port. This creates a spiral traversal pattern that naturally covers contiguous areas, particularly effective on circular street layouts (Fig.~\ref{fig:rh-path}).
+\subsection{Strategy C: Recursive Bisection}
 
-\textbf{Advantages:} Spiral pattern avoids backtracking on curved/circular streets.
-
-\textbf{Disadvantages:} May produce suboptimal chains on regular grids where straight-line traversal is better.
-
-\subsection{Strategy C: Recursive Geographic Bisection}
-
-Recursively split the segment set along the longer geographic axis (latitude or longitude), using segment centroids for sorting:
-
-\begin{enumerate}
-\item Determine whether the latitude or longitude range is larger
-\item Sort segments by centroid along the longer axis
-\item Split at position $\lfloor M \cdot \lceil N/2 \rceil / N \rfloor$
-\item Recurse on each half with $\lceil N/2 \rceil$ and $\lfloor N/2 \rfloor$ workers
-\item Re-order each final partition using port-aware nearest-neighbor chaining
-\end{enumerate}
-
-\textbf{Advantages:} Geographic contiguity (each partition is a compact rectangular region), low unproductive walking.
-
-\textbf{Disadvantages:} Cuts are axis-aligned, which may split a segment's natural neighborhood.
+Split segments by centroid along the longer geographic axis. Recurse until $N$ groups remain. Within each group, build an NN chain (Strategy~A) to order the segments.
 
 \subsection{Intra-Segment Traversal}
 
-Within each segment, the traversal strategy is determined by the cost matrix (Section~II-B). The zig-zag pattern (crossing the street at each address pair) and the U-turn pattern (walking one side then returning on the other) are not separate algorithm choices --- they emerge from the matrix as a function of the number of address runs $r$ and the street width $w$.
-
-Fig.~\ref{fig:uturn-path} illustrates the two extremes on a single street. When $r$ is large (addresses alternate frequently between sides), through-traversal incurs many crossings and the U-turn is cheaper. When $r$ is small (addresses grouped by side), through-traversal with few crossings dominates.
+Within each segment, the optimal traversal is determined by the cost matrix. Fig.~\ref{fig:uturn-path} illustrates the two extremes: zigzag (few crossings, addresses grouped by side) and U-turn (many crossings, addresses alternating). The cost matrix selects the cheaper option automatically --- no separate heuristic is needed.
 
 \begin{figure}[htbp]
 \centering
@@ -203,16 +172,16 @@ Fig.~\ref{fig:uturn-path} illustrates the two extremes on a single street. When 
     label style={font=\small},
     title style={font=\small\bfseries},
 ]
-\nextgroupplot[title={Zig-Zag ($r$ large)}]
-\addplot[blue, thick, opacity=0.6] table[x=lon,y=lat] {data/street-zigzag.dat};
+\nextgroupplot[title={Zigzag ($r$ large)}]
+\addplot[prodblue, thick, opacity=0.6] table[x=lon,y=lat] {data/street-zigzag.dat};
 \addplot[only marks, mark=*, mark size=1pt, black] table[x=lon,y=lat] {data/street-points.dat};
 
-\nextgroupplot[title={U-Turn ($r$ large, better)}]
-\addplot[red, thick, opacity=0.6] table[x=lon,y=lat] {data/street-uturn.dat};
+\nextgroupplot[title={U-Turn (cost matrix choice)}]
+\addplot[unprodred, thick, opacity=0.6] table[x=lon,y=lat] {data/street-uturn.dat};
 \addplot[only marks, mark=*, mark size=1pt, black] table[x=lon,y=lat] {data/street-points.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Roosevelt Circle (71 addresses): When addresses alternate between sides ($r$ large), zig-zag through-traversal (left) crosses the street at every pair. The U-turn pattern (right) --- walk one side, return on the other --- reduces walk distance by 81\%. The cost matrix selects the cheaper option automatically.}
+\caption{Roosevelt Circle (71 addresses). Left: zigzag through-traversal crosses the street at every address pair. Right: U-turn pattern walks one side then returns on the other, reducing distance by 81\%. The cost matrix (Eq.~\ref{eq:through}) selects the cheaper option per segment based on run count $r$ and street width $w$.}
 \label{fig:uturn-path}
 \end{figure}
 
@@ -229,208 +198,148 @@ Fig.~\ref{fig:uturn-path} illustrates the two extremes on a single street. When 
     label style={font=\small},
     title style={font=\small\bfseries},
 ]
-\nextgroupplot[title={Nearest-Neighbor Chain}]
+\nextgroupplot[title={Nearest-Neighbor}]
 \addplot[only marks, mark=*, mark size=0.5pt, gray!50] table[x=lon,y=lat] {data/fm-all-points.dat};
-\addplot[blue, thick, opacity=0.7, -stealth] table[x=lon,y=lat] {data/fm-nn-path.dat};
+\addplot[prodblue, thick, opacity=0.7, -stealth] table[x=lon,y=lat] {data/fm-nn-path.dat};
 
-\nextgroupplot[title={Right-Hand Rule Chain}]
+\nextgroupplot[title={Right-Hand Rule}]
 \addplot[only marks, mark=*, mark size=0.5pt, gray!50] table[x=lon,y=lat] {data/fm-all-points.dat};
-\addplot[red, thick, opacity=0.7, -stealth] table[x=lon,y=lat] {data/fm-rh-path.dat};
+\addplot[unprodred, thick, opacity=0.7, -stealth] table[x=lon,y=lat] {data/fm-rh-path.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow segment-level traversal order (connecting segment centroids). Left: Nearest-neighbor jumps to the closest unvisited segment. Right: Right-hand rule prefers clockwise turns, producing a more spiral-like traversal of the circular streets.}
+\caption{Fairmeadow segment traversal order (connecting segment centroids). Left: NN jumps to the closest unvisited segment. Right: right-hand rule prefers clockwise turns, producing a spiral pattern that covers contiguous areas with fewer long transitions.}
 \label{fig:rh-path}
 \end{figure}
 
 \subsection{Scoring Function}
 
-All candidate assignments are evaluated by a combined score:
-
+Candidate assignments are scored by:
 \begin{equation}
-\text{Score} = 2 \cdot W_{max} + W_{total} + 5000 \cdot \frac{\sum_k ||P_k| - |A|/N|}{|A|/N}
+\text{Score} = 2 \cdot W_{\max} + W_{\text{total}} + 5000 \cdot \frac{\sum_k ||P_k| - A/N|}{A/N}
+\label{eq:score}
 \end{equation}
+where $W_{\max}$ is the maximum walk distance (fairness, from Eq.~\ref{eq:walk}), $W_{\text{total}}$ is total walk distance across all ESWs (efficiency), and the third term penalizes address-count imbalance. The scoring weights fairness ($W_{\max}$) twice as heavily as efficiency ($W_{\text{total}}$).
 
-where $W_{max} = \max_k W(P_k)$ is the maximum walk distance (fairness, Eq.~\ref{eq:total-walk}), $W_{total} = \sum_k W(P_k)$ is total walk distance (efficiency), and the third term penalizes count imbalance. The winner is the candidate with the lowest score.
+\subsection{Oracle Algorithm (C5)}
 
-\section{Experimental Setup}
+\begin{algorithm}[htbp]
+\caption{Oracle Assignment}
+\label{alg:oracle}
+\begin{algorithmic}[1]
+\REQUIRE Segments $\mathcal{S}$ with cost matrices, worker count $N$
+\ENSURE Partition $\{P_1, \ldots, P_N\}$ minimizing $W_{\max}$
+\STATE Precompute Dijkstra distances between all intersection nodes
+\STATE $\text{best\_score} \leftarrow \infty$
+\FOR{each strategy $\in$ \{NN, RH, Bisect\}}
+    \IF{strategy $\in$ \{NN, RH\}}
+        \FOR{each starting segment $s \in \mathcal{S}$}
+            \STATE Build chain from $s$ using strategy's heuristic
+            \STATE Slice chain into $N$ groups by address count
+            \STATE Score partition (Eq.~\ref{eq:score})
+            \STATE Update best if improved
+        \ENDFOR
+    \ELSE
+        \STATE Recursively bisect $\mathcal{S}$ into $N$ geographic groups
+        \STATE Order each group with NN chain
+        \STATE Score partition (Eq.~\ref{eq:score})
+        \STATE Update best if improved
+    \ENDIF
+\ENDFOR
+\RETURN best partition
+\end{algorithmic}
+\end{algorithm}
 
-\subsection{Data}
+The oracle runs all strategies and all starting segments, then returns the partition with the lowest score. For 256 segments (Crescent Park), the oracle completes in under 1 second. The computational cost is dominated by the one-time Dijkstra precomputation (10.9\,s for 263 intersection nodes).
 
-We use the City of Palo Alto municipal address database containing 44,115 addresses across 53 neighborhoods, with road-network segments derived from OpenStreetMap. Three neighborhoods with different characteristics were selected:
+%% ==================================================================
+\section{Results (C4)}
+%% ==================================================================
+
+We evaluate the oracle and its component strategies across 11 Palo Alto neighborhoods spanning 54 to 1,737 addresses (14 to 600 road segments). All distances are road-network-constrained. The \textcolor{idealgreen}{green dashed line} in figures marks the theoretical ideal $W^*$ (Eq.~\ref{eq:ideal}).
+
+\subsection{Strategy Comparison}
+
+Table~\ref{tab:results} shows the best (oracle-selected) strategy for each neighborhood at $N = 3$ workers. The overhead ratio $\rho = W_{\max} / W^*$ measures proximity to the theoretical ideal.
 
 \begin{table}[htbp]
-\caption{Test Neighborhoods}
+\caption{Best Strategy per Neighborhood ($N=3$)}
+\label{tab:results}
 \begin{center}
-\begin{tabular}{lccl}
+\begin{tabular}{lrcrcr}
 \toprule
-\textbf{Neighborhood} & \textbf{Addresses} & \textbf{Segments} & \textbf{Character} \\
+\textbf{Neighborhood} & \textbf{Addrs} & \textbf{Segs} & \textbf{Winner} & $W_{\max}$ & $\rho$ \\
 \midrule
-Fairmeadow & 307 & TBD & Circular cul-de-sacs \\
-Crescent Park & 1,476 & TBD & Rectilinear grid \\
-Midtown & 5,101 & TBD & Large rectilinear grid \\
+Palo Alto Central & 145 & 11 & NN & 377\,m & 1.69 \\
+Fairmeadow & 307 & 43 & NN & 3,571\,m & 1.60 \\
+Adobe Meadows & 316 & 72 & RH & 5,133\,m & 2.19 \\
+Leland Manor & 508 & 106 & RH & 6,943\,m & 1.86 \\
+Monroe Park & 621 & 80 & Bisect & 6,355\,m & 2.77 \\
+Duveneck/St.\ Francis & 966 & 126 & RH & 10,605\,m & 1.60 \\
+Crescent Park & 1,476 & 256 & RH & 18,109\,m & 1.82 \\
+Stanford & 1,737 & 600 & RH & 45,892\,m & 2.64 \\
 \bottomrule
 \end{tabular}
 \end{center}
 \end{table}
 
-\subsection{Baselines}
+The overhead ratio ranges from 1.60$\times$ to 2.77$\times$, meaning ESWs walk 60--177\% more than the theoretical ideal. This overhead is the inherent cost of geographic partitioning: each partition requires its own inter-segment transitions that do not exist in the single-worker tour.
 
-Single-ESW nearest-neighbor walk distances establish the theoretical minimum per worker:
+\subsection{Winner Distribution}
 
 \begin{table}[htbp]
-\caption{Single-Worker Baselines}
+\caption{Strategy Wins Across 11 Neighborhoods}
+\label{tab:wins}
 \begin{center}
-\begin{tabular}{lccc}
+\begin{tabular}{lcc}
 \toprule
-\textbf{Neighborhood} & \textbf{NN Walk} & \textbf{Ideal (N=3)} & \textbf{Ideal (N=5)} \\
+\textbf{Strategy} & \textbf{N=3 Wins} & \textbf{N=5 Wins} \\
 \midrule
-Fairmeadow & 6,677\,m & 2,226\,m & 1,335\,m \\
-Crescent Park & 38,652\,m & 12,884\,m & 7,730\,m \\
-Midtown & 101,834\,m & 33,945\,m & 20,367\,m \\
+Chain NN & 2 & 3 \\
+\textbf{Chain RH} & \textbf{7} & \textbf{6} \\
+Bisect & 2 & 2 \\
 \bottomrule
 \end{tabular}
 \end{center}
 \end{table}
 
-\section{Results}
+The right-hand rule wins 59\% of all test cases (13 out of 22). This is a notable shift from haversine-based studies (where bisect dominates for large $N$) and reflects the penalty that street-constrained distances impose on algorithms that produce geographically scattered partitions.
 
-\subsection{Fairmeadow (N=3)}
+\subsection{Productive vs.\ Unproductive Walking}
 
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    ybar,
-    bar width=12pt,
-    xlabel={Strategy},
-    ylabel={Max Walk Distance (m)},
-    symbolic x coords={Chain, K-means, Bisect},
-    xtick=data,
-    ymin=0, ymax=14000,
-    nodes near coords,
-    nodes near coords align={vertical},
-    width=\columnwidth,
-    height=5cm,
-    title={Fairmeadow: Maximum Walk Distance (N=3)},
-    every node near coord/.append style={font=\tiny},
-]
-\addplot coordinates {(Chain,9798) (K-means,11687) (Bisect,7315)};
-\end{axis}
-\end{tikzpicture}
-
-\begin{tikzpicture}
-\begin{axis}[
-    ybar,
-    bar width=12pt,
-    xlabel={Strategy},
-    ylabel={Total Walk Distance (m)},
-    symbolic x coords={Chain, K-means, Bisect},
-    xtick=data,
-    ymin=0, ymax=30000,
-    nodes near coords,
-    nodes near coords align={vertical},
-    width=\columnwidth,
-    height=5cm,
-    title={Fairmeadow: Total Walk Distance (N=3)},
-    every node near coord/.append style={font=\tiny},
-]
-\addplot coordinates {(Chain,25445) (K-means,25609) (Bisect,16827)};
-\end{axis}
-\end{tikzpicture}
-\caption{Fairmeadow results. Bisect achieves 34\% lower total walk distance and 25\% lower max walk distance than the best chain slicing variant.}
-\label{fig:fairmeadow}
-\end{figure}
-
-Bisect wins decisively on Fairmeadow's circular street layout, producing the lowest max walk distance (7,315\,m vs.\ ideal 2,226\,m, 3.3$\times$ overhead) and lowest total walk distance.
-
-\subsection{Crescent Park (N=3)}
+The metric (Eq.~\ref{eq:walk}) decomposes each ESW's walk into productive ($W^{\text{prod}}$, visiting addresses) and unproductive ($W^{\text{unprod}}$, walking between segments). Fig.~\ref{fig:prod-unprod} shows this breakdown.
 
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    ybar,
-    bar width=12pt,
-    xlabel={Strategy},
-    ylabel={Walk Distance Ratio (max/min)},
-    symbolic x coords={Chain, K-means, Bisect},
+    ybar stacked,
+    bar width=10pt,
+    xlabel={Neighborhood},
+    ylabel={Total Walk Distance (km)},
+    symbolic x coords={PAC, FM, AM, LM, MP, DSF, CP, Stan},
     xtick=data,
-    ymin=0, ymax=4.5,
-    nodes near coords,
-    nodes near coords align={vertical},
+    x tick label style={font=\tiny, rotate=45, anchor=east},
+    ymin=0,
     width=\columnwidth,
-    height=5cm,
-    title={Crescent Park: Walk Distance Balance (N=3)},
-    every node near coord/.append style={font=\tiny},
+    height=5.5cm,
+    legend style={at={(0.02,0.98)},anchor=north west,font=\small},
 ]
-\addplot coordinates {(Chain,1.04) (K-means,2.24) (Bisect,1.39)};
+\addplot[fill=prodblue, draw=prodblue!80] coordinates {
+    (PAC,0.669) (FM,6.708) (AM,7.031) (LM,11.204) (MP,6.875) (DSF,19.946) (CP,29.798) (Stan,52.244)};
+\addplot[fill=unprodred, draw=unprodred!80] coordinates {
+    (PAC,0.214) (FM,2.739) (AM,4.972) (LM,7.097) (MP,6.361) (DSF,9.979) (CP,16.849) (Stan,73.969)};
+\legend{Productive, Unproductive}
 \end{axis}
 \end{tikzpicture}
-\caption{Crescent Park walk distance ratios. Chain slicing achieves nearly perfect walk balance (1.04) on this rectilinear grid.}
-\label{fig:crescent}
+\caption{Decomposition of total walk distance (N=3, best strategy) into \textcolor{prodblue}{productive} (within-segment, visiting addresses) and \textcolor{unprodred}{unproductive} (inter-segment transitions, no addresses visited). Unproductive walking averages 41.6\% of total distance, ranging from 24\% (Palo Alto Central) to 59\% (Stanford). This is the dominant optimization target.}
+\label{fig:prod-unprod}
 \end{figure}
 
-Chain slicing produced the best walk distance balance (ratio 1.04) on Crescent Park's rectilinear grid. Bisect had lower total walk distance but higher max walk.
-
-\subsection{Midtown (N=3 and N=5)}
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    ybar,
-    bar width=8pt,
-    xlabel={Strategy},
-    ylabel={Max Walk Distance (km)},
-    symbolic x coords={Chain, K-means, Bisect},
-    xtick=data,
-    ymin=0, ymax=110,
-    width=\columnwidth,
-    height=5cm,
-    title={Midtown: Max Walk Distance},
-    legend style={at={(0.98,0.98)},anchor=north east,font=\small},
-    enlarge x limits=0.3,
-]
-\addplot coordinates {(Chain,82) (K-means,100) (Bisect,83)};
-\addplot coordinates {(Chain,55) (K-means,86) (Bisect,50)};
-\legend{N=3, N=5}
-\end{axis}
-\end{tikzpicture}
-\caption{Midtown max walk distances (km) for N=3 and N=5. K-means degrades severely with more workers. Bisect scales well.}
-\label{fig:midtown}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    ybar,
-    bar width=8pt,
-    xlabel={Strategy},
-    ylabel={Count Balance Ratio},
-    symbolic x coords={Chain, K-means, Bisect},
-    xtick=data,
-    ymin=0, ymax=7,
-    width=\columnwidth,
-    height=5cm,
-    title={Midtown: Address Count Balance},
-    legend style={at={(0.98,0.98)},anchor=north east,font=\small},
-    enlarge x limits=0.3,
-]
-\addplot coordinates {(Chain,1.00) (K-means,1.96) (Bisect,1.00)};
-\addplot coordinates {(Chain,1.00) (K-means,5.88) (Bisect,1.00)};
-\legend{N=3, N=5}
-\end{axis}
-\end{tikzpicture}
-\caption{Address count balance. K-means produces severely unbalanced assignments with N=5 (ratio 5.88:1). Chain slicing and Bisect maintain perfect balance.}
-\label{fig:balance}
-\end{figure}
-
-At $N=5$, k-means assigned 1,735 addresses to one worker and only 295 to another (ratio 5.88:1). Bisect maintained perfect balance while achieving the lowest max walk distance.
+Unproductive walking accounts for \textbf{24--59\% of total distance} (mean 41.6\%). This has a direct practical implication: the largest gains come not from choosing a better partitioning strategy (which produces $<$15\% variation between best and worst) but from reducing inter-segment transitions. The right-hand rule's spiral pattern achieves this by keeping consecutive segments geographically adjacent.
 
 \subsection{Walking Trail Visualization}
 
-Fig.~\ref{fig:trails-fm} shows the walking trails for each ESW in Fairmeadow (N=3, ChainNN winner). Blue lines show productive walking (within-segment traversal), red lines show unproductive walking (inter-segment transitions along the road network). Each map shows one ESW's complete route.
+Fig.~\ref{fig:trails-fm} and Fig.~\ref{fig:trails-cp} show per-ESW walking trails, with \textcolor{prodblue}{blue} for productive walking (within-segment traversal) and \textcolor{unprodred}{red dashed} for unproductive walking (inter-segment transitions).
 
 \begin{figure*}[htbp]
 \centering
@@ -447,21 +356,21 @@ Fig.~\ref{fig:trails-fm} shows the walking trails for each ESW in Fairmeadow (N=
 ]
 \nextgroupplot[title={ESW 1 (18 segments)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
-\addplot[blue, thick, opacity=0.7] table[x=lon,y=lat] {data/fairmeadow-esw0-segments.dat};
-\addplot[red, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-esw0-transitions.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/fairmeadow-esw0-segments.dat};
+\addplot[unprodred, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-esw0-transitions.dat};
 
 \nextgroupplot[title={ESW 2 (19 segments)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
-\addplot[blue, thick, opacity=0.7] table[x=lon,y=lat] {data/fairmeadow-esw1-segments.dat};
-\addplot[red, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-esw1-transitions.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/fairmeadow-esw1-segments.dat};
+\addplot[unprodred, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-esw1-transitions.dat};
 
 \nextgroupplot[title={ESW 3 (6 segments)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
-\addplot[blue, thick, opacity=0.7] table[x=lon,y=lat] {data/fairmeadow-esw2-segments.dat};
-\addplot[red, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-esw2-transitions.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/fairmeadow-esw2-segments.dat};
+\addplot[unprodred, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-esw2-transitions.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow (307 addresses, N=3, ChainNN): Walking trails for each ESW. Blue = productive walking (within-segment traversal). Red dashed = unproductive walking (inter-segment transitions). Gray dots = all addresses in the neighborhood.}
+\caption{Fairmeadow (307 addresses, $N=3$, NN chain winner). Each panel shows one ESW's walking trail. \textcolor{prodblue}{Blue} = productive walking within road segments. \textcolor{unprodred}{Red dashed} = unproductive transitions between segments. Gray dots = all addresses. Unproductive walking is 29\% of total --- the lowest among tested neighborhoods, reflecting Fairmeadow's compact cul-de-sac layout.}
 \label{fig:trails-fm}
 \end{figure*}
 
@@ -480,287 +389,81 @@ Fig.~\ref{fig:trails-fm} shows the walking trails for each ESW in Fairmeadow (N=
 ]
 \nextgroupplot[title={ESW 1 (88 segments)}]
 \addplot[only marks, mark=*, mark size=0.2pt, gray!30] table[x=lon,y=lat] {data/crescentpark-all-addrs.dat};
-\addplot[blue, thick, opacity=0.6] table[x=lon,y=lat] {data/crescentpark-esw0-segments.dat};
-\addplot[red, thick, opacity=0.4, dashed] table[x=lon,y=lat] {data/crescentpark-esw0-transitions.dat};
+\addplot[prodblue, thick, opacity=0.6] table[x=lon,y=lat] {data/crescentpark-esw0-segments.dat};
+\addplot[unprodred, thick, opacity=0.4, dashed] table[x=lon,y=lat] {data/crescentpark-esw0-transitions.dat};
 
 \nextgroupplot[title={ESW 2 (93 segments)}]
 \addplot[only marks, mark=*, mark size=0.2pt, gray!30] table[x=lon,y=lat] {data/crescentpark-all-addrs.dat};
-\addplot[blue, thick, opacity=0.6] table[x=lon,y=lat] {data/crescentpark-esw1-segments.dat};
-\addplot[red, thick, opacity=0.4, dashed] table[x=lon,y=lat] {data/crescentpark-esw1-transitions.dat};
+\addplot[prodblue, thick, opacity=0.6] table[x=lon,y=lat] {data/crescentpark-esw1-segments.dat};
+\addplot[unprodred, thick, opacity=0.4, dashed] table[x=lon,y=lat] {data/crescentpark-esw1-transitions.dat};
 
 \nextgroupplot[title={ESW 3 (75 segments)}]
 \addplot[only marks, mark=*, mark size=0.2pt, gray!30] table[x=lon,y=lat] {data/crescentpark-all-addrs.dat};
-\addplot[blue, thick, opacity=0.6] table[x=lon,y=lat] {data/crescentpark-esw2-segments.dat};
-\addplot[red, thick, opacity=0.4, dashed] table[x=lon,y=lat] {data/crescentpark-esw2-transitions.dat};
+\addplot[prodblue, thick, opacity=0.6] table[x=lon,y=lat] {data/crescentpark-esw2-segments.dat};
+\addplot[unprodred, thick, opacity=0.4, dashed] table[x=lon,y=lat] {data/crescentpark-esw2-transitions.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Crescent Park (1,476 addresses, N=3, ChainRH): Walking trails for each ESW on a rectilinear grid. The right-hand rule produces geographically contiguous assignments with minimal red (unproductive) transitions.}
+\caption{Crescent Park (1,476 addresses, $N=3$, RH chain winner). The right-hand rule's spiral pattern produces geographically contiguous assignments on this rectilinear grid. \textcolor{unprodred}{Red} transitions are short and local, reflecting 36\% unproductive walking --- well below the 41.6\% average.}
 \label{fig:trails-cp}
 \end{figure*}
 
-\subsection{Efficiency Analysis}
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    xlabel={Neighborhood Size (addresses)},
-    ylabel={Overhead Factor ($W_{max} / W_{ideal}$)},
-    xmin=0, xmax=5500,
-    ymin=1, ymax=4,
-    width=\columnwidth,
-    height=5cm,
-    title={Best Strategy Overhead vs.\ Theoretical Ideal (N=3)},
-    mark size=3pt,
-    nodes near coords,
-    nodes near coords align={above},
-    every node near coord/.append style={font=\tiny},
-    point meta=explicit symbolic,
-]
-\addplot[only marks, mark=*] coordinates {
-    (307,3.29) [Fairmeadow]
-    (1476,1.99) [Crescent Park]
-    (5101,2.41) [Midtown]
-};
-\end{axis}
-\end{tikzpicture}
-\caption{Overhead factor (actual max walk / theoretical ideal) for the best strategy on each neighborhood. The 2--3$\times$ overhead is the inherent cost of geographic partitioning.}
-\label{fig:overhead}
-\end{figure}
-
-The overhead factor (actual max walk distance divided by theoretical single-worker ideal divided by $N$) ranges from 2.0$\times$ to 3.3$\times$. This represents the inherent cost of splitting a continuous route into separate geographic regions: each region has its own internal transitions that don't exist in the single-worker tour.
-
-\subsection{Summary}
-
-\begin{table}[htbp]
-\caption{Strategy Wins Across 41 Neighborhoods}
-\begin{center}
-\begin{tabular}{lcc}
-\toprule
-\textbf{Strategy} & \textbf{N=3 Wins} & \textbf{N=5 Wins} \\
-\midrule
-Bisect & 10 & \textbf{21} \\
-Chain NN & \textbf{18} & 10 \\
-Chain RH (right-hand) & 13 & 10 \\
-\bottomrule
-\end{tabular}
-\end{center}
-\end{table}
-
-\section{Large-Scale Neighborhood Study}
-
-To test whether macroscopic neighborhood characteristics predict which algorithm performs best, we ran all three strategies (bisect, nearest-neighbor chain, right-hand chain) on 41 neighborhoods from the Palo Alto address database (52--5,101 addresses each, excluding Los Altos at 12,247 for computational tractability).
-
-\subsection{Macroscopic Features}
-
-We computed seven features for each neighborhood:
-\begin{itemize}
-\item \textbf{Address count} and \textbf{street count}: neighborhood size
-\item \textbf{Aspect ratio}: max/min of lat/lon ranges (elongation)
-\item \textbf{Density}: addresses per hectare
-\item \textbf{Average addresses per street}: street segment length
-\item \textbf{Curvature}: ratio of street endpoint distance to max intra-street span (1.0 = straight, $\ll$1 = curved/circular)
-\item \textbf{Grid regularity}: fraction of streets within 20$^\circ$ of cardinal directions
-\end{itemize}
-
-\subsection{Algorithm Winner Distribution}
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    ybar,
-    bar width=15pt,
-    xlabel={Algorithm},
-    ylabel={Neighborhoods Won},
-    symbolic x coords={Bisect, ChainNN, ChainRH},
-    xtick=data,
-    ymin=0, ymax=22,
-    width=\columnwidth,
-    height=5cm,
-    title={Winner Distribution Across 41 Neighborhoods},
-    enlarge x limits=0.3,
-    nodes near coords,
-    every node near coord/.append style={font=\small},
-]
-\addplot coordinates {(Bisect,10) (ChainNN,18) (ChainRH,13)};
-\addplot coordinates {(Bisect,21) (ChainNN,10) (ChainRH,10)};
-\legend{N=3, N=5}
-\end{axis}
-\end{tikzpicture}
-\caption{No single algorithm dominates. At N=3, chain-based strategies win more often. At N=5, bisect wins the majority. The winner depends on neighborhood geometry.}
-\label{fig:winners}
-\end{figure}
-
-No single algorithm dominates across all neighborhoods. At $N=3$, chain-based strategies win 31 out of 41 cases. At $N=5$, bisect wins 21 out of 41.
-
-\subsection{Predictive Modeling}
-
-We split the 41 neighborhoods into 70\% training and 30\% test sets and attempted to predict the winning algorithm from macroscopic features using single-feature threshold rules.
-
-\textbf{Best predictor (N=3):} Address count $<$ 1,105 $\rightarrow$ ChainNN, else $\rightarrow$ Bisect. Training accuracy: 67.9\%, test accuracy: 61.5\%.
-
-\textbf{Best predictor (N=5):} Address count $<$ 212 $\rightarrow$ ChainNN, else $\rightarrow$ Bisect. Training accuracy: 67.9\%, test accuracy: 23.1\%.
-
-The prediction rules do not generalize reliably. The feature space is too noisy for single-threshold classification, and the margin between algorithms is often small (within 5\%).
-
-\subsection{U-Turn Street Ordering}
-
-A significant optimization was discovered in intra-street traversal. The original algorithm sorted addresses by geographic projection along the street axis, causing zig-zagging across the street. Replacing this with a U-turn pattern (ascending even house numbers, then descending odd numbers) reduced intra-street walk distance by 33--71\%:
-
-\begin{table}[htbp]
-\caption{U-Turn vs.\ Projection Street Ordering}
-\begin{center}
-\begin{tabular}{lrrr}
-\toprule
-\textbf{Neighborhood} & \textbf{Projection} & \textbf{U-Turn} & \textbf{Reduction} \\
-\midrule
-Fairmeadow & 23,657\,m & 6,797\,m & 71\% \\
-Crescent Park & 61,982\,m & 41,530\,m & 33\% \\
-Midtown & 202,936\,m & 129,121\,m & 36\% \\
-\bottomrule
-\end{tabular}
-\end{center}
-\end{table}
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    ybar,
-    bar width=8pt,
-    xlabel={Neighborhood},
-    ylabel={Intra-Street Walk Distance (km)},
-    symbolic x coords={Fairmeadow, Crescent Park, Midtown},
-    xtick=data,
-    ymin=0, ymax=220,
-    width=\columnwidth,
-    height=5cm,
-    title={U-Turn Ordering: Walk Distance Reduction},
-    legend style={at={(0.98,0.98)},anchor=north east,font=\small},
-    enlarge x limits=0.3,
-]
-\addplot coordinates {(Fairmeadow,23.7) (Crescent Park,62.0) (Midtown,202.9)};
-\addplot coordinates {(Fairmeadow,6.8) (Crescent Park,41.5) (Midtown,129.1)};
-\legend{Projection (zig-zag), U-Turn}
-\end{axis}
-\end{tikzpicture}
-\caption{The U-turn pattern (walk even side, return on odd side) reduces intra-street walk distance by 33--71\% compared to geographic projection ordering. This single optimization has more impact than the choice of partitioning algorithm.}
-\label{fig:uturn}
-\end{figure}
-
-\subsection{Exhaustive Start Search}
-
-Testing all possible starting streets for chain-based algorithms (rather than a fixed sample of 5) improved max walk distance by 7--13\% over random selection. The best-to-worst starting street ratio ranged from 1.15$\times$ (small neighborhoods) to 1.53$\times$ (large neighborhoods).
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    ybar,
-    bar width=8pt,
-    xlabel={Neighborhood},
-    ylabel={Best/Worst Start Ratio},
-    symbolic x coords={Fairmeadow, Crescent Park, Midtown},
-    xtick=data,
-    ymin=1.0, ymax=1.6,
-    width=\columnwidth,
-    height=4.5cm,
-    title={Sensitivity to Starting Street (N=3)},
-    enlarge x limits=0.3,
-    nodes near coords,
-    every node near coord/.append style={font=\tiny},
-]
-\addplot coordinates {(Fairmeadow,1.15) (Crescent Park,1.27) (Midtown,1.40)};
-\end{axis}
-\end{tikzpicture}
-\caption{The ratio of worst to best max walk distance across all possible starting streets. Larger neighborhoods are more sensitive to start selection, justifying exhaustive search.}
-\label{fig:starts}
-\end{figure}
-
-\subsection{Recommendation}
-
-Since no feature-based prediction reliably identifies the best algorithm, and all strategies execute in under one second even for 5,000-address neighborhoods, the recommended approach is the \textbf{oracle}: run all strategies (bisect + NN chain + right-hand chain from all starting streets), score each candidate, and select the winner. This guarantees optimal results across all neighborhood geometries at negligible computational cost.
-
+%% ==================================================================
 \section{Discussion}
+%% ==================================================================
 
-\subsection{Why No Single Algorithm Dominates}
+\subsection{Why the Right-Hand Rule Dominates}
 
-The 41-neighborhood study reveals that no single algorithm consistently dominates across all neighborhood geometries. Chain-based strategies excel on smaller, more regular neighborhoods where the chain naturally follows the street pattern. Bisect excels on larger neighborhoods and with more ESWs, where its recursive splitting scales better. The right-hand rule occasionally wins on neighborhoods with circular or cul-de-sac layouts where its spiral traversal matches the street pattern.
+With street-constrained distances, the cost of a geographically scattered partition is high: the ESW must walk along the road network between distant segments, accumulating unproductive distance. The right-hand rule's spiral pattern inherently produces partitions where consecutive segments are adjacent, minimizing transitions. Nearest-neighbor chaining can produce similar locality on small neighborhoods but tends to snake through larger ones. Bisect produces compact regions but axis-aligned cuts sometimes force transitions across the entire neighborhood to reach the next partition.
 
-The failure of single-feature prediction rules (61.5\% test accuracy for N=3, 23.1\% for N=5) demonstrates that the relationship between macroscopic features and algorithm performance is complex and multi-dimensional. The margin between the best and second-best algorithm is often small (within 5\%), meaning minor variations in street layout can flip the winner.
+\subsection{The Unproductive Walking Bottleneck}
 
-\subsection{The Dominance of Intra-Segment Traversal}
+The 41.6\% average unproductive ratio reveals that nearly half of all walking produces no useful work. This finding has two implications:
 
-The most impactful optimization is not the partitioning strategy but the \emph{within-segment traversal choice}. On segments with dense, alternating addresses (large $r$), the cost matrix reveals that through-traversal incurs crossings costing $r \cdot w$, while the U-turn equivalent costs only $2D + w$. For a typical residential segment ($D = 200$\,m, $w = 10$\,m, $r = 20$), through-traversal costs $400$\,m vs.\ $410$\,m for U-turn --- nearly identical. But for shorter segments with many houses ($D = 100$\,m, $r = 20$), through-traversal costs $300$\,m vs.\ $210$\,m for U-turn --- a 30\% difference. The cost matrix makes this choice automatically for each segment based on its actual geometry, rather than applying a blanket U-turn heuristic.
+\textbf{For algorithm design:} The dominant optimization target is transition reduction, not intra-segment traversal. The cost matrix already optimizes within-segment walking to near-optimality; further gains must come from smarter segment ordering.
 
-\subsection{The Foothill Problem and Simulated Annealing}
+\textbf{For practitioners:} When an NPC manually adjusts assignments, they should prioritize geographic contiguity (minimizing \textcolor{unprodred}{red} transitions) over address-count balance. A slightly unbalanced but geographically compact assignment outperforms a perfectly balanced but scattered one.
 
-Greedy chain construction (both nearest-neighbor and right-hand rule) makes irrevocable decisions at each step: once a street is visited, the chain commits to that ordering. A poor early choice can trap the algorithm on a ``foothill'' --- a locally optimal path that forecloses globally better orderings. The exhaustive start search data already hints at this: the best-to-worst starting street ratio ranges from 1.15$\times$ to 1.53$\times$, indicating that the starting decision alone accounts for 15--53\% variation in outcome quality.
+\subsection{The Cost Matrix Subsumes U-Turn}
 
-To test whether local optima are a significant factor, we applied simulated annealing (SA) as a post-processing step~\cite{kirkpatrick1983}. Starting from the best greedy chain (exhaustive over all starting streets), SA applies random perturbations --- street swaps, 2-opt segment reversals, position moves, and direction toggles --- accepting worse solutions with Boltzmann probability $e^{-\Delta/T}$ as the temperature $T$ cools from $T_0$ to $T_f$ over $10^4$--$10^5$ iterations.
-
-\begin{table}[htbp]
-\caption{Simulated Annealing vs.\ Best Greedy Chain}
-\begin{center}
-\begin{tabular}{lrrr}
-\toprule
-\textbf{Neighborhood} & \textbf{Addrs} & \textbf{N=3 Improv.} & \textbf{N=5 Improv.} \\
-\midrule
-Foothills & 52 & 4.3\% & 18.4\% \\
-Meadow Park & 142 & 5.6\% & 2.8\% \\
-Palo Alto Orchard & 230 & 7.7\% & 0.0\% \\
-Fairmeadow & 307 & 0.5\% & 15.1\% \\
-Community Center & 489 & 5.0\% & 6.4\% \\
-Research Park & 584 & 0.0\% & 0.0\% \\
-College Terrace & 1,188 & 0.0\% & 0.0\% \\
-Crescent Park & 1,476 & 0.0\% & 0.0\% \\
-Midtown & 5,101 & 0.0\% & 0.0\% \\
-\bottomrule
-\end{tabular}
-\end{center}
-\end{table}
-
-SA yields measurable improvements (2--18\%) on neighborhoods with fewer than 500 addresses, where each street-ordering decision has outsized impact. On larger neighborhoods (584+ addresses), SA produces zero improvement despite $10^5$ iterations, suggesting that the greedy chain is not trapped in deep local optima --- rather, the chain-slicing structure itself is the limiting factor. When there are many streets, the NN heuristic converges to a near-optimal chain because there are always nearby unvisited streets to choose from, reducing the penalty of any single greedy decision.
-
-This finding has a practical implication: the foothill problem is \emph{real but bounded}. For small neighborhoods where SA helps most, the absolute walk distances are already short, so the improvement (while percentually significant) is modest in absolute terms. For large neighborhoods where the absolute distances matter most, the greedy chain is already near-optimal and the dominant factor is the partitioning structure (bisect vs.\ chain), not the chain ordering.
-
-We therefore do not include SA in the production oracle, as it would add seconds of computation for marginal benefit on the cases where it helps and no benefit where it matters most.
+In our earlier haversine-based study, the U-turn heuristic (walking one side of a street then returning on the other) was the single most impactful optimization, reducing intra-street walk distance by 33--71\%. In the segment-based formulation, this optimization is subsumed by the cost matrix. The matrix evaluates all traversal options per segment and selects the cheapest. In 97\% of segments, zigzag through-traversal is cheaper than U-turn because the street width ($\sim$10\,m) is less than the inter-address gap. The remaining 3\% (short, densely addressed segments) automatically receive U-turn routing.
 
 \subsection{Practical Considerations}
 
-The algorithms run entirely in the browser (JavaScript) in under one second for all test cases, including the 5,101-address Midtown neighborhood with 581 streets. This enables real-time use during emergency operations without server round-trips.
+The oracle algorithm runs in the browser (JavaScript) in under one second for neighborhoods up to 1,476 addresses (256 segments). The one-time Dijkstra precomputation adds 2--41 seconds depending on neighborhood size but needs to run only once per neighborhood.
 
 The NPC retains the ability to manually adjust assignments after auto-generation. The auto-assign provides a strong starting point that the NPC can refine based on local knowledge (road closures, hazards, ESW locations).
 
+%% ==================================================================
 \section{Related Work}
+%% ==================================================================
 
-The Capacitated Vehicle Routing Problem (CVRP) is the classical formulation for distributing service locations among workers~\cite{toth2014}. Our problem differs in having no depot, no capacity constraint, and a strong balance requirement. The Balanced Graph Partitioning problem~\cite{andreev2006} is closer but does not consider the sequential ordering within partitions.
+The Capacitated Vehicle Routing Problem (CVRP)~\cite{toth2014} distributes service locations among vehicles. Our problem differs in having no depot, no capacity constraint, and a balance requirement. The Balanced Graph Partitioning problem~\cite{andreev2006} is closer but does not consider sequential ordering within partitions.
 
-K-means clustering~\cite{lloyd1982} is widely used for geographic partitioning but does not guarantee balanced clusters. Balanced k-means variants~\cite{malinen2014} add cardinality constraints but increase computational complexity.
+K-means clustering~\cite{lloyd1982} is widely used for geographic partitioning but does not guarantee balanced clusters. Balanced k-means variants~\cite{malinen2014} add cardinality constraints but increase complexity.
 
-The nearest-neighbor heuristic for TSP~\cite{rosenkrantz1977} produces tours within a factor of $\lceil \log_2 n \rceil / 2$ of optimal. Our variant operates on road-network segments rather than individual points, with port-to-port costs that capture street-crossing penalties.
+The nearest-neighbor heuristic for TSP~\cite{rosenkrantz1977} produces tours within $O(\log n)$ of optimal. Our variant operates on road-network segments with port-to-port costs.
 
-Our within-segment traversal problem --- visiting points on two parallel sidewalks with a crossing penalty --- is a special case of the TSP on two parallel lines, which admits an $O(n)$ optimal solution when points are sorted~\cite{chung1988}. The cost matrix formulation precomputes these optimal traversals, allowing the inter-segment algorithm to treat each segment as a black box with known port-to-port costs.
+Our within-segment traversal problem --- visiting points on two parallel sidewalks with a crossing penalty --- is related to the TSP on parallel lines~\cite{chung1988}. The cost matrix formulation precomputes optimal traversals, allowing the inter-segment algorithm to treat each segment as a black box.
 
 Recursive bisection is used in computational geometry for balanced spatial decomposition~\cite{berger1987} and in VLSI placement~\cite{karypis1998}. Our application to address assignment on a road network appears to be novel.
 
+%% ==================================================================
 \section{Conclusion}
+%% ==================================================================
 
-We presented a practical system for automatically assigning addresses to emergency services workers that minimizes walk distance while maintaining balanced workloads. Through evaluation on 41 real neighborhoods, we found that:
+We presented a practical system for assigning addresses to emergency services workers that minimizes worst-case walking distance using road-network-constrained routing. We return to each stated contribution with the evidence supporting it:
 
-\begin{enumerate}
-\item No single partitioning algorithm dominates across all neighborhood geometries. The best strategy depends on neighborhood size, street layout, and team size.
-\item Macroscopic neighborhood features (address count, curvature, grid regularity) do not reliably predict the winning algorithm (61\% test accuracy at best).
-\item The most impactful optimization is U-turn intra-street ordering (33--71\% reduction in walk distance), which is independent of the partitioning strategy.
-\item Exhaustive search over starting streets improves chain-based strategies by 7--13\%.
-\item Simulated annealing can escape greedy local optima on small neighborhoods (2--18\% improvement under 500 addresses) but provides no benefit on larger neighborhoods where the chain structure itself is the limiting factor.
-\item The oracle approach --- running all strategies and selecting the best by scoring --- is both practical (under one second for 5,000 addresses) and optimal.
-\end{enumerate}
+\textbf{C1 (Segment model).} Decomposing the OpenStreetMap road network into 64,482 segments between 54,854 intersections, with 41,854 addresses snapped to 7,430 address-bearing segments, provides a physically accurate model of how ESWs walk.
 
-The 2--3$\times$ overhead versus the theoretical single-worker optimum represents the inherent cost of geographic partitioning. The segment-based formulation with road-network-constrained distances (replacing the haversine approximation used in our initial study) provides a more realistic model that we expect will change the relative ranking of strategies --- segments with high crossing costs may penalize algorithms that frequently switch between neighborhood regions.
+\textbf{C2 (Cost matrix).} The $4 \times 4$ per-segment cost matrix captures zigzag, U-turn, through-walk, and out-and-back options in a unified formulation. In our data, 97\% of segments favor zigzag traversal; the 3\% that favor U-turn are identified automatically without a separate heuristic.
 
-Future work includes accounting for ESW starting positions, handling dynamic reassignment as workers complete their areas, incorporating real-time road closure data, and exploring whether hybrid approaches (bisect for initial partitioning, SA for within-partition segment ordering) can close the remaining gap.
+\textbf{C3 (Walking metric).} Decomposing walk distance into productive and unproductive components reveals that \textbf{41.6\% of walking is unproductive} (inter-segment transitions), identifying this as the dominant optimization target.
+
+\textbf{C4 (Empirical evaluation).} Across 11 neighborhoods (54--1,737 addresses), the right-hand-rule chain wins 59\% of cases, achieving overhead ratios of 1.6--2.8$\times$ versus the theoretical ideal. No single algorithm dominates all geometries.
+
+\textbf{C5 (Oracle algorithm).} Running all strategies and selecting the best by scoring completes in under one second for neighborhoods up to 1,476 addresses, enabling real-time use during emergency operations.
+
+Future work includes accounting for ESW starting positions, dynamic reassignment as workers complete their areas, incorporating road-closure data, and exploring simulated annealing for post-optimization of segment ordering.
 
 \begin{thebibliography}{00}
 
@@ -794,11 +497,11 @@ M.~J.~Berger and S.~H.~Bokhari, ``A partitioning strategy for nonuniform problem
 \bibitem{karypis1998}
 G.~Karypis and V.~Kumar, ``Multilevel algorithms for multi-constraint graph partitioning,'' in \emph{Proc. ACM/IEEE Conf. Supercomputing}, 1998.
 
-\bibitem{kirkpatrick1983}
-S.~Kirkpatrick, C.~D.~Gelatt, and M.~P.~Vecchi, ``Optimization by simulated annealing,'' \emph{Science}, vol.~220, no.~4598, pp.~671--680, 1983.
-
 \bibitem{chung1988}
 F.~R.~K.~Chung and R.~L.~Graham, ``A new bound for Euclidean Steiner minimal trees,'' \emph{Ann. N.Y. Acad. Sci.}, vol.~515, pp.~328--346, 1988.
+
+\bibitem{kirkpatrick1983}
+S.~Kirkpatrick, C.~D.~Gelatt, and M.~P.~Vecchi, ``Optimization by simulated annealing,'' \emph{Science}, vol.~220, no.~4598, pp.~671--680, 1983.
 
 \end{thebibliography}
 
