@@ -272,25 +272,25 @@ Chain slicing produced the best walk distance balance (ratio 1.04) on Crescent P
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    ybar group,
-    bar width=10pt,
+    ybar,
+    bar width=8pt,
     xlabel={Strategy},
-    ylabel={Max Walk Distance (m)},
+    ylabel={Max Walk Distance (km)},
     symbolic x coords={Chain, K-means, Bisect},
     xtick=data,
-    ymin=0, ymax=110000,
+    ymin=0, ymax=110,
     width=\columnwidth,
     height=5cm,
     title={Midtown: Max Walk Distance},
     legend style={at={(0.98,0.98)},anchor=north east,font=\small},
-    every node near coord/.append style={font=\tiny},
+    enlarge x limits=0.3,
 ]
-\addplot coordinates {(Chain,81696) (K-means,99956) (Bisect,83385)};
-\addplot coordinates {(Chain,55482) (K-means,86000) (Bisect,49818)};
+\addplot coordinates {(Chain,82) (K-means,100) (Bisect,83)};
+\addplot coordinates {(Chain,55) (K-means,86) (Bisect,50)};
 \legend{N=3, N=5}
 \end{axis}
 \end{tikzpicture}
-\caption{Midtown max walk distances for N=3 and N=5. K-means degrades severely with more workers. Bisect scales well.}
+\caption{Midtown max walk distances (km) for N=3 and N=5. K-means degrades severely with more workers. Bisect scales well.}
 \label{fig:midtown}
 \end{figure}
 
@@ -298,8 +298,8 @@ Chain slicing produced the best walk distance balance (ratio 1.04) on Crescent P
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    ybar group,
-    bar width=10pt,
+    ybar,
+    bar width=8pt,
     xlabel={Strategy},
     ylabel={Count Balance Ratio},
     symbolic x coords={Chain, K-means, Bisect},
@@ -309,7 +309,7 @@ Chain slicing produced the best walk distance balance (ratio 1.04) on Crescent P
     height=5cm,
     title={Midtown: Address Count Balance},
     legend style={at={(0.98,0.98)},anchor=north east,font=\small},
-    every node near coord/.append style={font=\tiny},
+    enlarge x limits=0.3,
 ]
 \addplot coordinates {(Chain,1.00) (K-means,1.96) (Bisect,1.00)};
 \addplot coordinates {(Chain,1.00) (K-means,5.88) (Bisect,1.00)};
@@ -336,7 +336,6 @@ Fig.~\ref{fig:maps-fm} shows the geographic distribution of assignments for Fair
     xlabel={Longitude},
     ylabel={Latitude},
     scatter,
-    only marks,
     scatter src=explicit,
     scatter/classes={0={mark=*,draw=black,fill=red!70,mark size=1.2pt},
                      1={mark=*,draw=black,fill=blue!70,mark size=1.2pt},
@@ -369,7 +368,6 @@ Fig.~\ref{fig:maps-fm} shows the geographic distribution of assignments for Fair
     xlabel={Longitude},
     ylabel={Latitude},
     scatter,
-    only marks,
     scatter src=explicit,
     scatter/classes={0={mark=*,draw=black,fill=red!70,mark size=0.6pt},
                      1={mark=*,draw=black,fill=blue!70,mark size=0.6pt},
@@ -379,13 +377,13 @@ Fig.~\ref{fig:maps-fm} shows the geographic distribution of assignments for Fair
     title style={font=\small\bfseries},
 ]
 \nextgroupplot[title={K-Means}]
-\addplot table[x=lon,y=lat,meta=cluster] {data/mt-kmeans.dat};
+\addplot table[x=lon,y=lat,meta=cluster] {data/mt-kmeans-sampled.dat};
 
 \nextgroupplot[title={Chain Slicing}]
-\addplot table[x=lon,y=lat,meta=cluster] {data/mt-chain.dat};
+\addplot table[x=lon,y=lat,meta=cluster] {data/mt-chain-sampled.dat};
 
 \nextgroupplot[title={Bisect}]
-\addplot table[x=lon,y=lat,meta=cluster] {data/mt-bisect.dat};
+\addplot table[x=lon,y=lat,meta=cluster] {data/mt-bisect-sampled.dat};
 \end{groupplot}
 \end{tikzpicture}
 \caption{Midtown (5,101 addresses, 3 ESWs): K-means assigns 2,278 addresses to one worker and only 1,164 to another. Chain slicing has balanced counts but geographically interleaved regions. Bisect produces three contiguous balanced regions with clear geographic separation.}
