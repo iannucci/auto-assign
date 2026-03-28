@@ -53,43 +53,69 @@ The problem combines elements of the Capacitated Vehicle Routing Problem (CVRP)~
 
 \section{Problem Formulation}
 
-Given a set of $A$ addresses with geographic coordinates $(lat_i, lon_i)$ and $N$ ESWs, find a partition $\{S_1, S_2, \ldots, S_N\}$ of $A$ that minimizes:
+\subsection{Road Network Model}
+
+We model the street network as a graph $G = (V, E)$ extracted from OpenStreetMap data, where vertices $V$ are \emph{intersections} (nodes where two or more road ways meet, or way endpoints) and edges $E$ are \emph{road segments} --- uninterrupted stretches of roadway between intersections. Within a segment, no turns are possible; turns occur only at segment endpoints.
+
+\begin{description}
+\item[Segment] A maximal chain of road edges between intersection nodes, with street name, road class, polyline geometry, and length $D$.
+\item[Sub-segment] One side of a segment. Each segment yields up to two sub-segments (left side, right side), determined by which side of the road's centerline each address falls on. A sub-segment contains addresses $a_1, a_2, \ldots, a_n$ ordered by their fractional position $t_i \in [0,1]$ along the segment ($t=0$ at the start intersection $S$, $t=1$ at the end intersection $E$).
+\end{description}
+
+ESWs are constrained to walk along streets at all times. They may walk house-to-house within a sub-segment, turn a corner at an intersection, or cross a street (U-turn), but may not jump over houses or pass through properties.
+
+\subsection{Sub-Segment Traversal Cost}
+
+An ESW must enter and exit each sub-segment at an intersection endpoint. There are four traversal options, each with a different walk distance:
 
 \begin{equation}
-\max_{k \in \{1..N\}} W(S_k)
+c(ss, \text{in}, \text{out}) = \begin{cases}
+D & \text{if } \text{in} = S, \text{out} = E \\
+D & \text{if } \text{in} = E, \text{out} = S \\
+2 \cdot t_n \cdot D & \text{if } \text{in} = \text{out} = S \\
+2(1-t_1) \cdot D & \text{if } \text{in} = \text{out} = E
+\end{cases}
+\label{eq:subseg-cost}
 \end{equation}
 
-where $W(S_k)$ is the total walk distance for ESW $k$, defined as the sum of haversine distances between consecutive addresses in the assignment order:
+where $t_1$ and $t_n$ are the positions of the first and last address. Through-traversal ($S \to E$ or $E \to S$) walks the full segment length $D$. Out-and-back ($S \to S$ or $E \to E$) walks only to the farthest address and returns, which is significantly cheaper when addresses cluster near one end.
+
+\subsection{Objective}
+
+Given $M$ sub-segments and $N$ ESWs, find a partition $\{P_1, P_2, \ldots, P_N\}$ of the sub-segments, an ordering within each partition, and entry/exit choices for each sub-segment, that minimize:
 
 \begin{equation}
-W(S_k) = \sum_{i=1}^{|S_k|-1} d(s_{k,i}, s_{k,i+1})
+\max_{k \in \{1..N\}} W(P_k)
 \end{equation}
 
-subject to the balance constraint:
+where the total walk distance for ESW $k$ is:
 
 \begin{equation}
-\frac{\max_k |S_k|}{\min_k |S_k|} \leq \beta
+W(P_k) = \underbrace{\sum_{i=1}^{|P_k|} c(ss_i, \text{in}_i, \text{out}_i)}_{\text{productive (intra-sub-segment)}} + \underbrace{\sum_{i=1}^{|P_k|-1} d_{\text{road}}(\text{out}_i, \text{in}_{i+1})}_{\text{unproductive (inter-sub-segment)}}
+\label{eq:total-walk}
 \end{equation}
 
-where $\beta$ is a balance tolerance (ideally $\beta \approx 1.0$). We use the haversine formula for distance:
+The first sum is \emph{productive} walking (visiting addresses). The second sum is \emph{unproductive} walking (traveling between sub-segments along the road network). A good assignment minimizes unproductive walking.
 
+The balance constraint requires:
 \begin{equation}
-d = 2R \arcsin\sqrt{\sin^2\!\frac{\Delta\phi}{2} + \cos\phi_1 \cos\phi_2 \sin^2\!\frac{\Delta\lambda}{2}}
+\frac{\max_k |P_k|}{\min_k |P_k|} \leq \beta
 \end{equation}
+where $|P_k|$ is the total number of addresses in ESW $k$'s assigned sub-segments and $\beta \approx 1.0$.
 
-where $R = 6{,}371{,}000$\,m is Earth's radius.
+\subsection{Special Cases}
 
-\subsection{Street-Aware Grouping}
+\textbf{Paired sub-segments.} When an ESW is assigned both sides of the same segment, the optimal traversal is the U-turn: walk $S \to E$ on one side, cross the street at $E$ (negligible distance), walk $E \to S$ on the other side. Total: $2D$ with zero unproductive distance. This U-turn pattern, which our earlier study found to reduce walk distance by 33--71\%, arises naturally from the sub-segment formulation.
 
-A key insight is that ESWs walk along streets, not between random points. We pre-process addresses by:
+\textbf{Cul-de-sacs.} When $S = E$ (dead-end street), through-traversal and out-and-back are equivalent. The ESW enters and exits at the single intersection.
 
-\begin{enumerate}
-\item \textbf{Street extraction}: Parse the street name from each address (strip house numbers).
-\item \textbf{Intra-street ordering}: Sort addresses along each street's geographic axis by projecting onto the line between the two most distant addresses on that street.
-\item \textbf{Endpoint identification}: Each street has two endpoints (first and last address in sorted order), representing where an ESW enters and exits.
-\end{enumerate}
+\subsection{Data Sources}
 
-This reduces the problem from assigning individual addresses to assigning \emph{street segments}, preserving walkability.
+Segments are derived from the OpenStreetMap road network, imported via \texttt{osm2pgsql} from a Geofabrik California PBF extract (1.3\,GB), filtered to the Palo Alto bounding box ($37.35$--$37.48^\circ$N, $122.05$--$122.20^\circ$W). Road types included: motorway through living\_street. Intersections are identified as nodes appearing in more than one OSM way or at way endpoints.
+
+Addresses come from the City of Palo Alto municipal address database (44,115 addresses), stored in PostGIS with WGS84 coordinates. Each address is snapped to its nearest road segment (within 200\,m) and assigned to the left or right sub-segment by the cross-product of the road direction vector and the address displacement vector.
+
+Inter-sub-segment distances $d_{\text{road}}$ are computed as shortest paths on the road network graph using Dijkstra's algorithm, precomputed between all intersection pairs within each neighborhood.
 
 \section{Algorithms}
 
