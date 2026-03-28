@@ -41,3 +41,42 @@ $ ls -lh /srv/data/california-latest.osm.pbf
 # --- sitrep.rail.com (root) ---
 # Install osm2pgsql for OSM data import
 $ apt-get update -qq && apt-get install -y -qq osm2pgsql
+# osm2pgsql version 1.11.0
+
+# Create GIS database with PostGIS extension
+$ PGPASSWORD='***' psql -h postgres.rail.com -U postgres -c 'CREATE DATABASE gis;'
+$ PGPASSWORD='***' psql -h postgres.rail.com -U postgres -d gis -c 'CREATE EXTENSION IF NOT EXISTS postgis;'
+
+# Import California OSM PBF with bbox filter for Palo Alto area
+# This scans the full 1.3GB PBF but only inserts features within the bbox
+$ osm2pgsql -d 'host=postgres.rail.com dbname=gis user=postgres password=***' \
+    --slim --drop \
+    --bbox '-122.20,37.35,-122.05,37.48' \
+    /srv/data/california-latest.osm.pbf
+# 163M nodes (1m44s), 16.8M ways (4h39m), 187K relations (25m), total 5h07m
+# Result: planet_osm_line=61,023  planet_osm_point=83,583
+#         planet_osm_polygon=103,368  planet_osm_roads=4,231
+
+# --- sitrep.rail.com (bob) ---
+# Pull updated extraction script and run
+$ cd ~/auto-assign && git pull
+$ DB_HOST=postgres.rail.com DB_PORT=5432 \
+  SA_DB=situational_awareness SA_USER=postgres SA_PASS='***' \
+  GIS_DB=gis GIS_USER=postgres GIS_PASS='***' \
+  node scripts/extract-network-data.js
+# 35,912 road ways → 146,957 nodes → 54,854 intersections → 64,482 segments
+# 41,854/41,857 addresses snapped, 7,430 segments with addresses
+# 3,663 segments with addresses on both sides
+# zigzag preferred: 3,549 (97%), U-turn preferred: 114 (3%)
+# Output: data/network-extract.json (27.8 MB, 5.0 MB gzip)
+
+# Commit compressed data and push
+$ gzip -k data/network-extract.json
+$ git add data/network-extract.json.gz .gitignore
+$ git commit -m 'Add compressed network extraction'
+$ git push origin main
+
+# --- Local (macbook) ---
+$ git pull origin main
+$ gunzip -k data/network-extract.json.gz
+# 28 MB uncompressed, ready for local analysis

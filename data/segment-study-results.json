@@ -1,0 +1,2444 @@
+[
+  {
+    "hood": "Greater Miranda",
+    "addrs": 54,
+    "segs": 14,
+    "n": 3,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 642.4,
+            "unproductive": 396.79999999999995,
+            "total": 1039.1999999999998,
+            "addrs": 20
+          },
+          {
+            "productive": 430.9,
+            "unproductive": 372.8,
+            "total": 803.7,
+            "addrs": 20
+          },
+          {
+            "productive": 264.6,
+            "unproductive": 314.8,
+            "total": 579.4000000000001,
+            "addrs": 14
+          }
+        ],
+        "maxWalk": 1039.1999999999998,
+        "totalWalk": 2422.3,
+        "totalProd": 1337.9,
+        "totalUnprod": 1084.3999999999999,
+        "score": 6722.9222222222215,
+        "imbalance": 0.4444444444444444
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 572.86696,
+            "unproductive": 327.6,
+            "total": 900.46696,
+            "addrs": 19
+          },
+          {
+            "productive": 424.8,
+            "unproductive": 567.9,
+            "total": 992.7,
+            "addrs": 18
+          },
+          {
+            "productive": 285.85560000000004,
+            "unproductive": 321.9,
+            "total": 607.7556,
+            "addrs": 17
+          }
+        ],
+        "maxWalk": 992.7,
+        "totalWalk": 2500.92256,
+        "totalProd": 1283.52256,
+        "totalUnprod": 1217.4,
+        "score": 5041.878115555556,
+        "imbalance": 0.1111111111111111
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 603.6,
+            "unproductive": 35.3,
+            "total": 638.9,
+            "addrs": 23
+          },
+          {
+            "productive": 397.62256,
+            "unproductive": 291.3,
+            "total": 688.92256,
+            "addrs": 20
+          },
+          {
+            "productive": 248.16196,
+            "unproductive": 142.3,
+            "total": 390.46196,
+            "addrs": 11
+          }
+        ],
+        "maxWalk": 688.92256,
+        "totalWalk": 1718.2845200000002,
+        "totalProd": 1249.38452,
+        "totalUnprod": 468.90000000000003,
+        "score": 6985.01852888889,
+        "imbalance": 0.7777777777777778
+      }
+    },
+    "winner": "ChainRH"
+  },
+  {
+    "hood": "Greater Miranda",
+    "addrs": 54,
+    "segs": 14,
+    "n": 5,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 366.08512,
+            "unproductive": 71.69999999999999,
+            "total": 437.78512,
+            "addrs": 12
+          },
+          {
+            "productive": 274.92892,
+            "unproductive": 473.09999999999997,
+            "total": 748.02892,
+            "addrs": 11
+          },
+          {
+            "productive": 398.6,
+            "unproductive": 258.3,
+            "total": 656.9000000000001,
+            "addrs": 20
+          },
+          {
+            "productive": 220.8,
+            "unproductive": 368.6,
+            "total": 589.4000000000001,
+            "addrs": 11
+          },
+          {
+            "productive": 0,
+            "unproductive": 0,
+            "total": 0,
+            "addrs": 0
+          }
+        ],
+        "maxWalk": 748.02892,
+        "totalWalk": 2432.1140400000004,
+        "totalProd": 1260.4140399999999,
+        "totalUnprod": 1171.6999999999998,
+        "score": 13928.171879999998,
+        "imbalance": 1.9999999999999998
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 282.3,
+            "unproductive": 143.6,
+            "total": 425.9,
+            "addrs": 11
+          },
+          {
+            "productive": 418.96696,
+            "unproductive": 219.3,
+            "total": 638.2669599999999,
+            "addrs": 11
+          },
+          {
+            "productive": 257.2,
+            "unproductive": 337.5,
+            "total": 594.7,
+            "addrs": 13
+          },
+          {
+            "productive": 325.0556,
+            "unproductive": 517,
+            "total": 842.0556,
+            "addrs": 19
+          },
+          {
+            "productive": 0,
+            "unproductive": 0,
+            "total": 0,
+            "addrs": 0
+          }
+        ],
+        "maxWalk": 842.0556,
+        "totalWalk": 2500.92256,
+        "totalProd": 1283.5225599999999,
+        "totalUnprod": 1217.4,
+        "score": 14185.033759999998,
+        "imbalance": 1.9999999999999998
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 603.6,
+            "unproductive": 35.3,
+            "total": 638.9,
+            "addrs": 23
+          },
+          {
+            "productive": 133.02256,
+            "unproductive": 117.19999999999999,
+            "total": 250.22256,
+            "addrs": 6
+          },
+          {
+            "productive": 264.6,
+            "unproductive": 0,
+            "total": 264.6,
+            "addrs": 14
+          },
+          {
+            "productive": 114.79936000000001,
+            "unproductive": 27.6,
+            "total": 142.39936,
+            "addrs": 5
+          },
+          {
+            "productive": 134,
+            "unproductive": 0,
+            "total": 134,
+            "addrs": 6
+          }
+        ],
+        "maxWalk": 638.9,
+        "totalWalk": 1430.12192,
+        "totalProd": 1250.0219200000001,
+        "totalUnprod": 180.1,
+        "score": 16967.181179259256,
+        "imbalance": 2.8518518518518516
+      }
+    },
+    "winner": "ChainNN"
+  },
+  {
+    "hood": "Classic Communities",
+    "addrs": 104,
+    "segs": 17,
+    "n": 3,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 538.80342,
+            "unproductive": 138,
+            "total": 676.80342,
+            "addrs": 35
+          },
+          {
+            "productive": 468.7,
+            "unproductive": 122.69999999999999,
+            "total": 591.4,
+            "addrs": 37
+          },
+          {
+            "productive": 431.23733999999996,
+            "unproductive": 332.4,
+            "total": 763.63734,
+            "addrs": 32
+          }
+        ],
+        "maxWalk": 763.63734,
+        "totalWalk": 2031.8407599999998,
+        "totalProd": 1438.74076,
+        "totalUnprod": 593.0999999999999,
+        "score": 4328.346209230769,
+        "imbalance": 0.15384615384615394
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 383.39700000000005,
+            "unproductive": 215.89999999999998,
+            "total": 599.297,
+            "addrs": 35
+          },
+          {
+            "productive": 553.6,
+            "unproductive": 283.5,
+            "total": 837.1,
+            "addrs": 35
+          },
+          {
+            "productive": 507.13734,
+            "unproductive": 290.7,
+            "total": 797.83734,
+            "addrs": 34
+          }
+        ],
+        "maxWalk": 837.1,
+        "totalWalk": 2234.23434,
+        "totalProd": 1444.13434,
+        "totalUnprod": 790.0999999999999,
+        "score": 4100.742032307692,
+        "imbalance": 0.03846153846153853
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 624.1,
+            "unproductive": 81.1,
+            "total": 705.2,
+            "addrs": 48
+          },
+          {
+            "productive": 484.53734,
+            "unproductive": 223.89999999999998,
+            "total": 708.43734,
+            "addrs": 32
+          },
+          {
+            "productive": 347.20000000000005,
+            "unproductive": 51.5,
+            "total": 398.70000000000005,
+            "addrs": 24
+          }
+        ],
+        "maxWalk": 708.43734,
+        "totalWalk": 1812.33734,
+        "totalProd": 1455.83734,
+        "totalUnprod": 356.5,
+        "score": 7075.365866153846,
+        "imbalance": 0.7692307692307692
+      }
+    },
+    "winner": "ChainRH"
+  },
+  {
+    "hood": "Classic Communities",
+    "addrs": 104,
+    "segs": 17,
+    "n": 5,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 395.70342,
+            "unproductive": 27.1,
+            "total": 422.80342,
+            "addrs": 26
+          },
+          {
+            "productive": 328,
+            "unproductive": 175,
+            "total": 503,
+            "addrs": 22
+          },
+          {
+            "productive": 375.6,
+            "unproductive": 0,
+            "total": 375.6,
+            "addrs": 33
+          },
+          {
+            "productive": 207.89999999999998,
+            "unproductive": 114.6,
+            "total": 322.5,
+            "addrs": 22
+          },
+          {
+            "productive": 131.53733999999997,
+            "unproductive": 162.3,
+            "total": 293.83734,
+            "addrs": 1
+          }
+        ],
+        "maxWalk": 503,
+        "totalWalk": 1917.7407600000001,
+        "totalProd": 1438.7407600000001,
+        "totalUnprod": 479,
+        "score": 12442.971529230768,
+        "imbalance": 1.9038461538461535
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 300.7,
+            "unproductive": 135.3,
+            "total": 436,
+            "addrs": 21
+          },
+          {
+            "productive": 367.6,
+            "unproductive": 122.69999999999999,
+            "total": 490.3,
+            "addrs": 22
+          },
+          {
+            "productive": 346.03734,
+            "unproductive": 238.4,
+            "total": 584.43734,
+            "addrs": 21
+          },
+          {
+            "productive": 302.90000000000003,
+            "unproductive": 136.8,
+            "total": 439.70000000000005,
+            "addrs": 22
+          },
+          {
+            "productive": 138.6,
+            "unproductive": 58.6,
+            "total": 197.2,
+            "addrs": 18
+          }
+        ],
+        "maxWalk": 584.43734,
+        "totalWalk": 2147.6373399999998,
+        "totalProd": 1455.8373399999998,
+        "totalUnprod": 691.8000000000001,
+        "score": 4662.665866153845,
+        "imbalance": 0.2692307692307691
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 349.7,
+            "unproductive": 114.8,
+            "total": 464.5,
+            "addrs": 23
+          },
+          {
+            "productive": 302.90000000000003,
+            "unproductive": 25.5,
+            "total": 328.40000000000003,
+            "addrs": 22
+          },
+          {
+            "productive": 270.13734,
+            "unproductive": 162.3,
+            "total": 432.43734,
+            "addrs": 19
+          },
+          {
+            "productive": 468.7,
+            "unproductive": 86.1,
+            "total": 554.8,
+            "addrs": 37
+          },
+          {
+            "productive": 59.00641999999999,
+            "unproductive": 0,
+            "total": 59.00641999999999,
+            "addrs": 3
+          }
+        ],
+        "maxWalk": 554.8,
+        "totalWalk": 1839.14376,
+        "totalProd": 1450.4437599999999,
+        "totalUnprod": 388.70000000000005,
+        "score": 12371.820683076923,
+        "imbalance": 1.8846153846153846
+      }
+    },
+    "winner": "ChainRH"
+  },
+  {
+    "hood": "Palo Alto Central",
+    "addrs": 145,
+    "segs": 11,
+    "n": 3,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 153,
+            "unproductive": 36.6,
+            "total": 189.6,
+            "addrs": 69
+          },
+          {
+            "productive": 293.9,
+            "unproductive": 83.1,
+            "total": 377,
+            "addrs": 67
+          },
+          {
+            "productive": 221.8,
+            "unproductive": 93.80000000000001,
+            "total": 315.6,
+            "addrs": 57
+          }
+        ],
+        "maxWalk": 377,
+        "totalWalk": 882.2,
+        "totalProd": 668.7,
+        "totalUnprod": 213.5,
+        "score": 2776.0963730569956,
+        "imbalance": 0.22797927461139905
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 153,
+            "unproductive": 36.6,
+            "total": 189.6,
+            "addrs": 69
+          },
+          {
+            "productive": 293.9,
+            "unproductive": 83.1,
+            "total": 377,
+            "addrs": 67
+          },
+          {
+            "productive": 220.19696,
+            "unproductive": 315.6,
+            "total": 535.79696,
+            "addrs": 57
+          }
+        ],
+        "maxWalk": 535.79696,
+        "totalWalk": 1102.39696,
+        "totalProd": 667.09696,
+        "totalUnprod": 435.3,
+        "score": 3313.8872530569956,
+        "imbalance": 0.22797927461139905
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 317.2,
+            "unproductive": 85,
+            "total": 402.2,
+            "addrs": 79
+          },
+          {
+            "productive": 149.2,
+            "unproductive": 358.2,
+            "total": 507.4,
+            "addrs": 69
+          },
+          {
+            "productive": 202.3,
+            "unproductive": 357.3999999999999,
+            "total": 559.6999999999999,
+            "addrs": 45
+          }
+        ],
+        "maxWalk": 559.6999999999999,
+        "totalWalk": 1469.2999999999997,
+        "totalProd": 668.7,
+        "totalUnprod": 800.5999999999999,
+        "score": 5593.88134715026,
+        "imbalance": 0.601036269430052
+      }
+    },
+    "winner": "ChainNN"
+  },
+  {
+    "hood": "Palo Alto Central",
+    "addrs": 145,
+    "segs": 11,
+    "n": 5,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 142.3,
+            "unproductive": 0,
+            "total": 142.3,
+            "addrs": 54
+          },
+          {
+            "productive": 181.4,
+            "unproductive": 248,
+            "total": 429.4,
+            "addrs": 44
+          },
+          {
+            "productive": 146.5,
+            "unproductive": 85,
+            "total": 231.5,
+            "addrs": 50
+          },
+          {
+            "productive": 198.5,
+            "unproductive": 72.4,
+            "total": 270.9,
+            "addrs": 45
+          },
+          {
+            "productive": 0,
+            "unproductive": 0,
+            "total": 0,
+            "addrs": 0
+          }
+        ],
+        "maxWalk": 429.4,
+        "totalWalk": 1074.1,
+        "totalProd": 668.7,
+        "totalUnprod": 405.4,
+        "score": 11932.899999999998,
+        "imbalance": 1.9999999999999996
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 132.6,
+            "unproductive": 47.2,
+            "total": 179.8,
+            "addrs": 48
+          },
+          {
+            "productive": 144.89695999999998,
+            "unproductive": 108.30000000000001,
+            "total": 253.19696,
+            "addrs": 50
+          },
+          {
+            "productive": 198.5,
+            "unproductive": 270.9,
+            "total": 469.4,
+            "addrs": 45
+          },
+          {
+            "productive": 197.10000000000002,
+            "unproductive": 313.4,
+            "total": 510.5,
+            "addrs": 50
+          },
+          {
+            "productive": 0,
+            "unproductive": 0,
+            "total": 0,
+            "addrs": 0
+          }
+        ],
+        "maxWalk": 510.5,
+        "totalWalk": 1412.89696,
+        "totalProd": 673.09696,
+        "totalUnprod": 739.8,
+        "score": 12433.896959999998,
+        "imbalance": 1.9999999999999996
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 196.39695999999998,
+            "unproductive": 62.800000000000004,
+            "total": 259.19696,
+            "addrs": 60
+          },
+          {
+            "productive": 142.3,
+            "unproductive": 0,
+            "total": 142.3,
+            "addrs": 54
+          },
+          {
+            "productive": 20,
+            "unproductive": 0,
+            "total": 20,
+            "addrs": 9
+          },
+          {
+            "productive": 216,
+            "unproductive": 321.6,
+            "total": 537.6,
+            "addrs": 50
+          },
+          {
+            "productive": 92.4,
+            "unproductive": 0,
+            "total": 92.4,
+            "addrs": 20
+          }
+        ],
+        "maxWalk": 537.6,
+        "totalWalk": 1051.4969600000002,
+        "totalProd": 667.09696,
+        "totalUnprod": 384.40000000000003,
+        "score": 14613.743592124352,
+        "imbalance": 2.4974093264248705
+      }
+    },
+    "winner": "ChainNN"
+  },
+  {
+    "hood": "Greenacres II",
+    "addrs": 264,
+    "segs": 45,
+    "n": 3,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 1925.82358,
+            "unproductive": 2450,
+            "total": 4375.82358,
+            "addrs": 92
+          },
+          {
+            "productive": 1694.5,
+            "unproductive": 1760.6000000000001,
+            "total": 3455.1000000000004,
+            "addrs": 92
+          },
+          {
+            "productive": 1708.6999999999998,
+            "unproductive": 2671.2,
+            "total": 4379.9,
+            "addrs": 91
+          }
+        ],
+        "maxWalk": 4379.9,
+        "totalWalk": 12210.82358,
+        "totalProd": 5329.02358,
+        "totalUnprod": 6881.8,
+        "score": 21043.35085272727,
+        "imbalance": 0.014545454545454493
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 2029.59622,
+            "unproductive": 2113.5,
+            "total": 4143.096219999999,
+            "addrs": 92
+          },
+          {
+            "productive": 1517.3,
+            "unproductive": 815.3000000000001,
+            "total": 2332.6,
+            "addrs": 92
+          },
+          {
+            "productive": 1760.89904,
+            "unproductive": 2992.7999999999997,
+            "total": 4753.6990399999995,
+            "addrs": 91
+          }
+        ],
+        "maxWalk": 4753.6990399999995,
+        "totalWalk": 11229.39526,
+        "totalProd": 5307.79526,
+        "totalUnprod": 5921.6,
+        "score": 20809.52061272727,
+        "imbalance": 0.014545454545454493
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 2282.83014,
+            "unproductive": 1319.9,
+            "total": 3602.73014,
+            "addrs": 109
+          },
+          {
+            "productive": 1384.3,
+            "unproductive": 2257.9,
+            "total": 3642.2,
+            "addrs": 76
+          },
+          {
+            "productive": 1654.6891600000001,
+            "unproductive": 2170.4,
+            "total": 3825.0891600000004,
+            "addrs": 90
+          }
+        ],
+        "maxWalk": 3825.0891600000004,
+        "totalWalk": 11070.0193,
+        "totalProd": 5321.8193,
+        "totalUnprod": 5748.200000000001,
+        "score": 20611.10671090909,
+        "imbalance": 0.37818181818181823
+      }
+    },
+    "winner": "Bisect"
+  },
+  {
+    "hood": "Greenacres II",
+    "addrs": 264,
+    "segs": 45,
+    "n": 5,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 1016.4755200000002,
+            "unproductive": 1120.8000000000002,
+            "total": 2137.27552,
+            "addrs": 56
+          },
+          {
+            "productive": 1360.64806,
+            "unproductive": 2019.1,
+            "total": 3379.74806,
+            "addrs": 60
+          },
+          {
+            "productive": 1330.8000000000002,
+            "unproductive": 850.3000000000001,
+            "total": 2181.1000000000004,
+            "addrs": 64
+          },
+          {
+            "productive": 825.6,
+            "unproductive": 1087.5,
+            "total": 1913.1,
+            "addrs": 56
+          },
+          {
+            "productive": 795.5,
+            "unproductive": 1670.5999999999997,
+            "total": 2466.0999999999995,
+            "addrs": 39
+          }
+        ],
+        "maxWalk": 3379.74806,
+        "totalWalk": 12077.32358,
+        "totalProd": 5329.023580000001,
+        "totalUnprod": 6748.3,
+        "score": 21745.910609090908,
+        "imbalance": 0.5818181818181818
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 1467.9858600000002,
+            "unproductive": 558.9000000000001,
+            "total": 2026.8858600000003,
+            "addrs": 71
+          },
+          {
+            "productive": 1103.7278000000001,
+            "unproductive": 944.9,
+            "total": 2048.6278,
+            "addrs": 55
+          },
+          {
+            "productive": 1063.43014,
+            "unproductive": 1330.8,
+            "total": 2394.2301399999997,
+            "addrs": 57
+          },
+          {
+            "productive": 1141.02352,
+            "unproductive": 757.6000000000001,
+            "total": 1898.62352,
+            "addrs": 58
+          },
+          {
+            "productive": 546.7755199999999,
+            "unproductive": 2534.8,
+            "total": 3081.5755200000003,
+            "addrs": 34
+          }
+        ],
+        "maxWalk": 3081.5755200000003,
+        "totalWalk": 11449.942840000002,
+        "totalProd": 5322.942840000001,
+        "totalUnprod": 6127.000000000001,
+        "score": 21431.27569818182,
+        "imbalance": 0.7636363636363637
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 1888.7301400000001,
+            "unproductive": 1108.4,
+            "total": 2997.13014,
+            "addrs": 86
+          },
+          {
+            "productive": 962.7,
+            "unproductive": 415.29999999999995,
+            "total": 1378,
+            "addrs": 51
+          },
+          {
+            "productive": 502.29999999999995,
+            "unproductive": 1554.5,
+            "total": 2056.8,
+            "addrs": 28
+          },
+          {
+            "productive": 927.9233399999998,
+            "unproductive": 1152.8,
+            "total": 2080.7233399999996,
+            "addrs": 63
+          },
+          {
+            "productive": 1002.01688,
+            "unproductive": 1221.6,
+            "total": 2223.61688,
+            "addrs": 47
+          }
+        ],
+        "maxWalk": 2997.13014,
+        "totalWalk": 10736.27036,
+        "totalProd": 5283.670360000001,
+        "totalUnprod": 5452.6,
+        "score": 23821.439730909093,
+        "imbalance": 1.4181818181818182
+      }
+    },
+    "winner": "ChainRH"
+  },
+  {
+    "hood": "Adobe Meadows",
+    "addrs": 316,
+    "segs": 72,
+    "n": 3,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 2412.6827000000003,
+            "unproductive": 2579.3999999999996,
+            "total": 4992.0827,
+            "addrs": 119
+          },
+          {
+            "productive": 2274.6645200000003,
+            "unproductive": 3235.5,
+            "total": 5510.16452,
+            "addrs": 121
+          },
+          {
+            "productive": 2220,
+            "unproductive": 1190,
+            "total": 3410,
+            "addrs": 109
+          }
+        ],
+        "maxWalk": 5510.16452,
+        "totalWalk": 13912.247220000001,
+        "totalProd": 6907.347220000001,
+        "totalUnprod": 7004.9,
+        "score": 25562.948752836677,
+        "imbalance": 0.1260744985673353
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 2543.96694,
+            "unproductive": 2588.6,
+            "total": 5132.56694,
+            "addrs": 118
+          },
+          {
+            "productive": 2322.2873600000003,
+            "unproductive": 1434,
+            "total": 3756.2873600000003,
+            "addrs": 121
+          },
+          {
+            "productive": 2164.8,
+            "unproductive": 949.2,
+            "total": 3114,
+            "addrs": 110
+          }
+        ],
+        "maxWalk": 5132.56694,
+        "totalWalk": 12002.854299999999,
+        "totalProd": 7031.054300000001,
+        "totalUnprod": 4971.8,
+        "score": 22812.400787449857,
+        "imbalance": 0.10888252148997139
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 2427.8662000000004,
+            "unproductive": 3320.7,
+            "total": 5748.5662,
+            "addrs": 118
+          },
+          {
+            "productive": 2301.6400000000003,
+            "unproductive": 1199.6999999999998,
+            "total": 3501.34,
+            "addrs": 116
+          },
+          {
+            "productive": 2209.2999999999997,
+            "unproductive": 1046.6,
+            "total": 3255.8999999999996,
+            "addrs": 115
+          }
+        ],
+        "maxWalk": 5748.5662,
+        "totalWalk": 12505.8062,
+        "totalProd": 6938.806200000001,
+        "totalUnprod": 5567,
+        "score": 24146.2050756447,
+        "imbalance": 0.028653295128939788
+      }
+    },
+    "winner": "ChainRH"
+  },
+  {
+    "hood": "Adobe Meadows",
+    "addrs": 316,
+    "segs": 72,
+    "n": 5,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 1432.8000000000002,
+            "unproductive": 572.4,
+            "total": 2005.2000000000003,
+            "addrs": 70
+          },
+          {
+            "productive": 1518.0319799999997,
+            "unproductive": 2528.2,
+            "total": 4046.2319799999996,
+            "addrs": 73
+          },
+          {
+            "productive": 1431.7802800000002,
+            "unproductive": 1966.4999999999998,
+            "total": 3398.28028,
+            "addrs": 74
+          },
+          {
+            "productive": 1419.9,
+            "unproductive": 137.7,
+            "total": 1557.6000000000001,
+            "addrs": 74
+          },
+          {
+            "productive": 1148.1999999999998,
+            "unproductive": 680.3000000000001,
+            "total": 1828.5,
+            "addrs": 58
+          }
+        ],
+        "maxWalk": 4046.2319799999996,
+        "totalWalk": 12835.81226,
+        "totalProd": 6950.712259999999,
+        "totalUnprod": 5885.099999999999,
+        "score": 22618.82063260745,
+        "imbalance": 0.33810888252149013
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 1441.6000000000001,
+            "unproductive": 75.2,
+            "total": 1516.8000000000002,
+            "addrs": 74
+          },
+          {
+            "productive": 1397.9,
+            "unproductive": 521.5999999999999,
+            "total": 1919.5,
+            "addrs": 71
+          },
+          {
+            "productive": 1553.5366399999998,
+            "unproductive": 1910.1000000000001,
+            "total": 3463.6366399999997,
+            "addrs": 71
+          },
+          {
+            "productive": 1454.1575000000003,
+            "unproductive": 1767.8,
+            "total": 3221.9575000000004,
+            "addrs": 71
+          },
+          {
+            "productive": 1203.3000000000002,
+            "unproductive": 1389.2,
+            "total": 2592.5,
+            "addrs": 62
+          }
+        ],
+        "maxWalk": 3463.6366399999997,
+        "totalWalk": 12714.39414,
+        "totalProd": 7050.494140000001,
+        "totalUnprod": 5663.9,
+        "score": 20759.14593002865,
+        "imbalance": 0.2234957020057308
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 1355.4206000000001,
+            "unproductive": 2071.6999999999994,
+            "total": 3427.1205999999993,
+            "addrs": 70
+          },
+          {
+            "productive": 1469.69276,
+            "unproductive": 1427.1,
+            "total": 2896.79276,
+            "addrs": 69
+          },
+          {
+            "productive": 1272.7802800000002,
+            "unproductive": 1202.4,
+            "total": 2475.1802800000005,
+            "addrs": 70
+          },
+          {
+            "productive": 1663,
+            "unproductive": 347.9,
+            "total": 2010.9,
+            "addrs": 85
+          },
+          {
+            "productive": 1130.2,
+            "unproductive": 190.6,
+            "total": 1320.8,
+            "addrs": 55
+          }
+        ],
+        "maxWalk": 3427.1205999999993,
+        "totalWalk": 12130.793639999998,
+        "totalProd": 6891.09364,
+        "totalUnprod": 5239.699999999999,
+        "score": 21219.991860057304,
+        "imbalance": 0.44699140401146137
+      }
+    },
+    "winner": "ChainRH"
+  },
+  {
+    "hood": "Leland Manor/Garland",
+    "addrs": 508,
+    "segs": 106,
+    "n": 3,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 3779.79398,
+            "unproductive": 2984.7999999999997,
+            "total": 6764.59398,
+            "addrs": 175
+          },
+          {
+            "productive": 3883.361099999999,
+            "unproductive": 3352.3999999999996,
+            "total": 7235.761099999999,
+            "addrs": 181
+          },
+          {
+            "productive": 3314.2000000000003,
+            "unproductive": 3693.1999999999994,
+            "total": 7007.4,
+            "addrs": 167
+          }
+        ],
+        "maxWalk": 7235.761099999999,
+        "totalWalk": 21007.755079999995,
+        "totalProd": 10977.35508,
+        "totalUnprod": 10030.399999999998,
+        "score": 35899.92737560229,
+        "imbalance": 0.08413001912045884
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 3324.8374,
+            "unproductive": 1974.4999999999998,
+            "total": 5299.337399999999,
+            "addrs": 177
+          },
+          {
+            "productive": 3953.7873199999985,
+            "unproductive": 2105,
+            "total": 6058.7873199999985,
+            "addrs": 191
+          },
+          {
+            "productive": 3925.626719999999,
+            "unproductive": 3017.7,
+            "total": 6943.326719999999,
+            "addrs": 155
+          }
+        ],
+        "maxWalk": 6943.326719999999,
+        "totalWalk": 18301.451439999997,
+        "totalProd": 11204.251439999996,
+        "totalUnprod": 7097.2,
+        "score": 33297.091495678775,
+        "imbalance": 0.2217973231357552
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 3937.6518400000004,
+            "unproductive": 2277.5,
+            "total": 6215.15184,
+            "addrs": 181
+          },
+          {
+            "productive": 4096.414559999999,
+            "unproductive": 3438.5999999999995,
+            "total": 7535.014559999999,
+            "addrs": 181
+          },
+          {
+            "productive": 3155.0066199999997,
+            "unproductive": 2849.2000000000003,
+            "total": 6004.20662,
+            "addrs": 161
+          }
+        ],
+        "maxWalk": 7535.014559999999,
+        "totalWalk": 19754.37302,
+        "totalProd": 11189.07302,
+        "totalUnprod": 8565.3,
+        "score": 35589.22049564053,
+        "imbalance": 0.15296367112810702
+      }
+    },
+    "winner": "ChainRH"
+  },
+  {
+    "hood": "Leland Manor/Garland",
+    "addrs": 508,
+    "segs": 106,
+    "n": 5,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 2118.6787200000003,
+            "unproductive": 2718.1999999999994,
+            "total": 4836.87872,
+            "addrs": 105
+          },
+          {
+            "productive": 2661.10824,
+            "unproductive": 1468.4000000000003,
+            "total": 4129.50824,
+            "addrs": 105
+          },
+          {
+            "productive": 1992.3002800000004,
+            "unproductive": 1425.6,
+            "total": 3417.9002800000003,
+            "addrs": 107
+          },
+          {
+            "productive": 2279.5,
+            "unproductive": 2895.399999999999,
+            "total": 5174.9,
+            "addrs": 105
+          },
+          {
+            "productive": 2130.7,
+            "unproductive": 1489.7,
+            "total": 3620.3999999999996,
+            "addrs": 101
+          }
+        ],
+        "maxWalk": 5174.9,
+        "totalWalk": 21179.58724,
+        "totalProd": 11182.287240000001,
+        "totalUnprod": 9997.3,
+        "score": 31873.55550003824,
+        "imbalance": 0.06883365200764835
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 2475.8382,
+            "unproductive": 1564.8999999999999,
+            "total": 4040.7382,
+            "addrs": 121
+          },
+          {
+            "productive": 2427.3940599999996,
+            "unproductive": 954.9,
+            "total": 3382.2940599999997,
+            "addrs": 114
+          },
+          {
+            "productive": 2763.5955000000004,
+            "unproductive": 1024.6,
+            "total": 3788.1955000000003,
+            "addrs": 112
+          },
+          {
+            "productive": 2016.7089600000004,
+            "unproductive": 1880.1999999999998,
+            "total": 3896.90896,
+            "addrs": 105
+          },
+          {
+            "productive": 1303.9497199999998,
+            "unproductive": 2531.5,
+            "total": 3835.4497199999996,
+            "addrs": 71
+          }
+        ],
+        "maxWalk": 4040.7382,
+        "totalWalk": 18943.58644,
+        "totalProd": 10987.48644,
+        "totalUnprod": 7956.099999999999,
+        "score": 30237.299933690247,
+        "imbalance": 0.6424474187380499
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 2223.7787399999997,
+            "unproductive": 1444.1000000000001,
+            "total": 3667.87874,
+            "addrs": 109
+          },
+          {
+            "productive": 2407.6714800000004,
+            "unproductive": 1750.6999999999998,
+            "total": 4158.37148,
+            "addrs": 108
+          },
+          {
+            "productive": 2304.51554,
+            "unproductive": 2095.5,
+            "total": 4400.01554,
+            "addrs": 104
+          },
+          {
+            "productive": 1887.5007999999998,
+            "unproductive": 1303.5,
+            "total": 3191.0008,
+            "addrs": 106
+          },
+          {
+            "productive": 2194.7603,
+            "unproductive": 2038.5000000000002,
+            "total": 4233.2603,
+            "addrs": 96
+          }
+        ],
+        "maxWalk": 4400.01554,
+        "totalWalk": 19650.526859999998,
+        "totalProd": 11018.22686,
+        "totalUnprod": 8632.300000000001,
+        "score": 29330.099048986616,
+        "imbalance": 0.1759082217973232
+      }
+    },
+    "winner": "Bisect"
+  },
+  {
+    "hood": "Monroe Park",
+    "addrs": 621,
+    "segs": 80,
+    "n": 3,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 2936.6025400000003,
+            "unproductive": 2323.0999999999995,
+            "total": 5259.70254,
+            "addrs": 237
+          },
+          {
+            "productive": 2814.88594,
+            "unproductive": 3767.2999999999997,
+            "total": 6582.185939999999,
+            "addrs": 232
+          },
+          {
+            "productive": 1122.3999999999999,
+            "unproductive": 976,
+            "total": 2098.3999999999996,
+            "addrs": 219
+          }
+        ],
+        "maxWalk": 6582.185939999999,
+        "totalWalk": 13940.28848,
+        "totalProd": 6873.88848,
+        "totalUnprod": 7066.4,
+        "score": 27555.241755348834,
+        "imbalance": 0.0901162790697674
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 3142.8107,
+            "unproductive": 3044.8999999999987,
+            "total": 6187.710699999999,
+            "addrs": 233
+          },
+          {
+            "productive": 2171.3043,
+            "unproductive": 1315.0000000000002,
+            "total": 3486.3043,
+            "addrs": 233
+          },
+          {
+            "productive": 1734.3,
+            "unproductive": 3360.7999999999997,
+            "total": 5095.099999999999,
+            "addrs": 222
+          }
+        ],
+        "maxWalk": 6187.710699999999,
+        "totalWalk": 14769.114999999998,
+        "totalProd": 7048.415,
+        "totalUnprod": 7720.699999999999,
+        "score": 27464.303841860463,
+        "imbalance": 0.06395348837209298
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 1354.6470800000002,
+            "unproductive": 2113,
+            "total": 3467.64708,
+            "addrs": 241
+          },
+          {
+            "productive": 2223.99338,
+            "unproductive": 1189,
+            "total": 3412.99338,
+            "addrs": 238
+          },
+          {
+            "productive": 3296.1983800000003,
+            "unproductive": 3058.7000000000003,
+            "total": 6354.8983800000005,
+            "addrs": 209
+          }
+        ],
+        "maxWalk": 6354.8983800000005,
+        "totalWalk": 13235.538840000001,
+        "totalProd": 6874.83884,
+        "totalUnprod": 6360.700000000001,
+        "score": 26831.963506976746,
+        "imbalance": 0.1773255813953488
+      }
+    },
+    "winner": "Bisect"
+  },
+  {
+    "hood": "Monroe Park",
+    "addrs": 621,
+    "segs": 80,
+    "n": 5,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 977.8000000000001,
+            "unproductive": 394.5,
+            "total": 1372.3000000000002,
+            "addrs": 138
+          },
+          {
+            "productive": 2209.70254,
+            "unproductive": 2004.6000000000001,
+            "total": 4214.302540000001,
+            "addrs": 140
+          },
+          {
+            "productive": 2169.0175999999997,
+            "unproductive": 2283.2,
+            "total": 4452.2176,
+            "addrs": 150
+          },
+          {
+            "productive": 1517.36834,
+            "unproductive": 2307.6,
+            "total": 3824.96834,
+            "addrs": 139
+          },
+          {
+            "productive": 0,
+            "unproductive": 57.6,
+            "total": 57.6,
+            "addrs": 121
+          }
+        ],
+        "maxWalk": 4452.2176,
+        "totalWalk": 13921.38848,
+        "totalProd": 6873.8884800000005,
+        "totalUnprod": 7047.5,
+        "score": 24032.21902883721,
+        "imbalance": 0.24127906976744198
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 1146.5076000000001,
+            "unproductive": 572.5999999999999,
+            "total": 1719.1076,
+            "addrs": 138
+          },
+          {
+            "productive": 1491.5185799999995,
+            "unproductive": 853.2,
+            "total": 2344.7185799999997,
+            "addrs": 140
+          },
+          {
+            "productive": 1916.90036,
+            "unproductive": 1802.9999999999998,
+            "total": 3719.9003599999996,
+            "addrs": 139
+          },
+          {
+            "productive": 2378.6097199999995,
+            "unproductive": 2203.7,
+            "total": 4582.309719999999,
+            "addrs": 144
+          },
+          {
+            "productive": 140.1,
+            "unproductive": 2349.6999999999994,
+            "total": 2489.7999999999993,
+            "addrs": 127
+          }
+        ],
+        "maxWalk": 4582.309719999999,
+        "totalWalk": 14855.836259999998,
+        "totalProd": 7073.63626,
+        "totalUnprod": 7782.199999999999,
+        "score": 24790.8045372093,
+        "imbalance": 0.1540697674418606
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 776.64708,
+            "unproductive": 1820.5,
+            "total": 2597.1470799999997,
+            "addrs": 186
+          },
+          {
+            "productive": 1455.54818,
+            "unproductive": 1091.6000000000001,
+            "total": 2547.14818,
+            "addrs": 135
+          },
+          {
+            "productive": 1303.75682,
+            "unproductive": 927,
+            "total": 2230.75682,
+            "addrs": 158
+          },
+          {
+            "productive": 1537.54226,
+            "unproductive": 1302.7,
+            "total": 2840.24226,
+            "addrs": 113
+          },
+          {
+            "productive": 1771.1807800000001,
+            "unproductive": 891.2,
+            "total": 2662.3807800000004,
+            "addrs": 96
+          }
+        ],
+        "maxWalk": 2840.24226,
+        "totalWalk": 12877.67512,
+        "totalProd": 6844.67512,
+        "totalUnprod": 6033,
+        "score": 23558.159639999998,
+        "imbalance": 1
+      }
+    },
+    "winner": "Bisect"
+  },
+  {
+    "hood": "Duv St Fran",
+    "addrs": 966,
+    "segs": 126,
+    "n": 3,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 6969.821,
+            "unproductive": 4097.699999999999,
+            "total": 11067.520999999999,
+            "addrs": 343
+          },
+          {
+            "productive": 6719.169700000002,
+            "unproductive": 3839.4999999999995,
+            "total": 10558.669700000002,
+            "addrs": 343
+          },
+          {
+            "productive": 6046.799999999999,
+            "unproductive": 5032.900000000001,
+            "total": 11079.7,
+            "addrs": 340
+          }
+        ],
+        "maxWalk": 11079.7,
+        "totalWalk": 32705.8907,
+        "totalProd": 19735.7907,
+        "totalUnprod": 12970.099999999999,
+        "score": 54923.77023216374,
+        "imbalance": 0.011695906432748537
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 7162.300260000001,
+            "unproductive": 2683.5,
+            "total": 9845.80026,
+            "addrs": 351
+          },
+          {
+            "productive": 7009.8474000000015,
+            "unproductive": 2464.2000000000003,
+            "total": 9474.047400000001,
+            "addrs": 368
+          },
+          {
+            "productive": 5774.1215999999995,
+            "unproductive": 4831.000000000001,
+            "total": 10605.1216,
+            "addrs": 307
+          }
+        ],
+        "maxWalk": 10605.1216,
+        "totalWalk": 29924.969259999998,
+        "totalProd": 19946.26926,
+        "totalUnprod": 9978.7,
+        "score": 52158.604272865494,
+        "imbalance": 0.2046783625730994
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 7127.92378,
+            "unproductive": 3689.1000000000004,
+            "total": 10817.02378,
+            "addrs": 359
+          },
+          {
+            "productive": 6465.05796,
+            "unproductive": 4041.3,
+            "total": 10506.357960000001,
+            "addrs": 355
+          },
+          {
+            "productive": 6152.451199999999,
+            "unproductive": 5909.0999999999985,
+            "total": 12061.551199999998,
+            "addrs": 312
+          }
+        ],
+        "maxWalk": 12061.551199999998,
+        "totalWalk": 33384.93294,
+        "totalProd": 19745.43294,
+        "totalUnprod": 13639.5,
+        "score": 58385.22832245613,
+        "imbalance": 0.17543859649122806
+      }
+    },
+    "winner": "ChainRH"
+  },
+  {
+    "hood": "Duv St Fran",
+    "addrs": 966,
+    "segs": 126,
+    "n": 5,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 4048.22682,
+            "unproductive": 2561.7999999999997,
+            "total": 6610.026819999999,
+            "addrs": 210
+          },
+          {
+            "productive": 4205.82048,
+            "unproductive": 3115.0000000000005,
+            "total": 7320.82048,
+            "addrs": 207
+          },
+          {
+            "productive": 4219.4,
+            "unproductive": 1995.6,
+            "total": 6215,
+            "addrs": 207
+          },
+          {
+            "productive": 3910,
+            "unproductive": 1639.3,
+            "total": 5549.3,
+            "addrs": 212
+          },
+          {
+            "productive": 3442.5,
+            "unproductive": 3773.1999999999994,
+            "total": 7215.699999999999,
+            "addrs": 190
+          }
+        ],
+        "maxWalk": 7320.82048,
+        "totalWalk": 32910.8473,
+        "totalProd": 19825.9473,
+        "totalUnprod": 13084.899999999998,
+        "score": 48293.22900074074,
+        "imbalance": 0.14814814814814833
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 4203.15254,
+            "unproductive": 977.2999999999998,
+            "total": 5180.45254,
+            "addrs": 207
+          },
+          {
+            "productive": 4238.67362,
+            "unproductive": 1605.3,
+            "total": 5843.97362,
+            "addrs": 219
+          },
+          {
+            "productive": 3995.1483999999996,
+            "unproductive": 1383.4,
+            "total": 5378.5484,
+            "addrs": 208
+          },
+          {
+            "productive": 3835.0901999999996,
+            "unproductive": 1818.3,
+            "total": 5653.3902,
+            "addrs": 214
+          },
+          {
+            "productive": 3597.000000000001,
+            "unproductive": 3756,
+            "total": 7353.000000000001,
+            "addrs": 178
+          }
+        ],
+        "maxWalk": 7353.000000000001,
+        "totalWalk": 29409.364759999997,
+        "totalProd": 19869.06476,
+        "totalUnprod": 9540.3,
+        "score": 45440.900822378164,
+        "imbalance": 0.26510721247563374
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 4525.7,
+            "unproductive": 1323.3000000000002,
+            "total": 5849,
+            "addrs": 230
+          },
+          {
+            "productive": 3581.10218,
+            "unproductive": 1869.0999999999997,
+            "total": 5450.202179999999,
+            "addrs": 185
+          },
+          {
+            "productive": 3808.4943599999997,
+            "unproductive": 1613.1999999999998,
+            "total": 5421.6943599999995,
+            "addrs": 202
+          },
+          {
+            "productive": 4011.7748199999996,
+            "unproductive": 3048.7,
+            "total": 7060.474819999999,
+            "addrs": 206
+          },
+          {
+            "productive": 3879.3567799999996,
+            "unproductive": 2725,
+            "total": 6604.35678,
+            "addrs": 203
+          }
+        ],
+        "maxWalk": 7060.474819999999,
+        "totalWalk": 30385.72814,
+        "totalProd": 19806.428139999996,
+        "totalUnprod": 10579.3,
+        "score": 45754.24113282651,
+        "imbalance": 0.2495126705653021
+      }
+    },
+    "winner": "ChainRH"
+  },
+  {
+    "hood": "Crescent Park",
+    "addrs": 1476,
+    "segs": 256,
+    "n": 3,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 9568.309820000002,
+            "unproductive": 4823.8,
+            "total": 14392.109820000001,
+            "addrs": 516
+          },
+          {
+            "productive": 9519.404359999999,
+            "unproductive": 5072.6,
+            "total": 14592.004359999999,
+            "addrs": 518
+          },
+          {
+            "productive": 10719.99418,
+            "unproductive": 8408,
+            "total": 19127.99418,
+            "addrs": 510
+          }
+        ],
+        "maxWalk": 19127.99418,
+        "totalWalk": 48112.10836,
+        "totalProd": 29807.708360000004,
+        "totalUnprod": 18304.4,
+        "score": 86458.77029512954,
+        "imbalance": 0.01813471502590681
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 8087.026019999998,
+            "unproductive": 3559.1999999999994,
+            "total": 11646.226019999998,
+            "addrs": 533
+          },
+          {
+            "productive": 11845.316539999993,
+            "unproductive": 5046.700000000001,
+            "total": 16892.016539999993,
+            "addrs": 519
+          },
+          {
+            "productive": 9866.081,
+            "unproductive": 8242.7,
+            "total": 18108.781000000003,
+            "addrs": 492
+          }
+        ],
+        "maxWalk": 18108.781000000003,
+        "totalWalk": 46647.023559999994,
+        "totalProd": 29798.42355999999,
+        "totalUnprod": 16848.6,
+        "score": 83305.00006777202,
+        "imbalance": 0.08808290155440422
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 8103.44924,
+            "unproductive": 4353.300000000001,
+            "total": 12456.749240000001,
+            "addrs": 519
+          },
+          {
+            "productive": 10186.313740000001,
+            "unproductive": 8660.7,
+            "total": 18847.013740000002,
+            "addrs": 517
+          },
+          {
+            "productive": 11450.686080000003,
+            "unproductive": 6120.5,
+            "total": 17571.186080000003,
+            "addrs": 508
+          }
+        ],
+        "maxWalk": 18847.013740000002,
+        "totalWalk": 48874.949060000006,
+        "totalProd": 29740.449060000003,
+        "totalUnprod": 19134.5,
+        "score": 86698.51021875648,
+        "imbalance": 0.02590673575129541
+      }
+    },
+    "winner": "ChainRH"
+  },
+  {
+    "hood": "Crescent Park",
+    "addrs": 1476,
+    "segs": 256,
+    "n": 5,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 5252.180120000001,
+            "unproductive": 2360.9999999999995,
+            "total": 7613.180120000001,
+            "addrs": 310
+          },
+          {
+            "productive": 6609.729700000002,
+            "unproductive": 3829.4,
+            "total": 10439.129700000001,
+            "addrs": 314
+          },
+          {
+            "productive": 5250.67116,
+            "unproductive": 2773.8,
+            "total": 8024.47116,
+            "addrs": 311
+          },
+          {
+            "productive": 6533.96832,
+            "unproductive": 4172.5,
+            "total": 10706.46832,
+            "addrs": 310
+          },
+          {
+            "productive": 6161.159060000001,
+            "unproductive": 5167.700000000001,
+            "total": 11328.859060000003,
+            "addrs": 299
+          }
+        ],
+        "maxWalk": 11328.859060000003,
+        "totalWalk": 48112.108360000006,
+        "totalProd": 29807.708360000004,
+        "totalUnprod": 18304.4,
+        "score": 71087.18399295339,
+        "imbalance": 0.06347150259067347
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 4598.23514,
+            "unproductive": 1815.6,
+            "total": 6413.835139999999,
+            "addrs": 310
+          },
+          {
+            "productive": 5596.48936,
+            "unproductive": 3711.4000000000005,
+            "total": 9307.889360000001,
+            "addrs": 312
+          },
+          {
+            "productive": 6880.121079999998,
+            "unproductive": 1832.7,
+            "total": 8712.821079999998,
+            "addrs": 316
+          },
+          {
+            "productive": 6678.588180000001,
+            "unproductive": 3105.399999999999,
+            "total": 9783.98818,
+            "addrs": 310
+          },
+          {
+            "productive": 6044.989799999999,
+            "unproductive": 6383.500000000001,
+            "total": 12428.4898,
+            "addrs": 296
+          }
+        ],
+        "maxWalk": 12428.4898,
+        "totalWalk": 46647.02356,
+        "totalProd": 29798.42356,
+        "totalUnprod": 16848.6,
+        "score": 71918.51093202071,
+        "imbalance": 0.08290155440414497
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 4556.349099999999,
+            "unproductive": 2967.2000000000003,
+            "total": 7523.5491,
+            "addrs": 335
+          },
+          {
+            "productive": 5723.415620000002,
+            "unproductive": 2499.3999999999996,
+            "total": 8222.815620000001,
+            "addrs": 287
+          },
+          {
+            "productive": 5698.97892,
+            "unproductive": 6151.600000000001,
+            "total": 11850.57892,
+            "addrs": 306
+          },
+          {
+            "productive": 6833.347980000001,
+            "unproductive": 2939.7000000000003,
+            "total": 9773.047980000001,
+            "addrs": 308
+          },
+          {
+            "productive": 7062.702400000002,
+            "unproductive": 4413.3,
+            "total": 11476.002400000001,
+            "addrs": 308
+          }
+        ],
+        "maxWalk": 11850.57892,
+        "totalWalk": 48845.99402,
+        "totalProd": 29874.794020000005,
+        "totalUnprod": 18971.2,
+        "score": 73395.59745585492,
+        "imbalance": 0.16968911917098456
+      }
+    },
+    "winner": "ChainNN"
+  },
+  {
+    "hood": "Stanford",
+    "addrs": 1737,
+    "segs": 600,
+    "n": 3,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 18580.868280000006,
+            "unproductive": 25537.800000000007,
+            "total": 44118.66828000001,
+            "addrs": 585
+          },
+          {
+            "productive": 20409.907959999993,
+            "unproductive": 29147.700000000015,
+            "total": 49557.60796000001,
+            "addrs": 594
+          },
+          {
+            "productive": 11170.414959999996,
+            "unproductive": 26472.9,
+            "total": 37643.314959999996,
+            "addrs": 574
+          }
+        ],
+        "maxWalk": 49557.60796000001,
+        "totalWalk": 131319.59120000002,
+        "totalProd": 50161.191199999994,
+        "totalUnprod": 81158.40000000002,
+        "score": 230611.6468233657,
+        "imbalance": 0.035367940673131704
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 19721.106139999993,
+            "unproductive": 15844.100000000006,
+            "total": 35565.206139999995,
+            "addrs": 586
+          },
+          {
+            "productive": 18918.351860000002,
+            "unproductive": 26973.400000000005,
+            "total": 45891.751860000004,
+            "addrs": 585
+          },
+          {
+            "productive": 13604.295100000003,
+            "unproductive": 31151.499999999993,
+            "total": 44755.795099999996,
+            "addrs": 582
+          }
+        ],
+        "maxWalk": 45891.751860000004,
+        "totalWalk": 126212.7531,
+        "totalProd": 52243.7531,
+        "totalUnprod": 73969,
+        "score": 218036.1883659213,
+        "imbalance": 0.007986309184255497
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 20016.690740000002,
+            "unproductive": 31130.59999999999,
+            "total": 51147.29074,
+            "addrs": 585
+          },
+          {
+            "productive": 12736.677980000006,
+            "unproductive": 13583.300000000001,
+            "total": 26319.977980000007,
+            "addrs": 583
+          },
+          {
+            "productive": 17156.040999999997,
+            "unproductive": 34427.399999999994,
+            "total": 51583.44099999999,
+            "addrs": 585
+          }
+        ],
+        "maxWalk": 51583.44099999999,
+        "totalWalk": 129050.70972,
+        "totalProd": 49909.40972,
+        "totalUnprod": 79141.29999999999,
+        "score": 232240.4097462407,
+        "imbalance": 0.00456360524814597
+      }
+    },
+    "winner": "ChainRH"
+  },
+  {
+    "hood": "Stanford",
+    "addrs": 1737,
+    "segs": 600,
+    "n": 5,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 12353.355680000004,
+            "unproductive": 13793.700000000008,
+            "total": 26147.055680000012,
+            "addrs": 362
+          },
+          {
+            "productive": 12422.297999999993,
+            "unproductive": 22124.600000000002,
+            "total": 34546.897999999994,
+            "addrs": 352
+          },
+          {
+            "productive": 10115.227019999998,
+            "unproductive": 22924.5,
+            "total": 33039.72702,
+            "addrs": 353
+          },
+          {
+            "productive": 8050.76068,
+            "unproductive": 5719,
+            "total": 13769.76068,
+            "addrs": 363
+          },
+          {
+            "productive": 7322.3215199999995,
+            "unproductive": 16168.8,
+            "total": 23491.12152,
+            "addrs": 323
+          }
+        ],
+        "maxWalk": 34546.897999999994,
+        "totalWalk": 130994.5629,
+        "totalProd": 50263.96289999999,
+        "totalUnprod": 80730.6,
+        "score": 200875.5808053052,
+        "imbalance": 0.157444381061038
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 11227.066079999999,
+            "unproductive": 8630,
+            "total": 19857.066079999997,
+            "addrs": 354
+          },
+          {
+            "productive": 12874.009219999996,
+            "unproductive": 13633.100000000002,
+            "total": 26507.10922,
+            "addrs": 352
+          },
+          {
+            "productive": 12306.08526,
+            "unproductive": 19197.7,
+            "total": 31503.78526,
+            "addrs": 385
+          },
+          {
+            "productive": 7840.875899999999,
+            "unproductive": 8655.199999999999,
+            "total": 16496.075899999996,
+            "addrs": 351
+          },
+          {
+            "productive": 8045.07234,
+            "unproductive": 24027.100000000002,
+            "total": 32072.17234,
+            "addrs": 311
+          }
+        ],
+        "maxWalk": 32072.17234,
+        "totalWalk": 126436.2088,
+        "totalProd": 52293.108799999995,
+        "totalUnprod": 74143.1,
+        "score": 191710.04577891616,
+        "imbalance": 0.22589845978322853
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 12074.46034,
+            "unproductive": 19104.4,
+            "total": 31178.86034,
+            "addrs": 361
+          },
+          {
+            "productive": 9609.409539999997,
+            "unproductive": 9229.3,
+            "total": 18838.709539999996,
+            "addrs": 356
+          },
+          {
+            "productive": 6372.2100199999995,
+            "unproductive": 7966.400000000001,
+            "total": 14338.61002,
+            "addrs": 336
+          },
+          {
+            "productive": 11561.713940000001,
+            "unproductive": 22893.10000000002,
+            "total": 34454.81394000002,
+            "addrs": 351
+          },
+          {
+            "productive": 10568.5775,
+            "unproductive": 25354.800000000007,
+            "total": 35923.3775,
+            "addrs": 349
+          }
+        ],
+        "maxWalk": 35923.3775,
+        "totalWalk": 134734.37134,
+        "totalProd": 50186.37134,
+        "totalUnprod": 84548.00000000003,
+        "score": 207043.1913713748,
+        "imbalance": 0.09241300627495715
+      }
+    },
+    "winner": "ChainRH"
+  },
+  {
+    "hood": "Fairmeadow",
+    "addrs": 307,
+    "segs": 43,
+    "n": 3,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 2256.88532,
+            "unproductive": 501.20000000000005,
+            "total": 2758.08532,
+            "addrs": 106
+          },
+          {
+            "productive": 2466.75788,
+            "unproductive": 1104.6000000000001,
+            "total": 3571.3578800000005,
+            "addrs": 107
+          },
+          {
+            "productive": 1984.2781599999998,
+            "unproductive": 1132.6999999999998,
+            "total": 3116.9781599999997,
+            "addrs": 99
+          }
+        ],
+        "maxWalk": 3571.3578800000005,
+        "totalWalk": 9446.42136,
+        "totalProd": 6707.92136,
+        "totalUnprod": 2738.5,
+        "score": 17069.90635076923,
+        "imbalance": 0.09615384615384616
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 2221.1853200000005,
+            "unproductive": 407.7,
+            "total": 2628.8853200000003,
+            "addrs": 104
+          },
+          {
+            "productive": 2319.87816,
+            "unproductive": 1271.6999999999998,
+            "total": 3591.57816,
+            "addrs": 109
+          },
+          {
+            "productive": 2085.6106,
+            "unproductive": 1365.4,
+            "total": 3451.0106,
+            "addrs": 99
+          }
+        ],
+        "maxWalk": 3591.57816,
+        "totalWalk": 9671.47408,
+        "totalProd": 6626.674080000001,
+        "totalUnprod": 3044.8,
+        "score": 17335.399630769232,
+        "imbalance": 0.09615384615384616
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 2197.67816,
+            "unproductive": 1071.8,
+            "total": 3269.4781599999997,
+            "addrs": 109
+          },
+          {
+            "productive": 2186.68098,
+            "unproductive": 568.7,
+            "total": 2755.38098,
+            "addrs": 102
+          },
+          {
+            "productive": 2314.6213,
+            "unproductive": 1629.6000000000001,
+            "total": 3944.2213,
+            "addrs": 101
+          }
+        ],
+        "maxWalk": 3944.2213,
+        "totalWalk": 9969.08044,
+        "totalProd": 6698.98044,
+        "totalUnprod": 3270.1000000000004,
+        "score": 18338.29227076923,
+        "imbalance": 0.09615384615384616
+      }
+    },
+    "winner": "ChainNN"
+  },
+  {
+    "hood": "Fairmeadow",
+    "addrs": 307,
+    "segs": 43,
+    "n": 5,
+    "results": {
+      "chainNN": {
+        "walks": [
+          {
+            "productive": 1410.6621599999999,
+            "unproductive": 586.7,
+            "total": 1997.36216,
+            "addrs": 64
+          },
+          {
+            "productive": 1592.58532,
+            "unproductive": 575.9000000000001,
+            "total": 2168.48532,
+            "addrs": 66
+          },
+          {
+            "productive": 1653.97816,
+            "unproductive": 907.1,
+            "total": 2561.07816,
+            "addrs": 69
+          },
+          {
+            "productive": 1348.4,
+            "unproductive": 443.5,
+            "total": 1791.9,
+            "addrs": 73
+          },
+          {
+            "productive": 683.3,
+            "unproductive": 118.6,
+            "total": 801.9,
+            "addrs": 40
+          }
+        ],
+        "maxWalk": 2561.07816,
+        "totalWalk": 9320.725639999999,
+        "totalProd": 6688.92564,
+        "totalUnprod": 2631.8,
+        "score": 18032.62554974359,
+        "imbalance": 0.7179487179487181
+      },
+      "chainRH": {
+        "walks": [
+          {
+            "productive": 1411.4,
+            "unproductive": 92.9,
+            "total": 1504.3000000000002,
+            "addrs": 66
+          },
+          {
+            "productive": 1613.6853199999998,
+            "unproductive": 335.4,
+            "total": 1949.0853199999997,
+            "addrs": 67
+          },
+          {
+            "productive": 1241.93598,
+            "unproductive": 903.5000000000001,
+            "total": 2145.43598,
+            "addrs": 64
+          },
+          {
+            "productive": 1378.57816,
+            "unproductive": 479.6,
+            "total": 1858.17816,
+            "addrs": 64
+          },
+          {
+            "productive": 1002.59792,
+            "unproductive": 1405,
+            "total": 2407.59792,
+            "addrs": 51
+          }
+        ],
+        "maxWalk": 2407.59792,
+        "totalWalk": 9864.59738,
+        "totalProd": 6648.1973800000005,
+        "totalUnprod": 3216.4,
+        "score": 16506.716296923078,
+        "imbalance": 0.3653846153846155
+      },
+      "bisect": {
+        "walks": [
+          {
+            "productive": 1883.87816,
+            "unproductive": 1029.6,
+            "total": 2913.4781599999997,
+            "addrs": 92
+          },
+          {
+            "productive": 1245.3,
+            "unproductive": 198.2,
+            "total": 1443.5,
+            "addrs": 66
+          },
+          {
+            "productive": 1044.2,
+            "unproductive": 291.6,
+            "total": 1335.8000000000002,
+            "addrs": 41
+          },
+          {
+            "productive": 1342.68308,
+            "unproductive": 627.9000000000001,
+            "total": 1970.58308,
+            "addrs": 61
+          },
+          {
+            "productive": 1191.5359799999999,
+            "unproductive": 1048.1000000000001,
+            "total": 2239.63598,
+            "addrs": 52
+          }
+        ],
+        "maxWalk": 2913.4781599999997,
+        "totalWalk": 9902.997220000001,
+        "totalProd": 6707.59722,
+        "totalUnprod": 3195.4000000000005,
+        "score": 21050.466360512823,
+        "imbalance": 1.0641025641025643
+      }
+    },
+    "winner": "ChainRH"
+  }
+]
