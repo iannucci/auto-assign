@@ -5,6 +5,10 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.17}
+\usetikzlibrary{pgfplots.groupplots}
+\usetikzlibrary{pgfplots.groupplots}
 \usepackage{pgfplotstable}
 \usepackage{booktabs}
 \usepackage{url}
@@ -272,7 +276,7 @@ Chain slicing produced the best walk distance balance (ratio 1.04) on Crescent P
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    ybar group,
+    ybar,
     bar width=10pt,
     xlabel={Strategy},
     ylabel={Max Walk Distance (m)},
