@@ -425,16 +425,15 @@ The overhead factor (actual max walk distance divided by theoretical single-work
 \subsection{Summary}
 
 \begin{table}[htbp]
-\caption{Strategy Comparison Across All Tests}
+\caption{Strategy Wins Across 41 Neighborhoods}
 \begin{center}
-\begin{tabular}{lcccc}
+\begin{tabular}{lcc}
 \toprule
-& \multicolumn{2}{c}{\textbf{Best Max Walk}} & \multicolumn{2}{c}{\textbf{Best Balance}} \\
-\textbf{Strategy} & \textbf{Wins} & \textbf{Avg Rank} & \textbf{Wins} & \textbf{Avg Rank} \\
+\textbf{Strategy} & \textbf{N=3 Wins} & \textbf{N=5 Wins} \\
 \midrule
-Chain Slicing & 1 & 1.75 & 4 & 1.00 \\
-K-Means & 0 & 3.00 & 0 & 3.00 \\
-\textbf{Bisect} & \textbf{3} & \textbf{1.50} & \textbf{4} & \textbf{1.00} \\
+Bisect & 10 & \textbf{21} \\
+Chain NN & \textbf{18} & 10 \\
+Chain RH (right-hand) & 13 & 10 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -516,9 +515,60 @@ Midtown & 202,936\,m & 129,121\,m & 36\% \\
 \end{center}
 \end{table}
 
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=8pt,
+    xlabel={Neighborhood},
+    ylabel={Intra-Street Walk Distance (km)},
+    symbolic x coords={Fairmeadow, Crescent Park, Midtown},
+    xtick=data,
+    ymin=0, ymax=220,
+    width=\columnwidth,
+    height=5cm,
+    title={U-Turn Ordering: Walk Distance Reduction},
+    legend style={at={(0.98,0.98)},anchor=north east,font=\small},
+    enlarge x limits=0.3,
+]
+\addplot coordinates {(Fairmeadow,23.7) (Crescent Park,62.0) (Midtown,202.9)};
+\addplot coordinates {(Fairmeadow,6.8) (Crescent Park,41.5) (Midtown,129.1)};
+\legend{Projection (zig-zag), U-Turn}
+\end{axis}
+\end{tikzpicture}
+\caption{The U-turn pattern (walk even side, return on odd side) reduces intra-street walk distance by 33--71\% compared to geographic projection ordering. This single optimization has more impact than the choice of partitioning algorithm.}
+\label{fig:uturn}
+\end{figure}
+
 \subsection{Exhaustive Start Search}
 
 Testing all possible starting streets for chain-based algorithms (rather than a fixed sample of 5) improved max walk distance by 7--13\% over random selection. The best-to-worst starting street ratio ranged from 1.15$\times$ (small neighborhoods) to 1.53$\times$ (large neighborhoods).
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=8pt,
+    xlabel={Neighborhood},
+    ylabel={Best/Worst Start Ratio},
+    symbolic x coords={Fairmeadow, Crescent Park, Midtown},
+    xtick=data,
+    ymin=1.0, ymax=1.6,
+    width=\columnwidth,
+    height=4.5cm,
+    title={Sensitivity to Starting Street (N=3)},
+    enlarge x limits=0.3,
+    nodes near coords,
+    every node near coord/.append style={font=\tiny},
+]
+\addplot coordinates {(Fairmeadow,1.15) (Crescent Park,1.27) (Midtown,1.40)};
+\end{axis}
+\end{tikzpicture}
+\caption{The ratio of worst to best max walk distance across all possible starting streets. Larger neighborhoods are more sensitive to start selection, justifying exhaustive search.}
+\label{fig:starts}
+\end{figure}
 
 \subsection{Recommendation}
 
