@@ -198,16 +198,18 @@ Within each segment, the optimal traversal is determined by the cost matrix. Fig
     label style={font=\small},
     title style={font=\small\bfseries},
 ]
-\nextgroupplot[title={Nearest-Neighbor}]
-\addplot[only marks, mark=*, mark size=0.5pt, gray!50] table[x=lon,y=lat] {data/fm-all-points.dat};
-\addplot[prodblue, thick, opacity=0.7, -stealth] table[x=lon,y=lat] {data/fm-nn-path.dat};
+\nextgroupplot[title={Nearest-Neighbor Chain}]
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
+\addplot[prodblue, semithick, opacity=0.7] table[x=lon,y=lat] {data/fm-nn-chain-segs.dat};
+\addplot[unprodred, semithick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fm-nn-chain-trans.dat};
 
-\nextgroupplot[title={Right-Hand Rule}]
-\addplot[only marks, mark=*, mark size=0.5pt, gray!50] table[x=lon,y=lat] {data/fm-all-points.dat};
-\addplot[unprodred, thick, opacity=0.7, -stealth] table[x=lon,y=lat] {data/fm-rh-path.dat};
+\nextgroupplot[title={Right-Hand Rule Chain}]
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
+\addplot[prodblue, semithick, opacity=0.7] table[x=lon,y=lat] {data/fm-rh-chain-segs.dat};
+\addplot[unprodred, semithick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fm-rh-chain-trans.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow segment traversal order (connecting segment centroids). Left: NN jumps to the closest unvisited segment. Right: right-hand rule prefers clockwise turns, producing a spiral pattern that covers contiguous areas with fewer long transitions.}
+\caption{Fairmeadow single-worker chain traversal (43 segments). \textcolor{prodblue}{Blue} = segment traversals (productive walking along road segments). \textcolor{unprodred}{Red dashed} = transitions between segment endpoints (unproductive walking). Left: NN connects each segment's exit endpoint to the nearest unvisited segment's entry endpoint, producing long cross-neighborhood transitions. Right: RH rule prefers clockwise turns, producing a tighter spiral with shorter transitions.}
 \label{fig:rh-path}
 \end{figure}
 
