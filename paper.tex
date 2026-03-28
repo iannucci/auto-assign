@@ -631,6 +631,73 @@ After BFS or DFS, apply simulated annealing with \emph{boundary transfers}: move
 
 A refinement: when an ESW walks from $H$ to their assigned territory, they may pass through segments belonging to their assignment. These segments can be surveyed en route, converting unproductive walk-to-first into productive work. The BFS strategy handles this naturally: the first segments assigned to each ESW are those nearest $H$, so the walk-from-huddle is automatically productive.
 
+\subsection{Worked Example: Greater Miranda ($N = 3$)}
+\label{sec:study2example}
+
+We trace all three strategies on Greater Miranda (54 addresses across 14 segments, $N = 3$ ESWs). The huddle point is the neighborhood intersection nearest to Fire Station~5. The target time is $T^* = 95$\,min per ESW.
+
+\subsubsection{BFS Round-by-Round}
+
+BFS assigns one segment to each ESW per round, always choosing the segment with the smallest marginal time increase from each ESW's current frontier:
+
+\begin{center}
+\begin{tabular}{clll}
+\toprule
+\textbf{Round} & \textbf{ESW 1} & \textbf{ESW 2} & \textbf{ESW 3} \\
+\midrule
+1 & +Arroyo Ct (1a) & +Miranda Ave (1a) & +Miranda Ave (1a) \\
+2 & +seg5 (1a)       & +seg4 (2a)         & +seg6 (2a)         \\
+3 & +seg10 (2a)      & +Arroyo Ct (3a)    & +Miranda Ave (3a)  \\
+4 & +Miranda Ave (3a)& +seg8 (4a)         & +seg1 (6a)         \\
+5 & +Moana Ct (11a)  & +Miranda Grn (14a) & ---                \\
+\midrule
+Total & 18a, 106\,min    & 24a, 142\,min      & 12a, 75\,min       \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+In Round~5, the two densest segments (Moana Court: 11 addresses, Miranda Green: 14) are assigned to ESWs 1 and 2, creating a 66-minute spread. BFS assigns by proximity, not by time balance --- it does not foresee that these dense segments will dominate finish time.
+
+\subsubsection{DFS One-at-a-Time}
+
+DFS greedily builds ESW~1's route until reaching the target time, then moves to ESW~2:
+
+\begin{center}
+\begin{tabular}{cll}
+\toprule
+\textbf{Step} & \textbf{ESW} & \textbf{Action} \\
+\midrule
+1--9 & ESW 1 & Adds 9 segments (18 addrs) → 100\,min \\
+     &       & STOP: next segment would exceed $1.1 \times T^*$ \\
+10   & ESW 2 & Adds seg1 (6 addrs) → 32\,min \\
+     &       & STOP: next would exceed target \\
+11--14& ESW 3 & Must take all 4 remaining → \textbf{30 addrs, 169\,min} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+ESW~1's greedy grab leaves ESW~2 with only one small segment (32\,min) and ESW~3 with the two dense segments plus scattered remnants (169\,min). This is the \textbf{dregs problem}: early greedy choices foreclose balanced outcomes for later ESWs. The 137-minute spread (169 vs.\ 32) is far worse than BFS's 66 minutes.
+
+\subsubsection{SA Improving BFS}
+
+Starting from BFS's result (max = 142\,min), SA searches for boundary transfers that reduce the maximum finish time. The key improving moves:
+
+\begin{center}
+\begin{tabular}{clll}
+\toprule
+\textbf{Iter} & \textbf{Move} & \textbf{Times Before} & \textbf{After} \\
+\midrule
+14 & Miranda Grn (14a): ESW2$\to$ESW1 & [106, 142, 75] & [124, 64, 135] \\
+   & \multicolumn{3}{l}{\emph{Accepts worse max (135 $>$ 124) to escape local optimum}} \\
+18 & Moana Ct (11a): ESW3$\to$ESW2 & [124, 64, 135] & [\textbf{124, 124}, 75] \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+At iteration~14, SA \emph{accepts a worsening move}: transferring Miranda Green (14 addresses) from ESW~2 (142\,min) to ESW~1 (106\,min) increases ESW~1 to 124\,min while reducing ESW~2 to 64\,min --- but the new maximum is 135\,min from ESW~3, not an improvement. SA accepts this because the Boltzmann probability $e^{-\Delta/T}$ is high at the current temperature. This move is the \textbf{backtracking} that enables the next move: at iteration~18, moving Moana Court from the now-heavy ESW~3 (135\,min) to the now-light ESW~2 (64\,min) drops the maximum to 124\,min. The two-move sequence achieves a 12.5\% improvement that no single greedy transfer could find.
+
+Final result: ESW~1 = 124\,min (21 addrs), ESW~2 = 124\,min (21 addrs), ESW~3 = 75\,min (12 addrs). The two heaviest ESWs are now balanced.
+
 \subsection{Results}
 
 We test BFS, DFS, BFS+SA, and Study~I's chain+slice (evaluated with the time metric) across 10 neighborhoods at $N = 3, 5$ (20 test cases), with $t_{\text{assess}} = 5$\,min and walking speed 5\,km/h. Huddle points are the nearest intersection node to each neighborhood's serving fire station (6 Palo Alto Fire Department stations, assigned by centroid proximity).
