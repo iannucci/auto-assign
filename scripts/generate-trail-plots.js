@@ -22,12 +22,18 @@ for (const trail of trails) {
     }
     fs.writeFileSync(path.join(dataDir, `${prefix}-segments.dat`), bluePts.join("\n") + "\n");
 
-    // Red: transition lines (straight lines between segment endpoints)
+    // Red: transition paths (road-following polylines between segment endpoints)
     const redPts = ["lon lat"];
     for (const trans of trail.transitions) {
-        redPts.push(`${trans.from[1]} ${trans.from[0]}`);
-        redPts.push(`${trans.to[1]} ${trans.to[0]}`);
-        redPts.push(""); // gap
+        const pl = trans.polyline || [];
+        if (pl.length > 0) {
+            for (const pt of pl) redPts.push(`${pt[1]} ${pt[0]}`);
+        } else if (trans.from && trans.to) {
+            // Fallback for old-format data
+            redPts.push(`${trans.from[1]} ${trans.from[0]}`);
+            redPts.push(`${trans.to[1]} ${trans.to[0]}`);
+        }
+        redPts.push(""); // gap between transitions
     }
     fs.writeFileSync(path.join(dataDir, `${prefix}-transitions.dat`), redPts.join("\n") + "\n");
 

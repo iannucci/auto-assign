@@ -58,25 +58,26 @@ for (const rs of data.roadSegments || []) {
 }
 
 // Build node-to-node adjacency from ALL segments (with and without addresses)
+// Store polylines so Dijkstra can reconstruct road-following paths
 const allSegs = [...data.segments, ...(data.roadSegments || [])];
-const nodeAdj = new Map(); // nodeId -> [{toNode, dist}]
+const nodeAdj = new Map(); // nodeId -> [{toNode, dist, polyline}]
 for (const s of allSegs) {
     const sn = s.startNode, en = s.endNode;
-    if (sn === en) continue; // skip loops
+    if (sn === en) continue;
     if (!nodeAdj.has(sn)) nodeAdj.set(sn, []);
     if (!nodeAdj.has(en)) nodeAdj.set(en, []);
-    nodeAdj.get(sn).push({ to: en, dist: s.distance });
-    nodeAdj.get(en).push({ to: sn, dist: s.distance });
+    const pl = s.polyline || [];
+    nodeAdj.get(sn).push({ to: en, dist: s.distance, polyline: pl });
+    nodeAdj.get(en).push({ to: sn, dist: s.distance, polyline: [...pl].reverse() });
 }
 
-// Single-source Dijkstra returning distances to all reachable nodes within maxDist
+// Single-source Dijkstra returning distances AND predecessor info for path reconstruction
 function dijkstraAll(startNode, maxDist = 10000) {
     const dist = new Map([[startNode, 0]]);
-    // Binary heap would be ideal; use a simple approach with visited set
+    const prev = new Map(); // nodeId -> {from, polyline}
     const visited = new Set();
     const queue = [{ node: startNode, d: 0 }];
     while (queue.length > 0) {
-        // Find min — O(n) but queue stays small with maxDist cutoff
         let minIdx = 0;
         for (let i = 1; i < queue.length; i++) {
             if (queue[i].d < queue[minIdx].d) minIdx = i;
@@ -93,28 +94,77 @@ function dijkstraAll(startNode, maxDist = 10000) {
             if (nd > maxDist) continue;
             if (nd < (dist.get(edge.to) ?? Infinity)) {
                 dist.set(edge.to, nd);
+                prev.set(edge.to, { from: node, polyline: edge.polyline });
                 queue.push({ node: edge.to, d: nd });
             }
         }
     }
-    return dist;
+    return { dist, prev };
 }
 
-// Precompute distance matrix for a set of nodes (neighborhood intersection nodes)
-// Returns a Map<nodeId, Map<nodeId, dist>>
+// Precompute distance matrix; only store prev maps for small neighborhoods (< 300 nodes)
+let distMatrix = null;  // Map<nodeId, Map<nodeId, dist>>
+let prevMatrix = null;  // Map<nodeId, Map<nodeId, {from, polyline}>> (null for large hoods)
+
 function precomputeDistances(nodeIds, maxDist = 10000) {
-    const matrix = new Map();
+    distMatrix = new Map();
+    const storePaths = nodeIds.size < 300; // Only store path data for small neighborhoods
+    prevMatrix = storePaths ? new Map() : null;
     for (const nid of nodeIds) {
-        matrix.set(nid, dijkstraAll(nid, maxDist));
+        const result = dijkstraAll(nid, maxDist);
+        distMatrix.set(nid, result.dist);
+        if (storePaths) prevMatrix.set(nid, result.prev);
     }
-    return matrix;
 }
 
-// Distance lookup using precomputed matrix
-let distMatrix = null; // set per-neighborhood
 function nodeDist(n1, n2) {
     if (n1 === n2) return 0;
     return distMatrix?.get(n1)?.get(n2) ?? Infinity;
+}
+
+// Reconstruct the road-following polyline from n1 to n2
+function nodePathPolyline(n1, n2) {
+    if (n1 === n2) return [];
+
+    // If prev matrix is available, use it
+    if (prevMatrix) {
+        const prev = prevMatrix.get(n1);
+        if (!prev || !prev.has(n2)) return [];
+        const segments = [];
+        let cur = n2;
+        while (prev.has(cur) && cur !== n1) {
+            const p = prev.get(cur);
+            segments.push(p.polyline);
+            cur = p.from;
+        }
+        segments.reverse();
+        const poly = [];
+        for (const pl of segments) {
+            for (let i = 0; i < pl.length; i++) {
+                if (poly.length === 0 || i > 0) poly.push(pl[i]);
+            }
+        }
+        return poly;
+    }
+
+    // Fallback: on-demand single-pair Dijkstra with path reconstruction
+    const result = dijkstraAll(n1, 10000);
+    if (!result.prev.has(n2)) return [];
+    const segments = [];
+    let cur = n2;
+    while (result.prev.has(cur) && cur !== n1) {
+        const p = result.prev.get(cur);
+        segments.push(p.polyline);
+        cur = p.from;
+    }
+    segments.reverse();
+    const poly = [];
+    for (const pl of segments) {
+        for (let i = 0; i < pl.length; i++) {
+            if (poly.length === 0 || i > 0) poly.push(pl[i]);
+        }
+    }
+    return poly;
 }
 
 // ============================================================
@@ -395,7 +445,7 @@ const allResults = [];
 const trailData = []; // For map visualization
 
 const testHoods = [...hoodAddrs.entries()]
-    .filter(([_, addrs]) => addrs.length >= 50 && addrs.length <= 2000)
+    .filter(([_, addrs]) => addrs.length >= 50 && addrs.length <= 1500)
     .sort((a, b) => a[1].length - b[1].length);
 
 // Sample ~8 neighborhoods across the size range
@@ -419,7 +469,7 @@ for (const [hood, addrs] of selected) {
     for (const s of segs) { hoodNodes.add(s.startNode); hoodNodes.add(s.endNode); }
     console.log(`  Precomputing distances for ${hood} (${hoodNodes.size} nodes, ${segs.length} segments)...`);
     const t0 = Date.now();
-    distMatrix = precomputeDistances(hoodNodes);
+    precomputeDistances(hoodNodes);
     console.log(`  Done in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
 
     for (const n of [3, 5]) {
@@ -499,12 +549,15 @@ for (const [hood, addrs] of selected) {
                     if (!prev || !curr) continue;
                     const prevExit = winnerParts[esw][i-1].exitPort;
                     const currEntry = winnerParts[esw][i].entryPort;
-                    const prevPl = prev.polyline;
-                    const currPl = curr.polyline;
-                    const fromPt = prevExit < 2 ? prevPl[0] : prevPl[prevPl.length-1];
-                    const toPt = currEntry < 2 ? currPl[0] : currPl[currPl.length-1];
+                    // Get actual road-following path between exit and entry nodes
+                    const exitNode = prevExit < 2 ? prev.startNode : prev.endNode;
+                    const entryNode = currEntry < 2 ? curr.startNode : curr.endNode;
+                    const roadPoly = nodePathPolyline(exitNode, entryNode);
                     trail.transitions.push({
-                        from: fromPt, to: toPt,
+                        polyline: roadPoly.length > 0 ? roadPoly : [
+                            prevExit < 2 ? prev.polyline[0] : prev.polyline[prev.polyline.length-1],
+                            currEntry < 2 ? curr.polyline[0] : curr.polyline[curr.polyline.length-1]
+                        ],
                         cost: winnerParts[esw][i].transitionCost
                     });
                 }

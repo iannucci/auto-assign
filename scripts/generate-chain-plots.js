@@ -29,8 +29,9 @@ for (const s of allSegs) {
     if (sn === en) continue;
     if (!nodeAdj.has(sn)) nodeAdj.set(sn, []);
     if (!nodeAdj.has(en)) nodeAdj.set(en, []);
-    nodeAdj.get(sn).push({ to: en, dist: s.distance });
-    nodeAdj.get(en).push({ to: sn, dist: s.distance });
+    const pl = s.polyline || [];
+    nodeAdj.get(sn).push({ to: en, dist: s.distance, polyline: pl });
+    nodeAdj.get(en).push({ to: sn, dist: s.distance, polyline: [...pl].reverse() });
 }
 
 function dijkstraAll(startNode, maxDist = 10000) {
@@ -54,6 +55,49 @@ function dijkstraAll(startNode, maxDist = 10000) {
         }
     }
     return dist;
+}
+
+// Dijkstra returning path polyline
+function dijkstraPath(startNode, endNode, maxDist = 10000) {
+    if (startNode === endNode) return { dist: 0, polyline: [] };
+    const dist = new Map([[startNode, 0]]);
+    const prev = new Map();
+    const visited = new Set();
+    const queue = [{ node: startNode, d: 0 }];
+    while (queue.length > 0) {
+        let mi = 0;
+        for (let i = 1; i < queue.length; i++) if (queue[i].d < queue[mi].d) mi = i;
+        const { node, d } = queue[mi];
+        queue[mi] = queue[queue.length - 1]; queue.pop();
+        if (visited.has(node)) continue;
+        visited.add(node);
+        if (node === endNode) break;
+        for (const edge of (nodeAdj.get(node) || [])) {
+            const nd = d + edge.dist;
+            if (nd > maxDist) continue;
+            if (nd < (dist.get(edge.to) ?? Infinity)) {
+                dist.set(edge.to, nd);
+                prev.set(edge.to, { from: node, polyline: edge.polyline });
+                queue.push({ node: edge.to, d: nd });
+            }
+        }
+    }
+    if (!dist.has(endNode)) return { dist: Infinity, polyline: [] };
+    const polylines = [];
+    let cur = endNode;
+    while (prev.has(cur)) {
+        const p = prev.get(cur);
+        polylines.push(p.polyline);
+        cur = p.from;
+    }
+    polylines.reverse();
+    const full = [];
+    for (const pl of polylines) {
+        for (let i = 0; i < pl.length; i++) {
+            if (full.length === 0 || i > 0) full.push(pl[i]);
+        }
+    }
+    return { dist: dist.get(endNode), polyline: full };
 }
 
 // Precompute distances for Fairmeadow nodes
@@ -159,17 +203,26 @@ function writeChainData(chain, prefix) {
     }
     fs.writeFileSync(path.join(dataDir, `${prefix}-chain-segs.dat`), segLines.join("\n") + "\n");
 
-    // Transitions between segments (red) - connecting exit endpoint to entry endpoint
+    // Transitions between segments (red) - road-following polylines through intersections
     const transLines = ["lon lat"];
     for (let i = 1; i < chain.length; i++) {
         const prev = chain[i-1];
         const curr = chain[i];
-        const prevPl = prev.seg.polyline;
-        const currPl = curr.seg.polyline;
-        const exitPt = prev.exitPort < 2 ? prevPl[0] : prevPl[prevPl.length-1];
-        const entryPt = curr.entryPort < 2 ? currPl[0] : currPl[currPl.length-1];
-        transLines.push(`${exitPt[1]} ${exitPt[0]}`);
-        transLines.push(`${entryPt[1]} ${entryPt[0]}`);
+        const exitNode = prev.exitPort < 2 ? prev.seg.startNode : prev.seg.endNode;
+        const entryNode = curr.entryPort < 2 ? curr.seg.startNode : curr.seg.endNode;
+        // Get road-following path
+        const pathResult = dijkstraPath(exitNode, entryNode);
+        if (pathResult && pathResult.polyline.length > 0) {
+            for (const pt of pathResult.polyline) transLines.push(`${pt[1]} ${pt[0]}`);
+        } else {
+            // Fallback: straight line (shouldn't happen within a neighborhood)
+            const prevPl = prev.seg.polyline;
+            const currPl = curr.seg.polyline;
+            const exitPt = prev.exitPort < 2 ? prevPl[0] : prevPl[prevPl.length-1];
+            const entryPt = curr.entryPort < 2 ? currPl[0] : currPl[currPl.length-1];
+            transLines.push(`${exitPt[1]} ${exitPt[0]}`);
+            transLines.push(`${entryPt[1]} ${entryPt[0]}`);
+        }
         transLines.push(""); // gap
     }
     fs.writeFileSync(path.join(dataDir, `${prefix}-chain-trans.dat`), transLines.join("\n") + "\n");
