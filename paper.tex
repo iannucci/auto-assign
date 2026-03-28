@@ -69,10 +69,9 @@ A key constraint distinguishes our problem from the standard VRP: \textbf{ESWs m
 
 We model the street network as a graph $G = (V, E)$ extracted from OpenStreetMap (OSM), where vertices $V$ are \emph{intersections} and edges $E$ are \emph{segments}.
 
-\begin{description}
-\item[Intersection.] A node shared by two or more OSM ways, or a way endpoint. We identify intersections by counting way membership: any node appearing in more than one way, plus all way endpoints, is an intersection.
-\item[Segment.] A maximal chain of road edges between two intersection nodes, with street name, road class, polyline geometry, and length $D$ (meters). Within a segment, no turns are possible; turns occur only at endpoints. Each segment endpoint has two \emph{ports} (one per sidewalk): $S_L, S_R$ at the start intersection and $E_L, E_R$ at the end.
-\end{description}
+\textbf{Intersection:} A node shared by two or more OSM ways, or a way endpoint. We identify intersections by counting way membership: any node appearing in more than one way, plus all way endpoints, is an intersection.
+
+\textbf{Segment:} A maximal chain of road edges between two intersection nodes, with street name, road class, polyline geometry, and length $D$ (meters). Within a segment, no turns are possible; turns occur only at endpoints. Each segment endpoint has two \emph{ports} (one per sidewalk): $S_L, S_R$ at the start intersection and $E_L, E_R$ at the end.
 
 \subsubsection{Address Snapping}
 
