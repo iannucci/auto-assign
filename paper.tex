@@ -843,7 +843,11 @@ Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for compari
 \label{fig:voronoi-fm}
 \end{figure*}
 
-The Voronoi result is a valuable negative finding: \textbf{the partitioning unit must be the road segment, not the Voronoi cell.} Algorithms that assign whole segments in walk order (chain+slice, bisect) outperform those that partition geographic space (Voronoi, BFS) because they respect the sequential nature of walking.
+\subsection{Hybrid: Voronoi + Boundary Transfer}
+
+Can post-processing rescue the Voronoi partition? We attempt contiguity-preserving boundary transfers: iteratively move boundary segments from the heaviest cell to a lighter adjacent cell, provided the transfer does not disconnect the source cell. Across 38 test cases, this improves max time by \textbf{3.9\% on average} (up to 37.8\% on Classic Communities at $N = 5$). However, most cases show \textbf{0\% improvement} because Voronoi cells in road networks tend to be \emph{tree-shaped} --- removing any interior segment disconnects the cell. Only cells with cycles (redundant connections) allow productive transfers.
+
+This confirms the negative finding: \textbf{the partitioning unit must be the road segment, not the geographic cell.} Algorithms that build assignments as walk-ordered segment sequences (chain+slice, bisect, 2-opt) outperform those that partition space first (Voronoi, BFS), because they respect the sequential nature of walking. The hybrid's failure to rescue Voronoi demonstrates that this is a structural limitation, not a parameter-tuning issue.
 
 %% ==================================================================
 \section{Discussion}
