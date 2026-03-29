@@ -1,244 +1,77 @@
 [
   {
-    "hood": "Greater Miranda",
-    "addrs": 54,
-    "s1": {
-      "winner": "ChainRH",
-      "maxWalk": 993,
-      "unprodPct": "49",
-      "prodDist": 1284,
-      "unprodDist": 1217
-    },
-    "s2": {
-      "winner": "Chain(S1)",
-      "maxTime": "115"
-    },
-    "s3": {
-      "maxTime": "127",
-      "spread": "50",
-      "wq": "67",
-      "prodDist": 1337,
-      "unprodDist": 800
-    }
-  },
-  {
-    "hood": "Evergreen Park",
-    "addrs": 62,
-    "s1": {
-      "winner": "ChainRH",
-      "maxWalk": 1294,
-      "unprodPct": "77",
-      "prodDist": 602,
-      "unprodDist": 1964
-    },
-    "s2": {
-      "winner": "BFS+SA",
-      "maxTime": "222"
-    },
-    "s3": {
-      "maxTime": "245",
-      "spread": "109",
-      "wq": "47",
-      "prodDist": 602,
-      "unprodDist": 1862
-    }
-  },
-  {
-    "hood": "Palo Alto",
-    "addrs": 77,
-    "s1": {
-      "winner": "Bisect",
-      "maxWalk": 13851,
-      "unprodPct": "87",
-      "prodDist": 4723,
-      "unprodDist": 31465
-    },
-    "s2": {
-      "winner": "Chain(S1)",
-      "maxTime": "720"
-    },
-    "s3": {
-      "maxTime": "717",
-      "spread": "157",
-      "wq": "29",
-      "prodDist": 4756,
-      "unprodDist": 27940
-    }
-  },
-  {
-    "hood": "Palo Alto Hills",
-    "addrs": 85,
-    "s1": {
-      "winner": "Bisect",
-      "maxWalk": 3674,
-      "unprodPct": "62",
-      "prodDist": 3669,
-      "unprodDist": 5935
-    },
-    "s2": {
-      "winner": "Chain(S1)",
-      "maxTime": "209"
-    },
-    "s3": {
-      "maxTime": "200",
-      "spread": "31",
-      "wq": "41",
-      "prodDist": 3726,
-      "unprodDist": 5938
-    }
-  },
-  {
-    "hood": "Classic Communities",
-    "addrs": 104,
-    "s1": {
-      "winner": "ChainRH",
-      "maxWalk": 837,
-      "unprodPct": "35",
-      "prodDist": 1444,
-      "unprodDist": 790
-    },
-    "s2": {
-      "winner": "Chain(S1)",
-      "maxTime": "193"
-    },
-    "s3": {
-      "maxTime": "216",
-      "spread": "83",
-      "wq": "68",
-      "prodDist": 1432,
-      "unprodDist": 680
-    }
-  },
-  {
-    "hood": "Greenacres I",
-    "addrs": 108,
-    "s1": {
-      "winner": "Bisect",
-      "maxWalk": 2412,
-      "unprodPct": "48",
-      "prodDist": 2645,
-      "unprodDist": 2433
-    },
-    "s2": {
-      "winner": "Chain(S1)",
-      "maxTime": "256"
-    },
-    "s3": {
-      "maxTime": "235",
-      "spread": "8",
-      "wq": "47",
-      "prodDist": 2645,
-      "unprodDist": 3569
-    }
-  },
-  {
-    "hood": "Walnut Grove",
-    "addrs": 138,
-    "s1": {
-      "winner": "ChainRH",
-      "maxWalk": 1849,
-      "unprodPct": "34",
-      "prodDist": 2798,
-      "unprodDist": 1449
-    },
-    "s2": {
-      "winner": "Chain(S1)",
-      "maxTime": "264"
-    },
-    "s3": {
-      "maxTime": "255",
-      "spread": "3",
-      "wq": "59",
-      "prodDist": 2823,
-      "unprodDist": 2195
-    }
-  },
-  {
-    "hood": "Meadow Park",
-    "addrs": 142,
-    "s1": {
-      "winner": "TwoOpt",
-      "maxWalk": 3595,
-      "unprodPct": "57",
-      "prodDist": 3194,
-      "unprodDist": 4284
-    },
-    "s2": {
-      "winner": "Chain(S1)",
-      "maxTime": "295"
-    },
-    "s3": {
-      "maxTime": "300",
-      "spread": "35",
-      "wq": "52",
-      "prodDist": 3221,
-      "unprodDist": 4690
-    }
-  },
-  {
     "hood": "Palo Alto Central",
     "addrs": 145,
-    "s1": {
-      "winner": "ChainNN",
-      "maxWalk": 377,
-      "unprodPct": "24",
-      "prodDist": 669,
-      "unprodDist": 214
-    },
-    "s2": {
-      "winner": "DFS",
-      "maxTime": "347"
-    },
-    "s3": {
-      "maxTime": "351",
-      "spread": "38",
-      "wq": "42",
-      "prodDist": 656,
-      "unprodDist": 961
-    }
-  },
-  {
-    "hood": "Charleston Gardens",
-    "addrs": 194,
-    "s1": {
-      "winner": "ChainRH",
-      "maxWalk": 2613,
-      "unprodPct": "45",
-      "prodDist": 3911,
-      "unprodDist": 3213
-    },
-    "s2": {
-      "winner": "DFS",
-      "maxTime": "449"
-    },
-    "s3": {
-      "maxTime": "522",
-      "spread": "168",
-      "wq": "44",
-      "prodDist": 3894,
-      "unprodDist": 5022
-    }
+    "s1winner": "ChainNN",
+    "s1prod": 0.6687000000000001,
+    "s1unprod": 0.2135,
+    "s1wq": 75.79913851734301,
+    "s1maxWalk": 0.377,
+    "s3addrs": "63/69/61",
+    "s3prod": 0.65565954,
+    "s3unprod": 0.9614999999999999,
+    "s3wq": 40.543899583339815,
+    "s3spread": 38.077037561502436,
+    "deltaUnprod": 350.35128805620604
   },
   {
     "hood": "Fairmeadow",
     "addrs": 307,
-    "s1": {
-      "winner": "TwoOpt",
-      "maxWalk": 3124,
-      "unprodPct": "25",
-      "prodDist": 6748,
-      "unprodDist": 2192
-    },
-    "s2": {
-      "winner": "DFS",
-      "maxTime": "575"
-    },
-    "s3": {
-      "maxTime": "571",
-      "spread": "12",
-      "wq": "63",
-      "prodDist": 6618,
-      "unprodDist": 4559
-    }
+    "s1winner": "TwoOpt",
+    "s1prod": 6.74792136,
+    "s1unprod": 2.1921000000000004,
+    "s1wq": 75.4799243566908,
+    "s1maxWalk": 3.1242593400000005,
+    "s3addrs": "107/104/101",
+    "s3prod": 6.618142580000001,
+    "s3unprod": 4.558499999999999,
+    "s3wq": 59.21404869690304,
+    "s3spread": 12.277328453138125,
+    "deltaUnprod": 107.95127959490891
+  },
+  {
+    "hood": "Community Center",
+    "addrs": 489,
+    "s1winner": "TwoOpt",
+    "s1prod": 11.89257718,
+    "s1unprod": 5.051300000000001,
+    "s1wq": 70.18805113883622,
+    "s1maxWalk": 5.885960940000001,
+    "s3addrs": "180/181/183",
+    "s3prod": 11.808715479999998,
+    "s3unprod": 6.962800000000003,
+    "s3wq": 62.90762987453796,
+    "s3spread": 32.294331693267736,
+    "deltaUnprod": 37.84174370954015
+  },
+  {
+    "hood": "Research Park",
+    "addrs": 584,
+    "s1winner": "TwoOpt",
+    "s1prod": 17.11989774,
+    "s1unprod": 49.78300000000001,
+    "s1wq": 25.589172245620585,
+    "s1maxWalk": 25.800755279999997,
+    "s3addrs": "215/179/196",
+    "s3prod": 17.258291260000007,
+    "s3unprod": 54.5606,
+    "s3wq": 24.030294755625285,
+    "s3spread": 375.9945983439336,
+    "deltaUnprod": 9.596850330434064
+  },
+  {
+    "hood": "Southgate",
+    "addrs": 268,
+    "s1winner": "ChainNN",
+    "s1prod": 5.35941642,
+    "s1unprod": 4.924200000000001,
+    "s1wq": 52.11606696625505,
+    "s1maxWalk": 3.79722422,
+    "s3addrs": "141/138/135",
+    "s3prod": 5.330164440000001,
+    "s3unprod": 3.9927999999999995,
+    "s3wq": 57.17242057827693,
+    "s3spread": 74.16544197767905,
+    "deltaUnprod": -18.91474757320989
   }
 ]

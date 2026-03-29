@@ -972,29 +972,35 @@ The resolution depends on operational context. If ESWs are \emph{driven} to the 
 
 \subsection{Cross-Study Comparison}
 
-Table~\ref{tab:comparison} compares all methods on the same 5 neighborhoods at $N = 3$. Productive walking (within-segment) is nearly identical across methods --- the same addresses must be visited regardless of partitioning strategy. The differentiator is \emph{unproductive walking} (inter-segment transitions), which varies by up to 3$\times$ between the best and worst methods on the same neighborhood.
+Table~\ref{tab:comparison} compares Study~I's oracle and Study~III's Voronoi on 5 neighborhoods chosen to span the widest diversity of geometry, density, and street pattern. Productive walking is nearly identical across methods --- the same addresses must be visited. The differentiator is \emph{unproductive walking}, which varies dramatically with neighborhood character.
 
 \begin{table*}[htbp]
-\caption{Cross-study comparison ($N=3$). Productive distance is constant (same segments visited); unproductive distance varies by method. Walk quality = productive / total walking. Study~I oracle is the best of NN/RH/2-opt/Bisect. Time includes 5\,min/address assessment.}
+\caption{Cross-study comparison ($N=3$) on 5 diverse neighborhoods. Productive distance is constant (same segments); unproductive distance varies by method and neighborhood character. $\Delta$Unprod = how much more unproductive walking Voronoi produces vs.\ Study~I (negative = Voronoi is better). The five neighborhoods span dense commercial (PAC), cul-de-sacs (FM), regular grid (CC), sparse campus (RP), and elongated layout (SG).}
 \label{tab:comparison}
 \begin{center}
-\begin{tabular}{l r | r r r | r r r | r r}
+\begin{tabular}{l r l | r r r | r r r | r}
 \toprule
-& & \multicolumn{3}{c|}{\textbf{Study~I Oracle}} & \multicolumn{3}{c|}{\textbf{Study~III Voronoi}} & \multicolumn{2}{c}{\textbf{Comparison}} \\
-\textbf{Neighborhood} & \textbf{Addrs} & Prod & Unprod & WQ & Prod & Unprod & WQ & $\Delta$Unprod & Winner \\
-& & (km) & (km) & (\%) & (km) & (km) & (\%) & & \\
+& & & \multicolumn{3}{c|}{\textbf{Study~I Oracle}} & \multicolumn{3}{c|}{\textbf{Study~III Voronoi}} & \\
+\textbf{Neighborhood} & \textbf{Addrs} & \textbf{Character} & Prod & Unprod & WQ & Prod & Unprod & WQ & $\Delta$Unprod \\
+& & & (km) & (km) & (\%) & (km) & (km) & (\%) & \\
 \midrule
-Fairmeadow      & 307 & 6.7 & 2.2 & 75\% & 6.6 & 4.6 & 59\% & +109\% & S1 \\
-Classic Comm.   & 104 & 1.5 & 0.4 & 80\% & 1.4 & 0.7 & 68\% & +90\%  & S1 \\
-Meadow Park     & 142 & 3.2 & 4.3 & 43\% & 3.2 & 4.7 & 41\% & +9\%   & S1 \\
-Greenacres I    & 108 & 2.6 & 2.4 & 52\% & 2.6 & 3.6 & 43\% & +47\%  & S1 \\
-Walnut Grove    & 138 & 2.8 & 1.4 & 66\% & 2.8 & 2.2 & 56\% & +52\%  & S1 \\
+Palo Alto Central & 145  & Dense commercial   & 0.7 & 0.2 & 76 & 0.7 & 1.0 & 41 & +350\% \\
+Fairmeadow        & 307  & Cul-de-sacs        & 6.7 & 2.2 & 75 & 6.6 & 4.6 & 59 & +108\% \\
+Community Center  & 489  & Regular grid       & 11.9& 5.1 & 70 & 11.8& 7.0 & 63 & +38\%  \\
+Research Park     & 584  & Sparse campus      & 17.1& 49.8& 26 & 17.3& 54.6& 24 & +10\%  \\
+Southgate         & 268  & Elongated          & 5.4 & 4.9 & 52 & 5.3 & 4.0 & 57 & \textbf{--19\%} \\
 \bottomrule
 \end{tabular}
 \end{center}
 \end{table*}
 
-Study~I's oracle consistently produces less unproductive walking (43--80\% walk quality vs.\ Voronoi's 41--68\%). However, the gap varies widely: on Meadow Park, the methods are within 9\%; on Fairmeadow, Study~I's advantage is 109\% less unproductive walking. Voronoi's advantage is in \emph{address balance} --- achieving near-perfect splits (107/104/101 on Fairmeadow) that Study~I's chain+slice cannot match when the chain ordering creates uneven address distribution across cut points.
+\textbf{Key findings:}
+\begin{itemize}
+\item \textbf{Study~I dominates on compact, dense neighborhoods} (PAC, FM). Chain ordering keeps transitions short when segments are close together. Voronoi's geometric partition cuts through the dense cluster, creating 3.5$\times$ more unproductive walking on PAC.
+\item \textbf{The gap narrows on regular grids} (CC: +38\%). Voronoi boundaries align with the street grid, reducing fragmentation. Both methods achieve $>$60\% walk quality.
+\item \textbf{Both methods struggle on sparse layouts} (RP: 26\% vs.\ 24\%). When addresses are spread thinly over many segments, no partitioning can avoid long transitions. The 10\% gap is negligible.
+\item \textbf{Voronoi wins on elongated neighborhoods} (SG: --19\%). The Euclidean partition naturally bisects the elongated shape, while chain+slice must snake through it. This is the only case where Voronoi produces \emph{less} unproductive walking.
+\end{itemize}
 
 Fig.~\ref{fig:comparison} shows the productive/unproductive breakdown visually.
 
@@ -1006,24 +1012,20 @@ Fig.~\ref{fig:comparison} shows the productive/unproductive breakdown visually.
     bar width=8pt,
     xlabel={Neighborhood},
     ylabel={Total Walk Distance (km)},
-    symbolic x coords={FM, CC, MP, GI, WG},
+    symbolic x coords={PAC, FM, CC, RP, SG},
     xtick=data,
     x tick label style={font=\small},
     ymin=0,
     width=\columnwidth,
-    height=6cm,
+    height=5.5cm,
     legend style={at={(0.02,0.98)},anchor=north west,font=\small},
     enlarge x limits=0.15,
-    title={Study~I Oracle vs.\ Study~III Voronoi ($N=3$)},
+    title={Study~I Oracle ($N=3$)},
     title style={font=\small\bfseries},
 ]
-% Study I Oracle - productive
-\addplot[fill=prodblue, draw=prodblue!80] coordinates {(FM,6.7) (CC,1.5) (MP,3.2) (GI,2.6) (WG,2.8)};
-% Study I Oracle - unproductive
-\addplot[fill=prodblue!30, draw=prodblue!50] coordinates {(FM,2.2) (CC,0.4) (MP,4.3) (GI,2.4) (WG,1.4)};
-% Study III Voronoi - productive (offset)
-% Can't easily do side-by-side stacked bars in pgfplots, so use a grouped bar approach
-\legend{S1 Productive, S1 Unproductive}
+\addplot[fill=prodblue, draw=prodblue!80] coordinates {(PAC,0.7) (FM,6.7) (CC,11.9) (RP,17.1) (SG,5.4)};
+\addplot[fill=unprodred!50, draw=unprodred!70] coordinates {(PAC,0.2) (FM,2.2) (CC,5.1) (RP,49.8) (SG,4.9)};
+\legend{Productive, Unproductive}
 \end{axis}
 \end{tikzpicture}
 
@@ -1033,25 +1035,23 @@ Fig.~\ref{fig:comparison} shows the productive/unproductive breakdown visually.
     bar width=8pt,
     xlabel={Neighborhood},
     ylabel={Total Walk Distance (km)},
-    symbolic x coords={FM, CC, MP, GI, WG},
+    symbolic x coords={PAC, FM, CC, RP, SG},
     xtick=data,
     x tick label style={font=\small},
     ymin=0,
     width=\columnwidth,
-    height=6cm,
+    height=5.5cm,
     legend style={at={(0.02,0.98)},anchor=north west,font=\small},
     enlarge x limits=0.15,
     title={Study~III Voronoi ($N=3$)},
     title style={font=\small\bfseries},
 ]
-% Study III Voronoi - productive
-\addplot[fill=voronoiorange, draw=voronoiorange!80] coordinates {(FM,6.6) (CC,1.4) (MP,3.2) (GI,2.6) (WG,2.8)};
-% Study III Voronoi - unproductive
-\addplot[fill=voronoiorange!30, draw=voronoiorange!50] coordinates {(FM,4.6) (CC,0.7) (MP,4.7) (GI,3.6) (WG,2.2)};
-\legend{S3 Productive, S3 Unproductive}
+\addplot[fill=voronoiorange, draw=voronoiorange!80] coordinates {(PAC,0.7) (FM,6.6) (CC,11.8) (RP,17.3) (SG,5.3)};
+\addplot[fill=unprodred!50, draw=unprodred!70] coordinates {(PAC,1.0) (FM,4.6) (CC,7.0) (RP,54.6) (SG,4.0)};
+\legend{Productive, Unproductive}
 \end{axis}
 \end{tikzpicture}
-\caption{Productive (\textcolor{prodblue}{dark}) vs.\ unproductive (\textcolor{prodblue!30}{light}) walking for Study~I oracle (top, \textcolor{prodblue}{blue}) and Study~III Voronoi (bottom, \textcolor{voronoiorange}{orange}) on 5 neighborhoods at $N=3$. FM=Fairmeadow, CC=Classic Communities, MP=Meadow Park, GI=Greenacres~I, WG=Walnut Grove. Productive walking is nearly identical (same segments visited). Unproductive walking is consistently lower for Study~I, but Voronoi achieves better address balance.}
+\caption{Productive vs.\ unproductive walking for Study~I oracle (top, \textcolor{prodblue}{blue} productive) and Study~III Voronoi (bottom, \textcolor{voronoiorange}{orange} productive) on 5 diverse neighborhoods at $N=3$. \textcolor{unprodred!50}{Red} = unproductive in both. PAC=Palo Alto Central (dense), FM=Fairmeadow (cul-de-sacs), CC=Community Center (grid), RP=Research Park (sparse), SG=Southgate (elongated). Productive bars are nearly identical; unproductive bars tell the story. Note Research Park's extreme unproductive walking (both methods $>$70\% unproductive) vs.\ Palo Alto Central where Study~I achieves 76\% productive.}
 \label{fig:comparison}
 \end{figure}
 
