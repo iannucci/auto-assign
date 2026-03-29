@@ -827,19 +827,22 @@ Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for compari
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
 \addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-esw0.dat};
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-seeds.dat};
+\addplot[only marks, mark=diamond*, mark size=4pt, idealgreen] table[x=lon,y=lat] {data/fairmeadow-s2-huddle.dat};
 
 \nextgroupplot[title={Cell 2 (70 addrs)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
 \addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-esw1.dat};
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-seeds.dat};
+\addplot[only marks, mark=diamond*, mark size=4pt, idealgreen] table[x=lon,y=lat] {data/fairmeadow-s2-huddle.dat};
 
 \nextgroupplot[title={Cell 3 (52 addrs)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
 \addplot[idealgreen, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-esw2.dat};
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-seeds.dat};
+\addplot[only marks, mark=diamond*, mark size=4pt, idealgreen] table[x=lon,y=lat] {data/fairmeadow-s2-huddle.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow Voronoi partition (Study~III, $N=3$). Each panel shows one cell's segments (colored) with Voronoi seed points (black diamonds). Address counts are severely unbalanced (190/70/52) despite Lloyd's iteration. Compare with Study~I (Fig.~\ref{fig:trails-fm}: balanced, contiguous trails) and Study~II (Fig.~\ref{fig:s2-trails-fm}: balanced addresses, DFS contiguity). The Voronoi cell boundaries cut across cul-de-sac entrances, fragmenting natural walking clusters. Cell~1 absorbs most addresses because the seed placement cannot compensate for the non-uniform address density of the cul-de-sac layout.}
+\caption{Fairmeadow Voronoi partition (Study~III, $N=3$). Each panel shows one cell's segments (colored) with Voronoi seed points (black diamonds) and \textcolor{idealgreen}{green diamond} = fan-out point from Fire Station~4. Address counts are severely unbalanced (190/70/52) despite Lloyd's iteration. Compare with Study~I (Fig.~\ref{fig:trails-fm}: balanced, contiguous trails) and Study~II (Fig.~\ref{fig:s2-trails-fm}: balanced addresses, DFS contiguity). The Voronoi cell boundaries cut across cul-de-sac entrances, fragmenting natural walking clusters.}
 \label{fig:voronoi-fm}
 \end{figure*}
 
