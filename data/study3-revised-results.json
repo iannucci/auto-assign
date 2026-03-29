@@ -1,0 +1,2432 @@
+[
+  {
+    "hood": "Greater Miranda",
+    "addrs": 54,
+    "segs": 14,
+    "n": 3,
+    "addrCounts": [
+      17,
+      23,
+      14
+    ],
+    "maxTime": 126.9248769950798,
+    "spread": 50.26701068042722,
+    "avgWalkQuality": 0.6719913643698247,
+    "times": [
+      {
+        "time": 92.06086595463819,
+        "addrs": 17,
+        "walkDist": 588.38196,
+        "prodDist": 483.18196,
+        "walkQuality": 0.8212045794198041
+      },
+      {
+        "time": 126.9248769950798,
+        "addrs": 23,
+        "walkDist": 993.6999999999999,
+        "prodDist": 431.4,
+        "walkQuality": 0.43413505082016707
+      },
+      {
+        "time": 76.65786631465258,
+        "addrs": 14,
+        "walkDist": 554.8,
+        "prodDist": 422,
+        "walkQuality": 0.7606344628695025
+      }
+    ]
+  },
+  {
+    "hood": "Greater Miranda",
+    "addrs": 54,
+    "segs": 14,
+    "n": 5,
+    "addrCounts": [
+      11,
+      11,
+      8,
+      9,
+      15
+    ],
+    "maxTime": 80.70022800912037,
+    "spread": 34.99279971198848,
+    "avgWalkQuality": 0.7473775335072869,
+    "times": [
+      {
+        "time": 57.64970598823953,
+        "addrs": 11,
+        "walkDist": 220.8,
+        "prodDist": 220.8,
+        "walkQuality": 1
+      },
+      {
+        "time": 60.960421936877474,
+        "addrs": 11,
+        "walkDist": 496.68196,
+        "prodDist": 274.98196,
+        "walkQuality": 0.5536379054314757
+      },
+      {
+        "time": 45.707428297131884,
+        "addrs": 8,
+        "walkDist": 475.59999999999997,
+        "prodDist": 260.9,
+        "walkQuality": 0.5485702270815812
+      },
+      {
+        "time": 47.94491779671187,
+        "addrs": 9,
+        "walkDist": 245.39999999999998,
+        "prodDist": 210.1,
+        "walkQuality": 0.8561532192339039
+      },
+      {
+        "time": 80.70022800912037,
+        "addrs": 15,
+        "walkDist": 475,
+        "prodDist": 369.8,
+        "walkQuality": 0.7785263157894737
+      }
+    ]
+  },
+  {
+    "hood": "Evergreen Park",
+    "addrs": 62,
+    "segs": 9,
+    "n": 3,
+    "addrCounts": [
+      46,
+      32,
+      27
+    ],
+    "maxTime": 245.2430097203888,
+    "spread": 108.74426545061803,
+    "avgWalkQuality": 0.47298654828618,
+    "times": [
+      {
+        "time": 245.2430097203888,
+        "addrs": 46,
+        "walkDist": 1270.1999999999998,
+        "prodDist": 186.5,
+        "walkQuality": 0.14682727129585893
+      },
+      {
+        "time": 172.83691347653905,
+        "addrs": 32,
+        "walkDist": 1069.7000000000003,
+        "prodDist": 291.1,
+        "walkQuality": 0.27213237356268105
+      },
+      {
+        "time": 136.49874426977078,
+        "addrs": 27,
+        "walkDist": 124.89036,
+        "prodDist": 124.89036,
+        "walkQuality": 1
+      }
+    ]
+  },
+  {
+    "hood": "Evergreen Park",
+    "addrs": 62,
+    "segs": 9,
+    "n": 5,
+    "addrCounts": [
+      27,
+      20,
+      26,
+      20,
+      12
+    ],
+    "maxTime": 138.25513020520822,
+    "spread": 70.24840993639747,
+    "avgWalkQuality": 0.624553042993792,
+    "times": [
+      {
+        "time": 136.49874426977078,
+        "addrs": 27,
+        "walkDist": 124.89036,
+        "prodDist": 124.89036,
+        "walkQuality": 1
+      },
+      {
+        "time": 101.10884435377415,
+        "addrs": 20,
+        "walkDist": 92.4,
+        "prodDist": 92.4,
+        "walkQuality": 1
+      },
+      {
+        "time": 138.25513020520822,
+        "addrs": 26,
+        "walkDist": 687.9,
+        "prodDist": 94.1,
+        "walkQuality": 0.13679313853757813
+      },
+      {
+        "time": 101.34885395415817,
+        "addrs": 20,
+        "walkDist": 112.4,
+        "prodDist": 74.3,
+        "walkQuality": 0.6610320284697508
+      },
+      {
+        "time": 68.00672026881075,
+        "addrs": 12,
+        "walkDist": 667.2,
+        "prodDist": 216.8,
+        "walkQuality": 0.3249400479616307
+      }
+    ]
+  },
+  {
+    "hood": "Palo Alto",
+    "addrs": 77,
+    "segs": 35,
+    "n": 3,
+    "addrCounts": [
+      113,
+      105,
+      84
+    ],
+    "maxTime": 716.9120974438977,
+    "spread": 157.3015130205207,
+    "avgWalkQuality": 0.29254717399402996,
+    "times": [
+      {
+        "time": 716.9120974438977,
+        "addrs": 113,
+        "walkDist": 12658.835079999997,
+        "prodDist": 1713.6350800000002,
+        "walkQuality": 0.1353706774099154
+      },
+      {
+        "time": 559.610584423377,
+        "addrs": 105,
+        "walkDist": 2884.1,
+        "prodDist": 1958.5,
+        "walkQuality": 0.679067993481502
+      },
+      {
+        "time": 625.8495948637944,
+        "addrs": 84,
+        "walkDist": 17153.446739999996,
+        "prodDist": 1084.14674,
+        "walkQuality": 0.06320285109067242
+      }
+    ]
+  },
+  {
+    "hood": "Palo Alto",
+    "addrs": 77,
+    "segs": 35,
+    "n": 5,
+    "addrCounts": [
+      70,
+      49,
+      85,
+      59,
+      39
+    ],
+    "maxTime": 450.49141965678626,
+    "spread": 230.2383160926437,
+    "avgWalkQuality": 0.2682072914163001,
+    "times": [
+      {
+        "time": 445.438873874955,
+        "addrs": 70,
+        "walkDist": 7952.921359999999,
+        "prodDist": 861.32136,
+        "walkQuality": 0.10830251187093344
+      },
+      {
+        "time": 333.68998679947197,
+        "addrs": 49,
+        "walkDist": 7390.5366,
+        "prodDist": 964.7366,
+        "walkQuality": 0.13053674614100413
+      },
+      {
+        "time": 450.49141965678626,
+        "addrs": 85,
+        "walkDist": 2124.2,
+        "prodDist": 1614.3,
+        "walkQuality": 0.7599566895772527
+      },
+      {
+        "time": 414.4626830673227,
+        "addrs": 59,
+        "walkDist": 9954.825380000002,
+        "prodDist": 759.02538,
+        "walkQuality": 0.07624698083855289
+      },
+      {
+        "time": 220.25310356414258,
+        "addrs": 39,
+        "walkDist": 2104.34112,
+        "prodDist": 559.7411200000001,
+        "walkQuality": 0.26599352865375747
+      }
+    ]
+  },
+  {
+    "hood": "Palo Alto Hills",
+    "addrs": 85,
+    "segs": 58,
+    "n": 3,
+    "addrCounts": [
+      29,
+      29,
+      27
+    ],
+    "maxTime": 199.79247137885517,
+    "spread": 31.191204368174738,
+    "avgWalkQuality": 0.4071370164816169,
+    "times": [
+      {
+        "time": 168.60126701068043,
+        "addrs": 29,
+        "walkDist": 1966.6935799999999,
+        "prodDist": 943.3935799999999,
+        "walkQuality": 0.479685086479003
+      },
+      {
+        "time": 199.79247137885517,
+        "addrs": 29,
+        "walkDist": 4565.85664,
+        "prodDist": 1463.75664,
+        "walkQuality": 0.32058751630011756
+      },
+      {
+        "time": 172.585619824793,
+        "addrs": 27,
+        "walkDist": 3132.0097000000005,
+        "prodDist": 1319.0096999999998,
+        "walkQuality": 0.4211384466657302
+      }
+    ]
+  },
+  {
+    "hood": "Palo Alto Hills",
+    "addrs": 85,
+    "segs": 58,
+    "n": 5,
+    "addrCounts": [
+      18,
+      16,
+      15,
+      17,
+      19
+    ],
+    "maxTime": 122.62237681507261,
+    "spread": 34.83799831993281,
+    "avgWalkQuality": 0.40771969610339365,
+    "times": [
+      {
+        "time": 122.62237681507261,
+        "addrs": 18,
+        "walkDist": 2718.42266,
+        "prodDist": 828.4226600000001,
+        "walkQuality": 0.3047438767303389
+      },
+      {
+        "time": 106.74902292091684,
+        "addrs": 16,
+        "walkDist": 2228.99608,
+        "prodDist": 776.39608,
+        "walkQuality": 0.34831648515057057
+      },
+      {
+        "time": 87.7843784951398,
+        "addrs": 15,
+        "walkDist": 1065.32226,
+        "prodDist": 534.72226,
+        "walkQuality": 0.5019347478949704
+      },
+      {
+        "time": 101.9338065522621,
+        "addrs": 17,
+        "walkDist": 1411.0941,
+        "prodDist": 614.2941000000001,
+        "walkQuality": 0.4353317755350264
+      },
+      {
+        "time": 122.31018120724829,
+        "addrs": 19,
+        "walkDist": 2275.7574,
+        "prodDist": 1020.1574,
+        "walkQuality": 0.44827159520606197
+      }
+    ]
+  },
+  {
+    "hood": "Classic Communities",
+    "addrs": 104,
+    "segs": 17,
+    "n": 3,
+    "addrCounts": [
+      41,
+      38,
+      25
+    ],
+    "maxTime": 215.66767478699148,
+    "spread": 83.11817280691227,
+    "avgWalkQuality": 0.6849971937440095,
+    "times": [
+      {
+        "time": 215.66767478699148,
+        "addrs": 41,
+        "walkDist": 888.93734,
+        "prodDist": 573.03734,
+        "walkQuality": 0.6446318702283336
+      },
+      {
+        "time": 197.1265621024841,
+        "addrs": 38,
+        "walkDist": 593.8564200000001,
+        "prodDist": 478.55642,
+        "walkQuality": 0.8058453253734293
+      },
+      {
+        "time": 132.5495019800792,
+        "addrs": 25,
+        "walkDist": 629.1,
+        "prodDist": 380.3,
+        "walkQuality": 0.6045143856302655
+      }
+    ]
+  },
+  {
+    "hood": "Classic Communities",
+    "addrs": 104,
+    "segs": 17,
+    "n": 5,
+    "addrCounts": [
+      17,
+      19,
+      33,
+      18,
+      17
+    ],
+    "maxTime": 170.24060962438497,
+    "spread": 80.7176287051482,
+    "avgWalkQuality": 0.7071054449351731,
+    "times": [
+      {
+        "time": 90.49498379935197,
+        "addrs": 17,
+        "walkDist": 457.897,
+        "prodDist": 245.997,
+        "walkQuality": 0.5372321723007576
+      },
+      {
+        "time": 100.18945565822634,
+        "addrs": 19,
+        "walkDist": 432.43734,
+        "prodDist": 270.13734,
+        "walkQuality": 0.6246855093503257
+      },
+      {
+        "time": 170.24060962438497,
+        "addrs": 33,
+        "walkDist": 436.70000000000005,
+        "prodDist": 375.6,
+        "walkQuality": 0.8600870162583009
+      },
+      {
+        "time": 93.9224339373575,
+        "addrs": 18,
+        "walkDist": 326.85642,
+        "prodDist": 274.25642,
+        "walkQuality": 0.8390730706773328
+      },
+      {
+        "time": 89.52298091923677,
+        "addrs": 17,
+        "walkDist": 376.9,
+        "prodDist": 254.2,
+        "walkQuality": 0.6744494560891483
+      }
+    ]
+  },
+  {
+    "hood": "Greenacres I",
+    "addrs": 108,
+    "segs": 22,
+    "n": 3,
+    "addrCounts": [
+      42,
+      40,
+      42
+    ],
+    "maxTime": 234.8923854554182,
+    "spread": 8.391725429017157,
+    "avgWalkQuality": 0.46821569606233576,
+    "times": [
+      {
+        "time": 233.18286235449418,
+        "addrs": 42,
+        "walkDist": 1931.82792,
+        "prodDist": 918.82792,
+        "walkQuality": 0.47562617274938235
+      },
+      {
+        "time": 234.8923854554182,
+        "addrs": 40,
+        "walkDist": 2907.5824800000005,
+        "prodDist": 851.98248,
+        "walkQuality": 0.293020915437625
+      },
+      {
+        "time": 226.50066002640105,
+        "addrs": 42,
+        "walkDist": 1375,
+        "prodDist": 874.5,
+        "walkQuality": 0.636
+      }
+    ]
+  },
+  {
+    "hood": "Greenacres I",
+    "addrs": 108,
+    "segs": 22,
+    "n": 5,
+    "addrCounts": [
+      22,
+      24,
+      23,
+      30,
+      25
+    ],
+    "maxTime": 160.53402136085444,
+    "spread": 37.25040777631105,
+    "avgWalkQuality": 0.5297056660270653,
+    "times": [
+      {
+        "time": 123.28361358454339,
+        "addrs": 22,
+        "walkDist": 1106.92352,
+        "prodDist": 533.32352,
+        "walkQuality": 0.4818070177061555
+      },
+      {
+        "time": 129.95205088203528,
+        "addrs": 24,
+        "walkDist": 829.3044,
+        "prodDist": 446.3044,
+        "walkQuality": 0.5381671675683862
+      },
+      {
+        "time": 123.63914556582263,
+        "addrs": 23,
+        "walkDist": 719.9,
+        "prodDist": 533,
+        "walkQuality": 0.7403806084178358
+      },
+      {
+        "time": 160.53402136085444,
+        "addrs": 30,
+        "walkDist": 877.8000000000001,
+        "prodDist": 546.1,
+        "walkQuality": 0.6221234905445432
+      },
+      {
+        "time": 151.4584480979239,
+        "addrs": 25,
+        "walkDist": 2204.7824800000003,
+        "prodDist": 586.58248,
+        "walkQuality": 0.26605004589840536
+      }
+    ]
+  },
+  {
+    "hood": "Walnut Grove",
+    "addrs": 138,
+    "segs": 28,
+    "n": 3,
+    "addrCounts": [
+      46,
+      46,
+      48
+    ],
+    "maxTime": 254.50738029521182,
+    "spread": 2.760527061082456,
+    "avgWalkQuality": 0.5890411939312404,
+    "times": [
+      {
+        "time": 253.96426017040682,
+        "addrs": 46,
+        "walkDist": 1996.9418,
+        "prodDist": 841.2418,
+        "walkQuality": 0.42126505639773776
+      },
+      {
+        "time": 251.74685323412936,
+        "addrs": 46,
+        "walkDist": 1812.1652799999997,
+        "prodDist": 1066.5652799999998,
+        "walkQuality": 0.5885585005800353
+      },
+      {
+        "time": 254.50738029521182,
+        "addrs": 48,
+        "walkDist": 1208.9,
+        "prodDist": 915.5,
+        "walkQuality": 0.7573000248159484
+      }
+    ]
+  },
+  {
+    "hood": "Walnut Grove",
+    "addrs": 138,
+    "segs": 28,
+    "n": 5,
+    "addrCounts": [
+      27,
+      25,
+      30,
+      26,
+      32
+    ],
+    "maxTime": 170.00960038401536,
+    "spread": 30.165952478099115,
+    "avgWalkQuality": 0.5898763304545012,
+    "times": [
+      {
+        "time": 143.68761142445697,
+        "addrs": 27,
+        "walkDist": 723.93866,
+        "prodDist": 547.23866,
+        "walkQuality": 0.7559185470216495
+      },
+      {
+        "time": 139.84364790591624,
+        "addrs": 25,
+        "walkDist": 1236.92118,
+        "prodDist": 436.02118,
+        "walkQuality": 0.352505225919084
+      },
+      {
+        "time": 163.4741389655586,
+        "addrs": 30,
+        "walkDist": 1122.8,
+        "prodDist": 724.0999999999999,
+        "walkQuality": 0.6449055931599572
+      },
+      {
+        "time": 142.91251650066002,
+        "addrs": 26,
+        "walkDist": 1076,
+        "prodDist": 576.8,
+        "walkQuality": 0.5360594795539033
+      },
+      {
+        "time": 170.00960038401536,
+        "addrs": 32,
+        "walkDist": 834.1,
+        "prodDist": 550.5,
+        "walkQuality": 0.6599928066179115
+      }
+    ]
+  },
+  {
+    "hood": "Meadow Park",
+    "addrs": 142,
+    "segs": 33,
+    "n": 3,
+    "addrCounts": [
+      49,
+      51,
+      49
+    ],
+    "maxTime": 299.61396831873276,
+    "spread": 35.32573070922837,
+    "avgWalkQuality": 0.5196214543530477,
+    "times": [
+      {
+        "time": 264.2882376095044,
+        "addrs": 49,
+        "walkDist": 1607.2888400000002,
+        "prodDist": 919.08884,
+        "walkQuality": 0.5718255593686571
+      },
+      {
+        "time": 276.0332413296532,
+        "addrs": 51,
+        "walkDist": 1752.6999999999998,
+        "prodDist": 1371.8999999999999,
+        "walkQuality": 0.7827352085354026
+      },
+      {
+        "time": 299.61396831873276,
+        "addrs": 49,
+        "walkDist": 4550.98198,
+        "prodDist": 929.7819800000001,
+        "walkQuality": 0.20430359515508348
+      }
+    ]
+  },
+  {
+    "hood": "Meadow Park",
+    "addrs": 142,
+    "segs": 33,
+    "n": 5,
+    "addrCounts": [
+      32,
+      29,
+      29,
+      29,
+      30
+    ],
+    "maxTime": 182.87057218288732,
+    "spread": 30.88509276371056,
+    "avgWalkQuality": 0.5191318375282623,
+    "times": [
+      {
+        "time": 176.4850594023761,
+        "addrs": 32,
+        "walkDist": 1373.7,
+        "prodDist": 919.2,
+        "walkQuality": 0.6691417340030574
+      },
+      {
+        "time": 159.97589823592944,
+        "addrs": 29,
+        "walkDist": 1247.9416,
+        "prodDist": 677.6416,
+        "walkQuality": 0.543007461246584
+      },
+      {
+        "time": 182.87057218288732,
+        "addrs": 29,
+        "walkDist": 3155.75478,
+        "prodDist": 429.85478,
+        "walkQuality": 0.1362129854715771
+      },
+      {
+        "time": 151.98547941917676,
+        "addrs": 29,
+        "walkDist": 582.1,
+        "prodDist": 477.4,
+        "walkQuality": 0.8201339975949149
+      },
+      {
+        "time": 168.1420122404896,
+        "addrs": 30,
+        "walkDist": 1511.7738799999997,
+        "prodDist": 645.7738799999998,
+        "walkQuality": 0.42716300932517764
+      }
+    ]
+  },
+  {
+    "hood": "Palo Alto Central",
+    "addrs": 145,
+    "segs": 11,
+    "n": 3,
+    "addrCounts": [
+      63,
+      69,
+      61
+    ],
+    "maxTime": 351.1665611424457,
+    "spread": 38.077037561502436,
+    "avgWalkQuality": 0.4157485281122413,
+    "times": [
+      {
+        "time": 320.150606024241,
+        "addrs": 63,
+        "walkDist": 429.2,
+        "prodDist": 250,
+        "walkQuality": 0.5824790307548928
+      },
+      {
+        "time": 351.1665611424457,
+        "addrs": 69,
+        "walkDist": 513.8595399999999,
+        "prodDist": 136.15954,
+        "walkQuality": 0.26497423790166474
+      },
+      {
+        "time": 313.08952358094325,
+        "addrs": 61,
+        "walkDist": 674.0999999999999,
+        "prodDist": 269.5,
+        "walkQuality": 0.3997923156801662
+      }
+    ]
+  },
+  {
+    "hood": "Palo Alto Central",
+    "addrs": 145,
+    "segs": 11,
+    "n": 5,
+    "addrCounts": [
+      44,
+      45,
+      29,
+      41,
+      34
+    ],
+    "maxTime": 227.38209528381134,
+    "spread": 79.4923796951878,
+    "avgWalkQuality": 0.7120785140048745,
+    "times": [
+      {
+        "time": 220.79994647785912,
+        "addrs": 44,
+        "walkDist": 66.65953999999999,
+        "prodDist": 30.05954,
+        "walkQuality": 0.4509413056255714
+      },
+      {
+        "time": 227.38209528381134,
+        "addrs": 45,
+        "walkDist": 198.5,
+        "prodDist": 198.5,
+        "walkQuality": 1
+      },
+      {
+        "time": 147.88971558862355,
+        "addrs": 29,
+        "walkDist": 240.8,
+        "prodDist": 195.3,
+        "walkQuality": 0.811046511627907
+      },
+      {
+        "time": 207.69170766830672,
+        "addrs": 41,
+        "walkDist": 224.3,
+        "prodDist": 177.10000000000002,
+        "walkQuality": 0.7895675434685689
+      },
+      {
+        "time": 171.2900516020641,
+        "addrs": 34,
+        "walkDist": 107.5,
+        "prodDist": 54.7,
+        "walkQuality": 0.5088372093023256
+      }
+    ]
+  },
+  {
+    "hood": "Charleston Gardens",
+    "addrs": 194,
+    "segs": 34,
+    "n": 3,
+    "addrCounts": [
+      66,
+      78,
+      95
+    ],
+    "maxTime": 521.6794671786871,
+    "spread": 167.98422608904355,
+    "avgWalkQuality": 0.4437610631656354,
+    "times": [
+      {
+        "time": 353.69524108964356,
+        "addrs": 66,
+        "walkDist": 1974.5244400000001,
+        "prodDist": 970.42444,
+        "walkQuality": 0.49147248843372127
+      },
+      {
+        "time": 426.6242649705988,
+        "addrs": 78,
+        "walkDist": 3051.8999999999996,
+        "prodDist": 1249.2999999999997,
+        "walkQuality": 0.40935155149251284
+      },
+      {
+        "time": 521.6794671786871,
+        "addrs": 95,
+        "walkDist": 3889.8,
+        "prodDist": 1674.4,
+        "walkQuality": 0.430459149570672
+      }
+    ]
+  },
+  {
+    "hood": "Charleston Gardens",
+    "addrs": 194,
+    "segs": 34,
+    "n": 5,
+    "addrCounts": [
+      42,
+      51,
+      51,
+      56,
+      39
+    ],
+    "maxTime": 307.5974386175447,
+    "spread": 102.81584735389416,
+    "avgWalkQuality": 0.5255899393710236,
+    "times": [
+      {
+        "time": 229.76276107044282,
+        "addrs": 42,
+        "walkDist": 1646.8308800000002,
+        "prodDist": 740.53088,
+        "walkQuality": 0.4496702660809955
+      },
+      {
+        "time": 270.7122284891396,
+        "addrs": 51,
+        "walkDist": 1309.3,
+        "prodDist": 963.4,
+        "walkQuality": 0.7358130298632858
+      },
+      {
+        "time": 269.66361238449537,
+        "addrs": 51,
+        "walkDist": 1221.91882,
+        "prodDist": 632.21882,
+        "walkQuality": 0.517398381669905
+      },
+      {
+        "time": 307.5974386175447,
+        "addrs": 56,
+        "walkDist": 2299.69456,
+        "prodDist": 1210.99456,
+        "walkQuality": 0.5265893049727439
+      },
+      {
+        "time": 204.78159126365054,
+        "addrs": 39,
+        "walkDist": 815.0999999999999,
+        "prodDist": 324.79999999999995,
+        "walkQuality": 0.39847871426818793
+      }
+    ]
+  },
+  {
+    "hood": "Greenhouse",
+    "addrs": 230,
+    "segs": 20,
+    "n": 3,
+    "addrCounts": [
+      79,
+      77,
+      76
+    ],
+    "maxTime": 406.46407680307215,
+    "spread": 20.01141869674791,
+    "avgWalkQuality": 0.6225030629223272,
+    "times": [
+      {
+        "time": 406.46407680307215,
+        "addrs": 79,
+        "walkDist": 955.30152,
+        "prodDist": 553.6015199999999,
+        "walkQuality": 0.5795044898494456
+      },
+      {
+        "time": 392.5004161766471,
+        "addrs": 77,
+        "walkDist": 625.00968,
+        "prodDist": 318.90968,
+        "walkQuality": 0.510247585285399
+      },
+      {
+        "time": 386.45265810632424,
+        "addrs": 76,
+        "walkDist": 537.7,
+        "prodDist": 418.2,
+        "walkQuality": 0.7777571136321368
+      }
+    ]
+  },
+  {
+    "hood": "Greenhouse",
+    "addrs": 230,
+    "segs": 20,
+    "n": 5,
+    "addrCounts": [
+      38,
+      47,
+      45,
+      54,
+      48
+    ],
+    "maxTime": 279.4671786871475,
+    "spread": 85.44294347773914,
+    "avgWalkQuality": 0.7273788737645969,
+    "times": [
+      {
+        "time": 194.02423520940837,
+        "addrs": 38,
+        "walkDist": 335.33952,
+        "prodDist": 274.23952,
+        "walkQuality": 0.81779660208257
+      },
+      {
+        "time": 236.99927997119886,
+        "addrs": 47,
+        "walkDist": 166.6,
+        "prodDist": 166.6,
+        "walkQuality": 1
+      },
+      {
+        "time": 232.85277427097083,
+        "addrs": 45,
+        "walkDist": 654.37168,
+        "prodDist": 325.97168,
+        "walkQuality": 0.49814454072951325
+      },
+      {
+        "time": 279.4671786871475,
+        "addrs": 54,
+        "walkDist": 788.9000000000001,
+        "prodDist": 253.2,
+        "walkQuality": 0.3209532260109012
+      },
+      {
+        "time": 243.24852994119766,
+        "addrs": 48,
+        "walkDist": 270.7,
+        "prodDist": 270.7,
+        "walkQuality": 1
+      }
+    ]
+  },
+  {
+    "hood": "Palo Alto Orchard",
+    "addrs": 230,
+    "segs": 28,
+    "n": 3,
+    "addrCounts": [
+      76,
+      77,
+      79
+    ],
+    "maxTime": 417.4136121444858,
+    "spread": 15.443733349333968,
+    "avgWalkQuality": 0.5276943368943559,
+    "times": [
+      {
+        "time": 407.1890908436337,
+        "addrs": 76,
+        "walkDist": 2265.66694,
+        "prodDist": 711.5669399999999,
+        "walkQuality": 0.31406511144131355
+      },
+      {
+        "time": 417.4136121444858,
+        "addrs": 77,
+        "walkDist": 2701.0263,
+        "prodDist": 1580.9263,
+        "walkQuality": 0.5853057780296327
+      },
+      {
+        "time": 401.9698787951518,
+        "addrs": 79,
+        "walkDist": 580.8,
+        "prodDist": 397.1,
+        "walkQuality": 0.6837121212121213
+      }
+    ]
+  },
+  {
+    "hood": "Palo Alto Orchard",
+    "addrs": 230,
+    "segs": 28,
+    "n": 5,
+    "addrCounts": [
+      49,
+      57,
+      47,
+      26,
+      53
+    ],
+    "maxTime": 300.5634225369015,
+    "spread": 167.17568702748113,
+    "avgWalkQuality": 0.6131970841824133,
+    "times": [
+      {
+        "time": 251.45696843873756,
+        "addrs": 49,
+        "walkDist": 538.05918,
+        "prodDist": 240.05918,
+        "walkQuality": 0.4461575769416294
+      },
+      {
+        "time": 300.5634225369015,
+        "addrs": 57,
+        "walkDist": 1296.8999999999999,
+        "prodDist": 902.8,
+        "walkQuality": 0.6961215205490014
+      },
+      {
+        "time": 261.07221024840993,
+        "addrs": 47,
+        "walkDist": 2172.59728,
+        "prodDist": 1157.3972800000001,
+        "walkQuality": 0.5327251813552856
+      },
+      {
+        "time": 133.38773550942037,
+        "addrs": 26,
+        "walkDist": 282.3,
+        "prodDist": 180.9,
+        "walkQuality": 0.640807651434644
+      },
+      {
+        "time": 268.45853834153365,
+        "addrs": 53,
+        "walkDist": 288.2,
+        "prodDist": 216.2,
+        "walkQuality": 0.7501734906315058
+      }
+    ]
+  },
+  {
+    "hood": "Greenacres II",
+    "addrs": 264,
+    "segs": 45,
+    "n": 3,
+    "addrCounts": [
+      100,
+      90,
+      85
+    ],
+    "maxTime": 554.9753990159606,
+    "spread": 76.23147389895598,
+    "avgWalkQuality": 0.4185897116617879,
+    "times": [
+      {
+        "time": 554.9753990159606,
+        "addrs": 100,
+        "walkDist": 4581.1,
+        "prodDist": 1909.9,
+        "walkQuality": 0.4169086027373338
+      },
+      {
+        "time": 493.9416728669147,
+        "addrs": 90,
+        "walkDist": 3661.6596,
+        "prodDist": 1643.7596,
+        "walkQuality": 0.4489110893868999
+      },
+      {
+        "time": 478.74392511700466,
+        "addrs": 85,
+        "walkDist": 4478.48128,
+        "prodDist": 1746.38128,
+        "walkQuality": 0.3899494428611299
+      }
+    ]
+  },
+  {
+    "hood": "Greenacres II",
+    "addrs": 264,
+    "segs": 45,
+    "n": 5,
+    "addrCounts": [
+      64,
+      55,
+      55,
+      48,
+      53
+    ],
+    "maxTime": 356.00215528621146,
+    "spread": 81.79478699147967,
+    "avgWalkQuality": 0.42135654059843936,
+    "times": [
+      {
+        "time": 356.00215528621146,
+        "addrs": 64,
+        "walkDist": 3000.0595999999996,
+        "prodDist": 1320.3596,
+        "walkQuality": 0.4401111231256873
+      },
+      {
+        "time": 309.4023688947558,
+        "addrs": 55,
+        "walkDist": 2866.7494,
+        "prodDist": 1185.5494,
+        "walkQuality": 0.4135518088884923
+      },
+      {
+        "time": 295.61602328093124,
+        "addrs": 55,
+        "walkDist": 1717.93322,
+        "prodDist": 822.63322,
+        "walkQuality": 0.4788505224900419
+      },
+      {
+        "time": 274.2073682947318,
+        "addrs": 48,
+        "walkDist": 2850.5,
+        "prodDist": 859.3000000000001,
+        "walkQuality": 0.301455884932468
+      },
+      {
+        "time": 292.55946405856236,
+        "addrs": 53,
+        "walkDist": 2296.53014,
+        "prodDist": 1085.8301399999998,
+        "walkQuality": 0.47281336355550724
+      }
+    ]
+  },
+  {
+    "hood": "Commercial",
+    "addrs": 267,
+    "segs": 85,
+    "n": 3,
+    "addrCounts": [
+      102,
+      89,
+      81
+    ],
+    "maxTime": 626.9886737069482,
+    "spread": 135.69125213008516,
+    "avgWalkQuality": 0.22499350169138896,
+    "times": [
+      {
+        "time": 626.9886737069482,
+        "addrs": 102,
+        "walkDist": 9748.66618,
+        "prodDist": 1654.6661799999997,
+        "walkQuality": 0.1697325715588304
+      },
+      {
+        "time": 514.1959073562942,
+        "addrs": 89,
+        "walkDist": 5766.09496,
+        "prodDist": 1432.1949600000003,
+        "walkQuality": 0.24838213209031162
+      },
+      {
+        "time": 491.2974215768631,
+        "addrs": 81,
+        "walkDist": 7191.164140000001,
+        "prodDist": 1847.1641399999999,
+        "walkQuality": 0.25686580142502485
+      }
+    ]
+  },
+  {
+    "hood": "Commercial",
+    "addrs": 267,
+    "segs": 85,
+    "n": 5,
+    "addrCounts": [
+      53,
+      54,
+      59,
+      49,
+      57
+    ],
+    "maxTime": 357.9785522620905,
+    "spread": 48.10633169326775,
+    "avgWalkQuality": 0.247115222341531,
+    "times": [
+      {
+        "time": 316.2522431297252,
+        "addrs": 53,
+        "walkDist": 4270.84942,
+        "prodDist": 880.0494199999999,
+        "walkQuality": 0.20605957584896542
+      },
+      {
+        "time": 357.9785522620905,
+        "addrs": 54,
+        "walkDist": 7331.252759999999,
+        "prodDist": 843.75276,
+        "walkQuality": 0.11508984720914192
+      },
+      {
+        "time": 324.2199306372255,
+        "addrs": 59,
+        "walkDist": 2434.89682,
+        "prodDist": 575.6968199999999,
+        "walkQuality": 0.23643581743229675
+      },
+      {
+        "time": 336.91100132005283,
+        "addrs": 49,
+        "walkDist": 7658.943740000002,
+        "prodDist": 1516.9437400000004,
+        "walkQuality": 0.19806174212738112
+      },
+      {
+        "time": 309.87222056882274,
+        "addrs": 57,
+        "walkDist": 2072.60214,
+        "prodDist": 994.7021400000001,
+        "walkQuality": 0.4799291290898697
+      }
+    ]
+  },
+  {
+    "hood": "Southgate",
+    "addrs": 268,
+    "segs": 44,
+    "n": 3,
+    "addrCounts": [
+      141,
+      138,
+      135
+    ],
+    "maxTime": 752.7907869914796,
+    "spread": 74.16544197767905,
+    "avgWalkQuality": 0.710128108395461,
+    "times": [
+      {
+        "time": 750.463916476659,
+        "addrs": 141,
+        "walkDist": 3788.5081599999994,
+        "prodDist": 2326.1081599999998,
+        "walkQuality": 0.6139905371089395
+      },
+      {
+        "time": 752.7907869914796,
+        "addrs": 138,
+        "walkDist": 5232.35628,
+        "prodDist": 2701.9562800000003,
+        "walkQuality": 0.5163937880774434
+      },
+      {
+        "time": 678.6253450138006,
+        "addrs": 135,
+        "walkDist": 302.1,
+        "prodDist": 302.1,
+        "walkQuality": 1
+      }
+    ]
+  },
+  {
+    "hood": "Southgate",
+    "addrs": 268,
+    "segs": 44,
+    "n": 5,
+    "addrCounts": [
+      60,
+      79,
+      59,
+      81,
+      135
+    ],
+    "maxTime": 678.6253450138006,
+    "spread": 358.5691774870995,
+    "avgWalkQuality": 0.6037724660748556,
+    "times": [
+      {
+        "time": 324.30020880835235,
+        "addrs": 60,
+        "walkDist": 2024.9364,
+        "prodDist": 963.8364,
+        "walkQuality": 0.47598354200161547
+      },
+      {
+        "time": 424.6280499219969,
+        "addrs": 79,
+        "walkDist": 2468.9054,
+        "prodDist": 1478.2054,
+        "walkQuality": 0.5987290562044216
+      },
+      {
+        "time": 320.0561675267011,
+        "addrs": 59,
+        "walkDist": 2087.93044,
+        "prodDist": 999.9304400000001,
+        "walkQuality": 0.4789098433758167
+      },
+      {
+        "time": 445.9119428777151,
+        "addrs": 81,
+        "walkDist": 3409.1921999999995,
+        "prodDist": 1586.0921999999998,
+        "walkQuality": 0.4652398887924242
+      },
+      {
+        "time": 678.6253450138006,
+        "addrs": 135,
+        "walkDist": 302.1,
+        "prodDist": 302.1,
+        "walkQuality": 1
+      }
+    ]
+  },
+  {
+    "hood": "Fairmeadow",
+    "addrs": 307,
+    "segs": 43,
+    "n": 3,
+    "addrCounts": [
+      107,
+      104,
+      101
+    ],
+    "maxTime": 571.0126146645866,
+    "spread": 12.277328453138125,
+    "avgWalkQuality": 0.6332098259597719,
+    "times": [
+      {
+        "time": 564.3771750870035,
+        "addrs": 107,
+        "walkDist": 2448,
+        "prodDist": 2131.3,
+        "walkQuality": 0.8706290849673204
+      },
+      {
+        "time": 571.0126146645866,
+        "addrs": 104,
+        "walkDist": 4250.88118,
+        "prodDist": 2262.8811800000003,
+        "walkQuality": 0.5323322586965369
+      },
+      {
+        "time": 558.7352862114485,
+        "addrs": 101,
+        "walkDist": 4477.7614,
+        "prodDist": 2223.9614,
+        "walkQuality": 0.49666813421545863
+      }
+    ]
+  },
+  {
+    "hood": "Fairmeadow",
+    "addrs": 307,
+    "segs": 43,
+    "n": 5,
+    "addrCounts": [
+      62,
+      63,
+      57,
+      67,
+      63
+    ],
+    "maxTime": 358.9145565822633,
+    "spread": 41.92276395055802,
+    "avgWalkQuality": 0.6692201396033675,
+    "times": [
+      {
+        "time": 327.221888875555,
+        "addrs": 62,
+        "walkDist": 1435.1,
+        "prodDist": 1265.1999999999998,
+        "walkQuality": 0.8816110375583582
+      },
+      {
+        "time": 344.66616080643223,
+        "addrs": 63,
+        "walkDist": 2472.08118,
+        "prodDist": 1252.3811799999999,
+        "walkQuality": 0.50661005396271
+      },
+      {
+        "time": 316.99179263170527,
+        "addrs": 57,
+        "walkDist": 2665.87608,
+        "prodDist": 1190.37608,
+        "walkQuality": 0.4465234107955986
+      },
+      {
+        "time": 358.9145565822633,
+        "addrs": 67,
+        "walkDist": 1992.8000000000002,
+        "prodDist": 1564.1000000000001,
+        "walkQuality": 0.7848755519871538
+      },
+      {
+        "time": 337.2355132605304,
+        "addrs": 63,
+        "walkDist": 1852.8853199999999,
+        "prodDist": 1346.08532,
+        "walkQuality": 0.7264806437130172
+      }
+    ]
+  },
+  {
+    "hood": "Adobe Meadows",
+    "addrs": 316,
+    "segs": 72,
+    "n": 3,
+    "addrCounts": [
+      119,
+      115,
+      115
+    ],
+    "maxTime": 664.9859920796832,
+    "spread": 40.01014472578902,
+    "avgWalkQuality": 0.4896777852869955,
+    "times": [
+      {
+        "time": 664.9859920796832,
+        "addrs": 119,
+        "walkDist": 5831.93272,
+        "prodDist": 2400.2327199999995,
+        "walkQuality": 0.4115672857076444
+      },
+      {
+        "time": 627.5673267730709,
+        "addrs": 115,
+        "walkDist": 4380.43534,
+        "prodDist": 2227.63534,
+        "walkQuality": 0.5085419980197675
+      },
+      {
+        "time": 624.9758473538942,
+        "addrs": 115,
+        "walkDist": 4164.48736,
+        "prodDist": 2285.98736,
+        "walkQuality": 0.5489240721335747
+      }
+    ]
+  },
+  {
+    "hood": "Adobe Meadows",
+    "addrs": 316,
+    "segs": 72,
+    "n": 5,
+    "addrCounts": [
+      60,
+      62,
+      68,
+      80,
+      79
+    ],
+    "maxTime": 430.1668066722669,
+    "spread": 105.05835401416056,
+    "avgWalkQuality": 0.5486915290728522,
+    "times": [
+      {
+        "time": 325.10845265810633,
+        "addrs": 60,
+        "walkDist": 2092.2873600000003,
+        "prodDist": 1241.58736,
+        "walkQuality": 0.593411490092833
+      },
+      {
+        "time": 344.47024600984037,
+        "addrs": 62,
+        "walkDist": 2872.4056,
+        "prodDist": 1278.3056000000001,
+        "walkQuality": 0.44502962952028785
+      },
+      {
+        "time": 379.16750294011763,
+        "addrs": 68,
+        "walkDist": 3263.8280199999995,
+        "prodDist": 1355.8280199999997,
+        "walkQuality": 0.4154103744718755
+      },
+      {
+        "time": 430.1668066722669,
+        "addrs": 80,
+        "walkDist": 2513.8,
+        "prodDist": 1494,
+        "walkQuality": 0.59431935714854
+      },
+      {
+        "time": 421.98907956318254,
+        "addrs": 79,
+        "walkDist": 2249,
+        "prodDist": 1563.6999999999998,
+        "walkQuality": 0.6952867941307247
+      }
+    ]
+  },
+  {
+    "hood": "Baylands",
+    "addrs": 324,
+    "segs": 105,
+    "n": 3,
+    "addrCounts": [
+      112,
+      111,
+      101
+    ],
+    "maxTime": 657.2224312972519,
+    "spread": 28.807818552742106,
+    "avgWalkQuality": 0.31444752292449385,
+    "times": [
+      {
+        "time": 628.4146127445098,
+        "addrs": 112,
+        "walkDist": 5700.989680000001,
+        "prodDist": 1856.9896800000001,
+        "walkQuality": 0.3257311070943738
+      },
+      {
+        "time": 657.2224312972519,
+        "addrs": 111,
+        "walkDist": 8518.1952,
+        "prodDist": 3199.9952,
+        "walkQuality": 0.37566586875116453
+      },
+      {
+        "time": 634.1241293651747,
+        "addrs": 101,
+        "walkDist": 10759.9137,
+        "prodDist": 2603.3136999999997,
+        "walkQuality": 0.24194559292794326
+      }
+    ]
+  },
+  {
+    "hood": "Baylands",
+    "addrs": 324,
+    "segs": 105,
+    "n": 5,
+    "addrCounts": [
+      33,
+      88,
+      66,
+      65,
+      72
+    ],
+    "maxTime": 500.5306816272651,
+    "spread": 300.7605604224169,
+    "avgWalkQuality": 0.3418000895305314,
+    "times": [
+      {
+        "time": 199.77012120484818,
+        "addrs": 33,
+        "walkDist": 2897.3941999999997,
+        "prodDist": 1332.2942,
+        "walkQuality": 0.45982496962270447
+      },
+      {
+        "time": 500.5306816272651,
+        "addrs": 88,
+        "walkDist": 5044.021700000001,
+        "prodDist": 1690.0217000000002,
+        "walkQuality": 0.33505440708155554
+      },
+      {
+        "time": 380.04604512180487,
+        "addrs": 66,
+        "walkDist": 4170.33694,
+        "prodDist": 1381.03694,
+        "walkQuality": 0.3311571606489906
+      },
+      {
+        "time": 378.16153846153844,
+        "addrs": 65,
+        "walkDist": 4429.951,
+        "prodDist": 1489.3509999999999,
+        "walkQuality": 0.33620033268991006
+      },
+      {
+        "time": 445.0157527901116,
+        "addrs": 72,
+        "walkDist": 7084.36268,
+        "prodDist": 1748.1626800000001,
+        "walkQuality": 0.24676357760949644
+      }
+    ]
+  },
+  {
+    "hood": "Greenmeadow",
+    "addrs": 466,
+    "segs": 94,
+    "n": 3,
+    "addrCounts": [
+      196,
+      193,
+      194
+    ],
+    "maxTime": 1103.2237794311773,
+    "spread": 56.51960950438024,
+    "avgWalkQuality": 0.4462728893465652,
+    "times": [
+      {
+        "time": 1070.8320568822753,
+        "addrs": 196,
+        "walkDist": 7569.0353,
+        "prodDist": 3680.8352999999997,
+        "walkQuality": 0.4863017748113818
+      },
+      {
+        "time": 1046.704169926797,
+        "addrs": 193,
+        "walkDist": 6808.408479999999,
+        "prodDist": 3644.2084799999993,
+        "walkQuality": 0.5352511516759053
+      },
+      {
+        "time": 1103.2237794311773,
+        "addrs": 194,
+        "walkDist": 11101.537540000001,
+        "prodDist": 3522.1375400000006,
+        "walkQuality": 0.31726574155240844
+      }
+    ]
+  },
+  {
+    "hood": "Greenmeadow",
+    "addrs": 466,
+    "segs": 94,
+    "n": 5,
+    "addrCounts": [
+      120,
+      114,
+      113,
+      113,
+      123
+    ],
+    "maxTime": 677.0490865234609,
+    "spread": 69.525385575423,
+    "avgWalkQuality": 0.4661954494611333,
+    "times": [
+      {
+        "time": 653.5504893795752,
+        "addrs": 120,
+        "walkDist": 4462.362279999999,
+        "prodDist": 2226.06228,
+        "walkQuality": 0.4988528811246586
+      },
+      {
+        "time": 645.2122335293411,
+        "addrs": 114,
+        "walkDist": 6267.43542,
+        "prodDist": 2450.9354200000002,
+        "walkQuality": 0.39105874345012404
+      },
+      {
+        "time": 607.5237009480379,
+        "addrs": 113,
+        "walkDist": 3543.5,
+        "prodDist": 2457.6,
+        "walkQuality": 0.6935515733032313
+      },
+      {
+        "time": 625.8825971438857,
+        "addrs": 113,
+        "walkDist": 5073.34682,
+        "prodDist": 1657.7468199999998,
+        "walkQuality": 0.32675606041063043
+      },
+      {
+        "time": 677.0490865234609,
+        "addrs": 123,
+        "walkDist": 5170.550380000001,
+        "prodDist": 2175.55038,
+        "walkQuality": 0.42075798901702216
+      }
+    ]
+  },
+  {
+    "hood": "Community Center",
+    "addrs": 489,
+    "segs": 117,
+    "n": 3,
+    "addrCounts": [
+      180,
+      181,
+      183
+    ],
+    "maxTime": 993.6231957278292,
+    "spread": 32.294331693267736,
+    "avgWalkQuality": 0.6366003361715272,
+    "times": [
+      {
+        "time": 961.3288640345614,
+        "addrs": 180,
+        "walkDist": 5110.534240000001,
+        "prodDist": 3611.73424,
+        "walkQuality": 0.7067234207592354
+      },
+      {
+        "time": 993.6231957278292,
+        "addrs": 181,
+        "walkDist": 7384.9709,
+        "prodDist": 4304.9709,
+        "walkQuality": 0.582936745221298
+      },
+      {
+        "time": 990.3151366854675,
+        "addrs": 183,
+        "walkDist": 6276.010340000001,
+        "prodDist": 3892.01034,
+        "walkQuality": 0.6201408425340483
+      }
+    ]
+  },
+  {
+    "hood": "Community Center",
+    "addrs": 489,
+    "segs": 117,
+    "n": 5,
+    "addrCounts": [
+      112,
+      114,
+      102,
+      109,
+      107
+    ],
+    "maxTime": 614.9490819632786,
+    "spread": 60.32573526941076,
+    "avgWalkQuality": 0.635392361737285,
+    "times": [
+      {
+        "time": 600.4108273130926,
+        "addrs": 112,
+        "walkDist": 3367.43424,
+        "prodDist": 2113.93424,
+        "walkQuality": 0.6277581355233829
+      },
+      {
+        "time": 614.9490819632786,
+        "addrs": 114,
+        "walkDist": 3745.607,
+        "prodDist": 2522.107,
+        "walkQuality": 0.6733506745368641
+      },
+      {
+        "time": 554.6233466938678,
+        "addrs": 102,
+        "walkDist": 3718.46348,
+        "prodDist": 2376.76348,
+        "walkQuality": 0.639178922364998
+      },
+      {
+        "time": 584.0768520340814,
+        "addrs": 109,
+        "walkDist": 3256.27408,
+        "prodDist": 2272.1740800000002,
+        "walkQuality": 0.697783424913667
+      },
+      {
+        "time": 591.5111993279731,
+        "addrs": 107,
+        "walkDist": 4709.078239999999,
+        "prodDist": 2537.6782399999993,
+        "walkQuality": 0.5388906513475129
+      }
+    ]
+  },
+  {
+    "hood": "Leland Manor/Garland",
+    "addrs": 508,
+    "segs": 106,
+    "n": 3,
+    "addrCounts": [
+      170,
+      181,
+      172
+    ],
+    "maxTime": 996.960145925837,
+    "spread": 66.8324531381254,
+    "avgWalkQuality": 0.49085602807865775,
+    "times": [
+      {
+        "time": 930.1276927877116,
+        "addrs": 170,
+        "walkDist": 6677.040640000001,
+        "prodDist": 3682.9406400000003,
+        "walkQuality": 0.5515827802419965
+      },
+      {
+        "time": 996.960145925837,
+        "addrs": 181,
+        "walkDist": 7663.038959999999,
+        "prodDist": 3444.2389599999997,
+        "walkQuality": 0.44946123567666163
+      },
+      {
+        "time": 959.3825786631465,
+        "addrs": 172,
+        "walkDist": 8281.55028,
+        "prodDist": 3904.9502799999996,
+        "walkQuality": 0.4715240683173151
+      }
+    ]
+  },
+  {
+    "hood": "Leland Manor/Garland",
+    "addrs": 508,
+    "segs": 106,
+    "n": 5,
+    "addrCounts": [
+      102,
+      102,
+      112,
+      107,
+      100
+    ],
+    "maxTime": 610.0101548061923,
+    "spread": 56.44995343813753,
+    "avgWalkQuality": 0.49803192797801,
+    "times": [
+      {
+        "time": 560.1552794911796,
+        "addrs": 102,
+        "walkDist": 4179.43944,
+        "prodDist": 2289.03944,
+        "walkQuality": 0.5476905390929651
+      },
+      {
+        "time": 565.4578183127326,
+        "addrs": 102,
+        "walkDist": 4621.3,
+        "prodDist": 2058.3,
+        "walkQuality": 0.4453941531603662
+      },
+      {
+        "time": 610.0101548061923,
+        "addrs": 112,
+        "walkDist": 4167.3462,
+        "prodDist": 2404.1461999999997,
+        "walkQuality": 0.5769010023693255
+      },
+      {
+        "time": 596.5411842073682,
+        "addrs": 107,
+        "walkDist": 5128.22688,
+        "prodDist": 2278.6268800000003,
+        "walkQuality": 0.4443303569283581
+      },
+      {
+        "time": 553.5602013680548,
+        "addrs": 100,
+        "walkDist": 4463.17158,
+        "prodDist": 2123.77158,
+        "walkQuality": 0.4758435883390349
+      }
+    ]
+  },
+  {
+    "hood": "Evergreen",
+    "addrs": 539,
+    "segs": 87,
+    "n": 3,
+    "addrCounts": [
+      203,
+      199,
+      195
+    ],
+    "maxTime": 1065.8111741269652,
+    "spread": 48.188755310212514,
+    "avgWalkQuality": 0.5786711686418043,
+    "times": [
+      {
+        "time": 1042.4822124084963,
+        "addrs": 203,
+        "walkDist": 2290.09276,
+        "prodDist": 1357.09276,
+        "walkQuality": 0.5925929218692434
+      },
+      {
+        "time": 1065.8111741269652,
+        "addrs": 199,
+        "walkDist": 5900.695140000001,
+        "prodDist": 3262.89514,
+        "walkQuality": 0.5529679237080531
+      },
+      {
+        "time": 1017.6224188167527,
+        "addrs": 195,
+        "walkDist": 3551.7261599999997,
+        "prodDist": 2097.12616,
+        "walkQuality": 0.5904526603481165
+      }
+    ]
+  },
+  {
+    "hood": "Evergreen",
+    "addrs": 539,
+    "segs": 87,
+    "n": 5,
+    "addrCounts": [
+      108,
+      122,
+      121,
+      124,
+      122
+    ],
+    "maxTime": 647.6864272170887,
+    "spread": 68.87915996639867,
+    "avgWalkQuality": 0.555044398886582,
+    "times": [
+      {
+        "time": 578.8072672506901,
+        "addrs": 108,
+        "walkDist": 3233.80958,
+        "prodDist": 1674.50958,
+        "walkQuality": 0.5178132906638244
+      },
+      {
+        "time": 629.1251650066002,
+        "addrs": 122,
+        "walkDist": 1593.7,
+        "prodDist": 874.5,
+        "walkQuality": 0.5487230971952061
+      },
+      {
+        "time": 647.6864272170887,
+        "addrs": 121,
+        "walkDist": 3557.0599800000005,
+        "prodDist": 2390.1599800000004,
+        "walkQuality": 0.6719481800810118
+      },
+      {
+        "time": 640.5979841593663,
+        "addrs": 124,
+        "walkDist": 1716.4300199999998,
+        "prodDist": 926.3300199999999,
+        "walkQuality": 0.539684117153812
+      },
+      {
+        "time": 631.0495936637466,
+        "addrs": 122,
+        "walkDist": 1754.0626399999999,
+        "prodDist": 871.8626399999999,
+        "walkQuality": 0.4970533093390553
+      }
+    ]
+  },
+  {
+    "hood": "Crest Park Duv St Fran",
+    "addrs": 567,
+    "segs": 74,
+    "n": 3,
+    "addrCounts": [
+      215,
+      223,
+      225
+    ],
+    "maxTime": 1210.892853474139,
+    "spread": 47.04528381135242,
+    "avgWalkQuality": 0.6478975949378499,
+    "times": [
+      {
+        "time": 1163.8475696627866,
+        "addrs": 215,
+        "walkDist": 7403.66798,
+        "prodDist": 4571.16798,
+        "walkQuality": 0.617419364610675
+      },
+      {
+        "time": 1198.8703031321252,
+        "addrs": 223,
+        "walkDist": 6988.91236,
+        "prodDist": 4672.312360000001,
+        "walkQuality": 0.6685321147738645
+      },
+      {
+        "time": 1210.892853474139,
+        "addrs": 225,
+        "walkDist": 7157.45148,
+        "prodDist": 4707.75148,
+        "walkQuality": 0.6577413054290101
+      }
+    ]
+  },
+  {
+    "hood": "Crest Park Duv St Fran",
+    "addrs": 567,
+    "segs": 74,
+    "n": 5,
+    "addrCounts": [
+      141,
+      134,
+      132,
+      135,
+      121
+    ],
+    "maxTime": 759.2708402736109,
+    "spread": 109.26002208088323,
+    "avgWalkQuality": 0.6859918104543029,
+    "times": [
+      {
+        "time": 759.2708402736109,
+        "addrs": 141,
+        "walkDist": 4522.38912,
+        "prodDist": 2708.7891200000004,
+        "walkQuality": 0.5989730313166861
+      },
+      {
+        "time": 726.7944180967239,
+        "addrs": 134,
+        "walkDist": 4732.67886,
+        "prodDist": 3195.47886,
+        "walkQuality": 0.6751945260870712
+      },
+      {
+        "time": 709.3809235569423,
+        "addrs": 132,
+        "walkDist": 4114.91236,
+        "prodDist": 2836.71236,
+        "walkQuality": 0.6893737002943119
+      },
+      {
+        "time": 715.3684147365894,
+        "addrs": 135,
+        "walkDist": 3363.9,
+        "prodDist": 2521,
+        "walkQuality": 0.7494277475549214
+      },
+      {
+        "time": 650.0108181927277,
+        "addrs": 121,
+        "walkDist": 3750.75148,
+        "prodDist": 2689.25148,
+        "walkQuality": 0.7169900470185244
+      }
+    ]
+  },
+  {
+    "hood": "Research Park",
+    "addrs": 584,
+    "segs": 289,
+    "n": 3,
+    "addrCounts": [
+      215,
+      179,
+      196
+    ],
+    "maxTime": 1495.2396104644185,
+    "spread": 375.9945983439336,
+    "avgWalkQuality": 0.2548490197604724,
+    "times": [
+      {
+        "time": 1495.2396104644185,
+        "addrs": 215,
+        "walkDist": 35018.56674,
+        "prodDist": 7598.56674,
+        "walkQuality": 0.21698680007141832
+      },
+      {
+        "time": 1197.3765469818793,
+        "addrs": 179,
+        "walkDist": 25197.037659999998,
+        "prodDist": 6128.337660000002,
+        "walkQuality": 0.24321659326360678
+      },
+      {
+        "time": 1119.245012120485,
+        "addrs": 196,
+        "walkDist": 11603.286860000004,
+        "prodDist": 3531.386860000001,
+        "walkQuality": 0.304343665946392
+      }
+    ]
+  },
+  {
+    "hood": "Research Park",
+    "addrs": 584,
+    "segs": 289,
+    "n": 5,
+    "addrCounts": [
+      121,
+      112,
+      136,
+      119,
+      102
+    ],
+    "maxTime": 982.3294407776311,
+    "spread": 423.02764766590667,
+    "avgWalkQuality": 0.2529345765565091,
+    "times": [
+      {
+        "time": 799.8873800552022,
+        "addrs": 121,
+        "walkDist": 16239.96538,
+        "prodDist": 3826.0653799999995,
+        "walkQuality": 0.2355956611035583
+      },
+      {
+        "time": 639.3859083163327,
+        "addrs": 112,
+        "walkDist": 6615.22774,
+        "prodDist": 2315.02774,
+        "walkQuality": 0.3499543524407823
+      },
+      {
+        "time": 982.3294407776311,
+        "addrs": 136,
+        "walkDist": 25193.1123,
+        "prodDist": 4416.712299999999,
+        "walkQuality": 0.1753142782600941
+      },
+      {
+        "time": 872.6603912156486,
+        "addrs": 119,
+        "walkDist": 23137.440400000003,
+        "prodDist": 5741.040400000001,
+        "walkQuality": 0.248127722891941
+      },
+      {
+        "time": 559.3017931117245,
+        "addrs": 102,
+        "walkDist": 4108.3184200000005,
+        "prodDist": 1050.41842,
+        "walkQuality": 0.2556808680861694
+      }
+    ]
+  },
+  {
+    "hood": "Monroe Park",
+    "addrs": 621,
+    "segs": 80,
+    "n": 3,
+    "addrCounts": [
+      230,
+      223,
+      235
+    ],
+    "maxTime": 1268.0555228609144,
+    "spread": 105.30816992679706,
+    "avgWalkQuality": 0.4376813387336403,
+    "times": [
+      {
+        "time": 1194.7923216128645,
+        "addrs": 230,
+        "walkDist": 3732.54416,
+        "prodDist": 1411.7441600000002,
+        "walkQuality": 0.3782257086544423
+      },
+      {
+        "time": 1162.7473529341173,
+        "addrs": 223,
+        "walkDist": 3978.78692,
+        "prodDist": 1869.68692,
+        "walkQuality": 0.4699138098101519
+      },
+      {
+        "time": 1268.0555228609144,
+        "addrs": 235,
+        "walkDist": 7754.31672,
+        "prodDist": 3605.0167199999996,
+        "walkQuality": 0.46490449773632664
+      }
+    ]
+  },
+  {
+    "hood": "Monroe Park",
+    "addrs": 621,
+    "segs": 80,
+    "n": 5,
+    "addrCounts": [
+      153,
+      137,
+      149,
+      127,
+      122
+    ],
+    "maxTime": 796.6709967598704,
+    "spread": 131.37601032041277,
+    "avgWalkQuality": 0.4391876092418586,
+    "times": [
+      {
+        "time": 796.6709967598704,
+        "addrs": 153,
+        "walkDist": 2639.1441600000003,
+        "prodDist": 1309.2441600000002,
+        "walkQuality": 0.4960866404508953
+      },
+      {
+        "time": 717.1161996879875,
+        "addrs": 137,
+        "walkDist": 2676.24292,
+        "prodDist": 1102.04292,
+        "walkQuality": 0.41178732758683956
+      },
+      {
+        "time": 756.6558027121085,
+        "addrs": 149,
+        "walkDist": 971.27804,
+        "prodDist": 402.77804000000003,
+        "walkQuality": 0.4146887126162144
+      },
+      {
+        "time": 690.2880628825153,
+        "addrs": 127,
+        "walkDist": 4607.15428,
+        "prodDist": 2343.25428,
+        "walkQuality": 0.5086120710505054
+      },
+      {
+        "time": 665.2949864394576,
+        "addrs": 122,
+        "walkDist": 4607.73122,
+        "prodDist": 1680.7312200000001,
+        "walkQuality": 0.3647632945048388
+      }
+    ]
+  },
+  {
+    "hood": "Oak Creek",
+    "addrs": 689,
+    "segs": 57,
+    "n": 3,
+    "addrCounts": [
+      218,
+      233,
+      239
+    ],
+    "maxTime": 1262.0781747269891,
+    "spread": 151.9245685827434,
+    "avgWalkQuality": 0.48210848958740793,
+    "times": [
+      {
+        "time": 1110.1536061442457,
+        "addrs": 218,
+        "walkDist": 1679.4,
+        "prodDist": 1162.6000000000001,
+        "walkQuality": 0.6922710491842325
+      },
+      {
+        "time": 1212.9638435137406,
+        "addrs": 233,
+        "walkDist": 3996.82708,
+        "prodDist": 1172.92708,
+        "walkQuality": 0.29346455488887446
+      },
+      {
+        "time": 1262.0781747269891,
+        "addrs": 239,
+        "walkDist": 5589.624300000001,
+        "prodDist": 2574.5243,
+        "walkQuality": 0.46058986468911683
+      }
+    ]
+  },
+  {
+    "hood": "Oak Creek",
+    "addrs": 689,
+    "segs": 57,
+    "n": 5,
+    "addrCounts": [
+      146,
+      97,
+      145,
+      160,
+      142
+    ],
+    "maxTime": 817.5771030841233,
+    "spread": 295.87166350654024,
+    "avgWalkQuality": 0.4817372416235644,
+    "times": [
+      {
+        "time": 742.8472674906997,
+        "addrs": 146,
+        "walkDist": 1070.5628,
+        "prodDist": 648.2628,
+        "walkQuality": 0.6055345842392431
+      },
+      {
+        "time": 521.7054395775831,
+        "addrs": 97,
+        "walkDist": 3058.66428,
+        "prodDist": 568.1642800000001,
+        "walkQuality": 0.18575568548503796
+      },
+      {
+        "time": 784.1122560902436,
+        "addrs": 145,
+        "walkDist": 4925.824300000001,
+        "prodDist": 2161.6243000000004,
+        "walkQuality": 0.43883503924409156
+      },
+      {
+        "time": 817.5771030841233,
+        "addrs": 160,
+        "walkDist": 1464.6999999999998,
+        "prodDist": 817,
+        "walkQuality": 0.5577934047927904
+      },
+      {
+        "time": 723.8221528861154,
+        "addrs": 142,
+        "walkDist": 1151.8,
+        "prodDist": 715,
+        "walkQuality": 0.6207674943566591
+      }
+    ]
+  },
+  {
+    "hood": "Charleston Meadows",
+    "addrs": 694,
+    "segs": 95,
+    "n": 3,
+    "addrCounts": [
+      258,
+      271,
+      256
+    ],
+    "maxTime": 1430.012169926797,
+    "spread": 66.1253656546262,
+    "avgWalkQuality": 0.4159520888797265,
+    "times": [
+      {
+        "time": 1363.8868042721708,
+        "addrs": 258,
+        "walkDist": 6156.9874,
+        "prodDist": 3687.7874000000006,
+        "walkQuality": 0.5989597120176015
+      },
+      {
+        "time": 1430.012169926797,
+        "addrs": 271,
+        "walkDist": 6250.764119999998,
+        "prodDist": 1689.1641200000001,
+        "walkQuality": 0.27023322070262357
+      },
+      {
+        "time": 1408.8010277211088,
+        "addrs": 256,
+        "walkDist": 10732.989640000002,
+        "prodDist": 4064.18964,
+        "walkQuality": 0.3786633339189545
+      }
+    ]
+  },
+  {
+    "hood": "Charleston Meadows",
+    "addrs": 694,
+    "segs": 95,
+    "n": 5,
+    "addrCounts": [
+      154,
+      149,
+      154,
+      159,
+      169
+    ],
+    "maxTime": 942.3153682947318,
+    "spread": 159.0221192847714,
+    "avgWalkQuality": 0.43604565197617706,
+    "times": [
+      {
+        "time": 834.9161593663746,
+        "addrs": 154,
+        "walkDist": 5409.463559999997,
+        "prodDist": 1364.06356,
+        "walkQuality": 0.2521624454754624
+      },
+      {
+        "time": 783.2932490099604,
+        "addrs": 149,
+        "walkDist": 3190.9764400000004,
+        "prodDist": 1759.6764400000006,
+        "walkQuality": 0.5514539117060985
+      },
+      {
+        "time": 792.4579090363615,
+        "addrs": 154,
+        "walkDist": 1871.4175599999999,
+        "prodDist": 877.9175599999999,
+        "walkQuality": 0.46911901371706693
+      },
+      {
+        "time": 853.4953380535221,
+        "addrs": 159,
+        "walkDist": 4874.416520000001,
+        "prodDist": 2963.8165200000003,
+        "walkQuality": 0.6080351377112105
+      },
+      {
+        "time": 942.3153682947318,
+        "addrs": 169,
+        "walkDist": 8109.289639999999,
+        "prodDist": 2428.38964,
+        "walkQuality": 0.29945775127104723
+      }
+    ]
+  }
+]
