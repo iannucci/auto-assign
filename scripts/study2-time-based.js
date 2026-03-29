@@ -384,7 +384,7 @@ console.log("----------------------|-------|------|---|--------------|---------|
 const allResults = [];
 
 const selected = [...hoodAddrs.entries()]
-    .filter(([_, addrs]) => addrs.length >= 50 && addrs.length <= 200)
+    .filter(([name, addrs]) => (addrs.length >= 50 && addrs.length <= 200) || name === "Fairmeadow")
     .sort((a, b) => a[1].length - b[1].length);
 
 for (const [hood, addrs] of selected) {
@@ -511,6 +511,78 @@ const s2vss1 = allResults.filter(r => r.results.bfs_sa && r.results.chainSlice).
 );
 if (s2vss1.length > 0) {
     console.log(`BFS+SA vs Chain(S1): avg improvement=${(s2vss1.reduce((s,v)=>s+v,0)/s2vss1.length*100).toFixed(1)}%`);
+}
+
+// Save trail data for Fairmeadow (for comparison with Study I Fig 7)
+const fmResult = allResults.find(r => r.hood === "Fairmeadow" && r.n === 3);
+if (fmResult) {
+    // Find the winning partitions
+    const winnerKey = fmResult.winner === "Chain(S1)" ? "chainSlice" :
+                      fmResult.winner === "BFS+SA" ? "bfs_sa" :
+                      fmResult.winner === "DFS" ? "dfs" : "bfs";
+    // We need the actual partitions, not just times. Re-run the winner.
+    // For simplicity, use the BFS+SA result (most interesting for Study II)
+    const fmSegs = getHoodSegments("Fairmeadow");
+    const fmAssignment = fireData.neighborhoodAssignments.find(a => a.hood === "Fairmeadow");
+    const fmHoodNodes = new Set();
+    for (const s of fmSegs) { fmHoodNodes.add(s.startNode); fmHoodNodes.add(s.endNode); }
+    let fmHuddleNode = null, fmHuddleDist = Infinity;
+    for (const nid of fmHoodNodes) {
+        for (const s of fmSegs) {
+            let lat, lon;
+            if (s.startNode === nid) { lat = s.polyline[0][0]; lon = s.polyline[0][1]; }
+            else if (s.endNode === nid) { lat = s.polyline[s.polyline.length-1][0]; lon = s.polyline[s.polyline.length-1][1]; }
+            else continue;
+            const R = 6371000, toRad = d => d * Math.PI / 180;
+            const dLat = toRad(lat - fmAssignment.stationLat), dLon = toRad(lon - fmAssignment.stationLon);
+            const a2 = Math.sin(dLat/2)**2 + Math.cos(toRad(fmAssignment.stationLat))*Math.cos(toRad(lat))*Math.sin(dLon/2)**2;
+            const d = R * 2 * Math.atan2(Math.sqrt(a2), Math.sqrt(1 - a2));
+            if (d < fmHuddleDist) { fmHuddleDist = d; fmHuddleNode = nid; }
+            break;
+        }
+    }
+    fmHoodNodes.add(fmHuddleNode);
+    precomputeDistances(fmHoodNodes);
+
+    // Run BFS+SA for trail data
+    const bfsParts = assignBFS(fmSegs, 3, fmHuddleNode);
+    const saParts = saImprove(bfsParts, fmHuddleNode);
+
+    const dataDir = path.join(__dirname, "..", "data");
+    for (let esw = 0; esw < saParts.length; esw++) {
+        // Segment polylines (blue)
+        const segPts = ["lon lat"];
+        for (const entry of saParts[esw]) {
+            const seg = segById.get(entry.segId);
+            if (!seg) continue;
+            const pl = entry.entryPort < 2 ? seg.polyline : [...seg.polyline].reverse();
+            for (const pt of pl) segPts.push(`${pt[1]} ${pt[0]}`);
+            segPts.push("");
+        }
+        fs.writeFileSync(path.join(dataDir, `fairmeadow-s2-esw${esw}-segments.dat`), segPts.join("\n") + "\n");
+
+        // Transition polylines (red) - just endpoints since we don't have prev matrix here
+        const transPts = ["lon lat"];
+        for (let i = 1; i < saParts[esw].length; i++) {
+            const prev = segById.get(saParts[esw][i-1].segId);
+            const curr = segById.get(saParts[esw][i].segId);
+            if (!prev || !curr) continue;
+            const prevExit = saParts[esw][i-1].exitPort;
+            const currEntry = saParts[esw][i].entryPort;
+            const exitPt = prevExit < 2 ? prev.polyline[0] : prev.polyline[prev.polyline.length-1];
+            const entryPt = currEntry < 2 ? curr.polyline[0] : curr.polyline[curr.polyline.length-1];
+            transPts.push(`${exitPt[1]} ${exitPt[0]}`);
+            transPts.push(`${entryPt[1]} ${entryPt[0]}`);
+            transPts.push("");
+        }
+        fs.writeFileSync(path.join(dataDir, `fairmeadow-s2-esw${esw}-transitions.dat`), transPts.join("\n") + "\n");
+    }
+
+    const s2Times = saParts.map(p => eswTime(p, fmHuddleNode));
+    console.log("\nFairmeadow Study II (BFS+SA, N=3) trail data saved:");
+    for (let k = 0; k < 3; k++) {
+        console.log(`  ESW ${k+1}: ${s2Times[k].addrs} addrs, ${s2Times[k].time.toFixed(0)}min, ${saParts[k].length} segs`);
+    }
 }
 
 // Save

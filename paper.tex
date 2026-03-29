@@ -708,6 +708,43 @@ Starting from BFS's result (max = 142\,min), SA searches for boundary transfers 
 
 Final result: ESW~1 = 124\,min (21 addrs), ESW~2 = 124\,min (21 addrs), ESW~3 = 75\,min (12 addrs). The two heaviest ESWs are now perfectly balanced.
 
+\subsection{Visual Comparison: Study~I vs.\ Study~II}
+
+Fig.~\ref{fig:s2-trails-fm} shows the BFS+SA assignment for Fairmeadow under Study~II's time metric ($N = 3$), for direct comparison with Study~I's result in Fig.~\ref{fig:trails-fm}. Study~I optimizes walking distance; Study~II optimizes finish time (walking + 5\,min/address assessment).
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=3 by 1, horizontal sep=0.8cm},
+    width=0.36\textwidth,
+    height=0.3\textwidth,
+    xlabel={Longitude},
+    ylabel={Latitude},
+    tick label style={font=\tiny},
+    label style={font=\small},
+    title style={font=\small\bfseries},
+]
+\nextgroupplot[title={ESW 1 (109a, 633\,min)}]
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/fairmeadow-s2-esw0-segments.dat};
+\addplot[unprodred, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-s2-esw0-transitions.dat};
+
+\nextgroupplot[title={ESW 2 (93a, 551\,min)}]
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/fairmeadow-s2-esw1-segments.dat};
+\addplot[unprodred, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-s2-esw1-transitions.dat};
+
+\nextgroupplot[title={ESW 3 (110a, 609\,min)}]
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/fairmeadow-s2-esw2-segments.dat};
+\addplot[unprodred, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-s2-esw2-transitions.dat};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Fairmeadow under Study~II (BFS+SA, $N=3$, time metric). Compare with Fig.~\ref{fig:trails-fm} (Study~I, distance metric). Study~II produces a different partition: address counts are less balanced (109/93/110 vs.\ Study~I's near-equal splits) but the \textcolor{unprodred}{red transitions} originate from the huddle point and radiate outward, reflecting the BFS fan-out pattern. The time spread is 82\,min (633 vs.\ 551\,min). Assessment time dominates: even the 82-min spread is only 13\% of the 633-min max, compared to the walking-distance differences that dominate Study~I.}
+\label{fig:s2-trails-fm}
+\end{figure*}
+
 \subsection{Results}
 
 We test BFS, DFS, BFS+SA, and Study~I's chain+slice (evaluated with the time metric) across 10 neighborhoods at $N = 3, 5$ (20 test cases), with $t_{\text{assess}} = 5$\,min and walking speed 5\,km/h. Huddle points are the nearest intersection node to each neighborhood's serving fire station (6 Palo Alto Fire Department stations, assigned by centroid proximity). Table~\ref{tab:study2wins} summarizes the results.
