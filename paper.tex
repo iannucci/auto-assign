@@ -895,8 +895,10 @@ Fig.~\ref{fig:hybrid} shows the key step on Midtown (5,140 addresses, 693 segmen
     scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
     label style={font=\small},
     title style={font=\small\bfseries},
+    xmin=-122.1402, xmax=-122.1113,
+    ymin=37.4173, ymax=37.4470,
 ]
-\nextgroupplot[title={Voronoi Partition Lines}]
+\nextgroupplot[title={Voronoi (1616/1855/1669)}]
 \addplot[only marks, mark=*, mark size=0.15pt, gray!20] table[x=lon,y=lat] {data/midtown-all-addrs-sampled.dat};
 \addplot[prodblue, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-voronoi-cell0.dat};
 \addplot[unprodred, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-voronoi-cell1.dat};
@@ -904,12 +906,11 @@ Fig.~\ref{fig:hybrid} shows the key step on Midtown (5,140 addresses, 693 segmen
 \addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/midtown-voronoi-straight-lines.dat};
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/midtown-voronoi-seeds.dat};
 
-\nextgroupplot[title={Segment-Aligned Boundary}]
+\nextgroupplot[title={Segments Reassigned (1656/1780/1704)}]
 \addplot[only marks, mark=*, mark size=0.15pt, gray!20] table[x=lon,y=lat] {data/midtown-all-addrs-sampled.dat};
 \addplot[prodblue, semithick, opacity=0.5] table[x=lon,y=lat] {data/midtown-after-cell0.dat};
 \addplot[unprodred, semithick, opacity=0.5] table[x=lon,y=lat] {data/midtown-after-cell1.dat};
 \addplot[idealgreen!70!black, semithick, opacity=0.5] table[x=lon,y=lat] {data/midtown-after-cell2.dat};
-\addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/midtown-voronoi-boundary.dat};
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/midtown-voronoi-seeds.dat};
 \end{groupplot}
 \end{tikzpicture}
