@@ -899,8 +899,7 @@ Fig.~\ref{fig:hybrid} shows the key step on Midtown (5,140 addresses, 693 segmen
 \addplot[prodblue, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-voronoi-cell0.dat};
 \addplot[unprodred, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-voronoi-cell1.dat};
 \addplot[idealgreen!70!black, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-voronoi-cell2.dat};
-\addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/midtown-voronoi-lines.dat};
-\addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/midtown-voronoi-boundary.dat};
+\addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/midtown-voronoi-straight-lines.dat};
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/midtown-voronoi-seeds.dat};
 
 \nextgroupplot[title={Segment-Aligned Boundary}]
@@ -912,7 +911,7 @@ Fig.~\ref{fig:hybrid} shows the key step on Midtown (5,140 addresses, 693 segmen
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/midtown-voronoi-seeds.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Midtown ($N=3$, 5,140 addresses). Left: raw Voronoi partition. \textcolor{voronoiorange}{Orange lines} show the Voronoi cell boundaries --- smooth curves where the road-network distance to two seeds is equal. These lines cut through 14 segments, splitting them between cells. Right: after assigning each split segment wholly to one cell, the boundary becomes a \textcolor{voronoiorange}{zig-zag} that follows segment edges. No segment is shared. Black diamonds = Voronoi seeds. The segment-aligned partition preserves the Voronoi structure while ensuring each ESW owns complete, walkable streets.}
+\caption{Midtown ($N=3$, 5,140 addresses). Left: Voronoi partition with \textcolor{voronoiorange}{orange} straight-line cell boundaries extending from the circumcenter to the map edges. These geometric boundaries cut through road segments, splitting streets between cells. Right: after reassigning each split segment wholly to one cell (by closer endpoint), the boundary becomes a \textcolor{voronoiorange}{zig-zag} that follows segment edges. No segment is shared. Black diamonds = Voronoi seeds. The segment-aligned partition preserves the Voronoi structure while ensuring each ESW owns complete, walkable streets.}
 \label{fig:hybrid}
 \end{figure*}
 
