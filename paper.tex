@@ -876,16 +876,15 @@ Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for compari
 
 Can post-processing rescue the Voronoi partition? We attempt contiguity-preserving boundary transfers: iteratively move boundary segments from the heaviest cell to a lighter adjacent cell, provided the transfer does not disconnect the source cell. Across 38 test cases, this improves max time by \textbf{3.9\% on average} (up to 37.8\% on Classic Communities at $N = 5$). However, most cases show \textbf{0\% improvement} because Voronoi cells in road networks tend to be \emph{tree-shaped} --- removing any interior segment disconnects the cell. Only cells with cycles (redundant connections) allow productive transfers.
 
-Fig.~\ref{fig:hybrid} shows a balanced Voronoi on Midtown --- a rectilinear grid neighborhood with 5,140 addresses and 693 segments. Greedy seed search achieves near-perfect balance (1706/1748/1686). On this regular grid, only \textbf{14 of 693 segments (2\%)} straddle Voronoi cell boundaries, shown in \textcolor{voronoiorange}{orange}. This is far better than Fairmeadow's cul-de-sac layout, where boundary fragmentation was severe. The rectilinear grid aligns well with Voronoi boundaries because streets run in cardinal directions and cells split cleanly along block boundaries.
+Fig.~\ref{fig:hybrid} shows the key step on Midtown (5,140 addresses, 693 segments, rectilinear grid). The left panel shows the raw Voronoi partition: \textcolor{voronoiorange}{orange lines} trace the Voronoi cell boundaries where the road-network distance to two seeds is equal. These boundaries cut \emph{through} 14 segments, splitting them between cells. The right panel shows the result after each split segment has been assigned wholly to one cell (the cell owning the segment's closer endpoint). The boundary becomes a \textcolor{voronoiorange}{zig-zag} that follows segment edges rather than cutting through them. No segment is shared; each ESW owns complete, walkable streets.
 
-However, even 14 boundary segments create problems: each is a street that two ESWs must share, with one ESW walking past the other's addresses. And within each cell, the ESW still needs a walk-ordered route --- the Voronoi partition only determines \emph{which} segments to assign, not the walking order. Study~I's chain+slice remains necessary for the intra-cell routing.
-
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \begin{tikzpicture}
-\begin{axis}[
-    width=\columnwidth,
-    height=0.7\columnwidth,
+\begin{groupplot}[
+    group style={group size=2 by 1, horizontal sep=2.0cm, ylabels at=edge left},
+    width=0.46\textwidth,
+    height=0.38\textwidth,
     xlabel={Longitude},
     ylabel={Latitude},
     tick label style={font=\tiny},
@@ -894,19 +893,28 @@ However, even 14 boundary segments create problems: each is a street that two ES
     scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
     label style={font=\small},
     title style={font=\small\bfseries},
-    title={Midtown Balanced Voronoi (1706/1748/1686)},
 ]
+\nextgroupplot[title={Voronoi Partition Lines}]
 \addplot[only marks, mark=*, mark size=0.15pt, gray!20] table[x=lon,y=lat] {data/midtown-all-addrs.dat};
-\addplot[prodblue, semithick, opacity=0.5] table[x=lon,y=lat] {data/midtown-voronoi-cell0.dat};
-\addplot[unprodred, semithick, opacity=0.5] table[x=lon,y=lat] {data/midtown-voronoi-cell1.dat};
-\addplot[idealgreen!70!black, semithick, opacity=0.5] table[x=lon,y=lat] {data/midtown-voronoi-cell2.dat};
-\addplot[voronoiorange, very thick, opacity=0.9] table[x=lon,y=lat] {data/midtown-voronoi-boundary.dat};
+\addplot[prodblue, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-voronoi-cell0.dat};
+\addplot[unprodred, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-voronoi-cell1.dat};
+\addplot[idealgreen!70!black, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-voronoi-cell2.dat};
+\addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/midtown-voronoi-lines.dat};
+\addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/midtown-voronoi-boundary.dat};
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/midtown-voronoi-seeds.dat};
-\end{axis}
+
+\nextgroupplot[title={Segment-Aligned Boundary}]
+\addplot[only marks, mark=*, mark size=0.15pt, gray!20] table[x=lon,y=lat] {data/midtown-all-addrs.dat};
+\addplot[prodblue, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-after-cell0.dat};
+\addplot[unprodred, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-after-cell1.dat};
+\addplot[idealgreen!70!black, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-after-cell2.dat};
+\addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/midtown-zigzag-boundary.dat};
+\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/midtown-voronoi-seeds.dat};
+\end{groupplot}
 \end{tikzpicture}
-\caption{Midtown balanced Voronoi ($N=3$, 5,140 addresses, 693 segments). \textcolor{prodblue}{Blue}, \textcolor{unprodred}{red}, and \textcolor{idealgreen!70!black}{green} show the three cells (1706/1748/1686 addresses). \textcolor{voronoiorange}{Orange} = 14 boundary segments (2\%) whose endpoints belong to different cells. On this rectilinear grid, Voronoi boundaries align with block edges, producing far less fragmentation than Fairmeadow's cul-de-sacs (Fig.~\ref{fig:voronoi-fm}). Black diamonds = Voronoi seeds. Even here, boundary segments create shared streets where two ESWs' territories interleave.}
+\caption{Midtown ($N=3$, 5,140 addresses). Left: raw Voronoi partition. \textcolor{voronoiorange}{Orange lines} show the Voronoi cell boundaries --- smooth curves where the road-network distance to two seeds is equal. These lines cut through 14 segments, splitting them between cells. Right: after assigning each split segment wholly to one cell, the boundary becomes a \textcolor{voronoiorange}{zig-zag} that follows segment edges. No segment is shared. Black diamonds = Voronoi seeds. The segment-aligned partition preserves the Voronoi structure while ensuring each ESW owns complete, walkable streets.}
 \label{fig:hybrid}
-\end{figure}
+\end{figure*}
 
 This confirms the negative finding: \textbf{the partitioning unit must be the road segment, not the geographic cell.} Algorithms that build assignments as walk-ordered segment sequences (chain+slice, bisect, 2-opt) outperform those that partition space first (Voronoi, BFS), because they respect the sequential nature of walking. The hybrid's failure to rescue Voronoi demonstrates that this is a structural limitation, not a parameter-tuning issue.
 
