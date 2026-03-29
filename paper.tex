@@ -970,6 +970,91 @@ The resolution depends on operational context. If ESWs are \emph{driven} to the 
 \section{Discussion}
 %% ==================================================================
 
+\subsection{Cross-Study Comparison}
+
+Table~\ref{tab:comparison} compares all methods on the same 5 neighborhoods at $N = 3$. Productive walking (within-segment) is nearly identical across methods --- the same addresses must be visited regardless of partitioning strategy. The differentiator is \emph{unproductive walking} (inter-segment transitions), which varies by up to 3$\times$ between the best and worst methods on the same neighborhood.
+
+\begin{table*}[htbp]
+\caption{Cross-study comparison ($N=3$). Productive distance is constant (same segments visited); unproductive distance varies by method. Walk quality = productive / total walking. Study~I oracle is the best of NN/RH/2-opt/Bisect. Time includes 5\,min/address assessment.}
+\label{tab:comparison}
+\begin{center}
+\begin{tabular}{l r | r r r | r r r | r r}
+\toprule
+& & \multicolumn{3}{c|}{\textbf{Study~I Oracle}} & \multicolumn{3}{c|}{\textbf{Study~III Voronoi}} & \multicolumn{2}{c}{\textbf{Comparison}} \\
+\textbf{Neighborhood} & \textbf{Addrs} & Prod & Unprod & WQ & Prod & Unprod & WQ & $\Delta$Unprod & Winner \\
+& & (km) & (km) & (\%) & (km) & (km) & (\%) & & \\
+\midrule
+Fairmeadow      & 307 & 6.7 & 2.2 & 75\% & 6.6 & 4.6 & 59\% & +109\% & S1 \\
+Classic Comm.   & 104 & 1.5 & 0.4 & 80\% & 1.4 & 0.7 & 68\% & +90\%  & S1 \\
+Meadow Park     & 142 & 3.2 & 4.3 & 43\% & 3.2 & 4.7 & 41\% & +9\%   & S1 \\
+Greenacres I    & 108 & 2.6 & 2.4 & 52\% & 2.6 & 3.6 & 43\% & +47\%  & S1 \\
+Walnut Grove    & 138 & 2.8 & 1.4 & 66\% & 2.8 & 2.2 & 56\% & +52\%  & S1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table*}
+
+Study~I's oracle consistently produces less unproductive walking (43--80\% walk quality vs.\ Voronoi's 41--68\%). However, the gap varies widely: on Meadow Park, the methods are within 9\%; on Fairmeadow, Study~I's advantage is 109\% less unproductive walking. Voronoi's advantage is in \emph{address balance} --- achieving near-perfect splits (107/104/101 on Fairmeadow) that Study~I's chain+slice cannot match when the chain ordering creates uneven address distribution across cut points.
+
+Fig.~\ref{fig:comparison} shows the productive/unproductive breakdown visually.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar stacked,
+    bar width=8pt,
+    xlabel={Neighborhood},
+    ylabel={Total Walk Distance (km)},
+    symbolic x coords={FM, CC, MP, GI, WG},
+    xtick=data,
+    x tick label style={font=\small},
+    ymin=0,
+    width=\columnwidth,
+    height=6cm,
+    legend style={at={(0.02,0.98)},anchor=north west,font=\small},
+    enlarge x limits=0.15,
+    title={Study~I Oracle vs.\ Study~III Voronoi ($N=3$)},
+    title style={font=\small\bfseries},
+]
+% Study I Oracle - productive
+\addplot[fill=prodblue, draw=prodblue!80] coordinates {(FM,6.7) (CC,1.5) (MP,3.2) (GI,2.6) (WG,2.8)};
+% Study I Oracle - unproductive
+\addplot[fill=prodblue!30, draw=prodblue!50] coordinates {(FM,2.2) (CC,0.4) (MP,4.3) (GI,2.4) (WG,1.4)};
+% Study III Voronoi - productive (offset)
+% Can't easily do side-by-side stacked bars in pgfplots, so use a grouped bar approach
+\legend{S1 Productive, S1 Unproductive}
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    ybar stacked,
+    bar width=8pt,
+    xlabel={Neighborhood},
+    ylabel={Total Walk Distance (km)},
+    symbolic x coords={FM, CC, MP, GI, WG},
+    xtick=data,
+    x tick label style={font=\small},
+    ymin=0,
+    width=\columnwidth,
+    height=6cm,
+    legend style={at={(0.02,0.98)},anchor=north west,font=\small},
+    enlarge x limits=0.15,
+    title={Study~III Voronoi ($N=3$)},
+    title style={font=\small\bfseries},
+]
+% Study III Voronoi - productive
+\addplot[fill=voronoiorange, draw=voronoiorange!80] coordinates {(FM,6.6) (CC,1.4) (MP,3.2) (GI,2.6) (WG,2.8)};
+% Study III Voronoi - unproductive
+\addplot[fill=voronoiorange!30, draw=voronoiorange!50] coordinates {(FM,4.6) (CC,0.7) (MP,4.7) (GI,3.6) (WG,2.2)};
+\legend{S3 Productive, S3 Unproductive}
+\end{axis}
+\end{tikzpicture}
+\caption{Productive (\textcolor{prodblue}{dark}) vs.\ unproductive (\textcolor{prodblue!30}{light}) walking for Study~I oracle (top, \textcolor{prodblue}{blue}) and Study~III Voronoi (bottom, \textcolor{voronoiorange}{orange}) on 5 neighborhoods at $N=3$. FM=Fairmeadow, CC=Classic Communities, MP=Meadow Park, GI=Greenacres~I, WG=Walnut Grove. Productive walking is nearly identical (same segments visited). Unproductive walking is consistently lower for Study~I, but Voronoi achieves better address balance.}
+\label{fig:comparison}
+\end{figure}
+
 \subsection{The Progressive Discovery of Constraints}
 
 The four studies form a discovery arc. Each optimized a metric that seemed complete and discovered, through simulation, a constraint that the metric failed to capture:

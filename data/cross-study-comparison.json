@@ -1,0 +1,244 @@
+[
+  {
+    "hood": "Greater Miranda",
+    "addrs": 54,
+    "s1": {
+      "winner": "ChainRH",
+      "maxWalk": 993,
+      "unprodPct": "49",
+      "prodDist": 1284,
+      "unprodDist": 1217
+    },
+    "s2": {
+      "winner": "Chain(S1)",
+      "maxTime": "115"
+    },
+    "s3": {
+      "maxTime": "127",
+      "spread": "50",
+      "wq": "67",
+      "prodDist": 1337,
+      "unprodDist": 800
+    }
+  },
+  {
+    "hood": "Evergreen Park",
+    "addrs": 62,
+    "s1": {
+      "winner": "ChainRH",
+      "maxWalk": 1294,
+      "unprodPct": "77",
+      "prodDist": 602,
+      "unprodDist": 1964
+    },
+    "s2": {
+      "winner": "BFS+SA",
+      "maxTime": "222"
+    },
+    "s3": {
+      "maxTime": "245",
+      "spread": "109",
+      "wq": "47",
+      "prodDist": 602,
+      "unprodDist": 1862
+    }
+  },
+  {
+    "hood": "Palo Alto",
+    "addrs": 77,
+    "s1": {
+      "winner": "Bisect",
+      "maxWalk": 13851,
+      "unprodPct": "87",
+      "prodDist": 4723,
+      "unprodDist": 31465
+    },
+    "s2": {
+      "winner": "Chain(S1)",
+      "maxTime": "720"
+    },
+    "s3": {
+      "maxTime": "717",
+      "spread": "157",
+      "wq": "29",
+      "prodDist": 4756,
+      "unprodDist": 27940
+    }
+  },
+  {
+    "hood": "Palo Alto Hills",
+    "addrs": 85,
+    "s1": {
+      "winner": "Bisect",
+      "maxWalk": 3674,
+      "unprodPct": "62",
+      "prodDist": 3669,
+      "unprodDist": 5935
+    },
+    "s2": {
+      "winner": "Chain(S1)",
+      "maxTime": "209"
+    },
+    "s3": {
+      "maxTime": "200",
+      "spread": "31",
+      "wq": "41",
+      "prodDist": 3726,
+      "unprodDist": 5938
+    }
+  },
+  {
+    "hood": "Classic Communities",
+    "addrs": 104,
+    "s1": {
+      "winner": "ChainRH",
+      "maxWalk": 837,
+      "unprodPct": "35",
+      "prodDist": 1444,
+      "unprodDist": 790
+    },
+    "s2": {
+      "winner": "Chain(S1)",
+      "maxTime": "193"
+    },
+    "s3": {
+      "maxTime": "216",
+      "spread": "83",
+      "wq": "68",
+      "prodDist": 1432,
+      "unprodDist": 680
+    }
+  },
+  {
+    "hood": "Greenacres I",
+    "addrs": 108,
+    "s1": {
+      "winner": "Bisect",
+      "maxWalk": 2412,
+      "unprodPct": "48",
+      "prodDist": 2645,
+      "unprodDist": 2433
+    },
+    "s2": {
+      "winner": "Chain(S1)",
+      "maxTime": "256"
+    },
+    "s3": {
+      "maxTime": "235",
+      "spread": "8",
+      "wq": "47",
+      "prodDist": 2645,
+      "unprodDist": 3569
+    }
+  },
+  {
+    "hood": "Walnut Grove",
+    "addrs": 138,
+    "s1": {
+      "winner": "ChainRH",
+      "maxWalk": 1849,
+      "unprodPct": "34",
+      "prodDist": 2798,
+      "unprodDist": 1449
+    },
+    "s2": {
+      "winner": "Chain(S1)",
+      "maxTime": "264"
+    },
+    "s3": {
+      "maxTime": "255",
+      "spread": "3",
+      "wq": "59",
+      "prodDist": 2823,
+      "unprodDist": 2195
+    }
+  },
+  {
+    "hood": "Meadow Park",
+    "addrs": 142,
+    "s1": {
+      "winner": "TwoOpt",
+      "maxWalk": 3595,
+      "unprodPct": "57",
+      "prodDist": 3194,
+      "unprodDist": 4284
+    },
+    "s2": {
+      "winner": "Chain(S1)",
+      "maxTime": "295"
+    },
+    "s3": {
+      "maxTime": "300",
+      "spread": "35",
+      "wq": "52",
+      "prodDist": 3221,
+      "unprodDist": 4690
+    }
+  },
+  {
+    "hood": "Palo Alto Central",
+    "addrs": 145,
+    "s1": {
+      "winner": "ChainNN",
+      "maxWalk": 377,
+      "unprodPct": "24",
+      "prodDist": 669,
+      "unprodDist": 214
+    },
+    "s2": {
+      "winner": "DFS",
+      "maxTime": "347"
+    },
+    "s3": {
+      "maxTime": "351",
+      "spread": "38",
+      "wq": "42",
+      "prodDist": 656,
+      "unprodDist": 961
+    }
+  },
+  {
+    "hood": "Charleston Gardens",
+    "addrs": 194,
+    "s1": {
+      "winner": "ChainRH",
+      "maxWalk": 2613,
+      "unprodPct": "45",
+      "prodDist": 3911,
+      "unprodDist": 3213
+    },
+    "s2": {
+      "winner": "DFS",
+      "maxTime": "449"
+    },
+    "s3": {
+      "maxTime": "522",
+      "spread": "168",
+      "wq": "44",
+      "prodDist": 3894,
+      "unprodDist": 5022
+    }
+  },
+  {
+    "hood": "Fairmeadow",
+    "addrs": 307,
+    "s1": {
+      "winner": "TwoOpt",
+      "maxWalk": 3124,
+      "unprodPct": "25",
+      "prodDist": 6748,
+      "unprodDist": 2192
+    },
+    "s2": {
+      "winner": "DFS",
+      "maxTime": "575"
+    },
+    "s3": {
+      "maxTime": "571",
+      "spread": "12",
+      "wq": "63",
+      "prodDist": 6618,
+      "unprodDist": 4559
+    }
+  }
+]
