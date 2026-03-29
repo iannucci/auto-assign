@@ -856,7 +856,7 @@ Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for compari
 \addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-unbal-cell0.dat};
 \addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-unbal-cell1.dat};
 \addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-unbal-cell2.dat};
-\addplot[voronoiorange, very thick, opacity=0.8] table[x=lon,y=lat] {data/voronoi-fm-unbal-boundary.dat};
+\addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/voronoi-fm-unbal-straight-lines.dat};
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-unbal-seeds.dat};
 
 \nextgroupplot[title={Balanced Seeds (104/102/106)}]
@@ -864,7 +864,7 @@ Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for compari
 \addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell0.dat};
 \addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell1.dat};
 \addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell2.dat};
-\addplot[voronoiorange, very thick, opacity=0.8] table[x=lon,y=lat] {data/voronoi-fm-bal-boundary.dat};
+\addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/voronoi-fm-bal-straight-lines.dat};
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-bal-seeds.dat};
 \end{groupplot}
 \end{tikzpicture}
