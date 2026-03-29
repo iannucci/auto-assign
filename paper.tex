@@ -31,7 +31,7 @@ bob@rail.com}}
 \maketitle
 
 \begin{abstract}
-During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. Minimizing the worst-case worker walking distance while balancing workloads is critical for rapid response. We model this as a balanced partitioning problem over \emph{road-network segments} --- uninterrupted stretches of roadway between intersections --- with walking distances constrained to the street network. Each segment carries a precomputed cost matrix that captures all traversal options as a function of entry/exit port, street width, and address distribution. We evaluate four partitioning strategies across 33 neighborhoods in Palo Alto, California (54--1,476 addresses, 9--289 road segments) at team sizes $N = 3, 5, 7, 10$, yielding 124 test cases. No single algorithm dominates: the winning strategy depends on team size $N$ --- 2-opt local search wins at small $N$ ($\leq 5$), recursive bisection wins at large $N$ ($\geq 7$). Compared to random assignment, the oracle approach reduces worst-case walking distance by 37\% on average. We achieve overhead ratios averaging $1.5\times$ the theoretical ideal. Unproductive walking (inter-segment transitions) accounts for 46\% of total distance on average. A second study reformulates the objective as minimizing worst-case \emph{finish time} from fire station huddle points, incorporating per-address assessment time. When assessment time dominates walking ($\sim$8$\times$), the strategy choice matters less than address count balance.
+During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. We model this as a balanced partitioning problem over \emph{road-network segments} with walking distances constrained to the street network. Each segment carries a precomputed cost matrix capturing all traversal options. Through four progressive studies, we discover that the problem's constraints are in fundamental tension. Study~I evaluates four partitioning strategies across 33 Palo Alto neighborhoods (124 test cases): no single algorithm dominates; 2-opt wins at small team sizes, bisection at large. An oracle that runs all strategies reduces worst-case walk by 37\% vs.\ random. Study~II reformulates the objective as minimizing finish time from fire station huddle points: when assessment time dominates walking ($\sim$8$\times$), address count balance matters more than routing --- but round-robin (BFS) assignment produces twice the walking of chain-based approaches, revealing that \emph{walking quality} must be a constraint. Study~III tests road-network Voronoi partitioning: despite guaranteeing topological contiguity, it underperforms because cell boundaries fragment walking paths. Study~IV formulates all discovered constraints simultaneously (walkable contiguity, walking quality $\geq$ 50\%, time balance): only 6\% of cases are feasible, because the walk from fire station to neighborhood dominates the quality budget. The resolution is operational, not algorithmic: whether ESWs are driven to the neighborhood determines which constraints bind.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -48,7 +48,9 @@ In the ES-Link system~\cite{eslink}, a Neighborhood Preparedness Coordinator (NP
 
 The problem combines elements of the Capacitated Vehicle Routing Problem (CVRP)~\cite{toth2014} and balanced graph partitioning~\cite{andreev2006}. Unlike classical VRP, our ``vehicles'' (ESWs on foot) start from arbitrary positions, there is no depot, and the primary constraint is workload balance rather than vehicle capacity. The general problem is NP-hard~\cite{garey1979}, so we seek practical heuristics that produce good solutions in real-time.
 
-A key constraint distinguishes our problem from the standard VRP: \textbf{ESWs must walk on streets.} They cannot jump between non-adjacent addresses, cut through properties, or teleport across blocks. Straight-line (haversine) distance --- the standard metric in geographic partitioning --- is an unreliable proxy for actual walking distance. Our formulation uses road-network distances throughout, and we demonstrate empirically that this changes which algorithm wins (Section~\ref{sec:haversine-vs-road}).
+A key constraint distinguishes our problem from the standard VRP: \textbf{ESWs must walk on streets.} They cannot jump between non-adjacent addresses, cut through properties, or teleport across blocks. Straight-line (haversine) distance --- the standard metric in geographic partitioning --- is an unreliable proxy for actual walking distance. Our formulation uses road-network distances throughout.
+
+We present the work as four progressive studies, each of which optimizes a metric and discovers a constraint that was not explicit in the previous formulation. Study~I minimizes walk distance and discovers that time balance matters. Study~II minimizes finish time from fire station huddle points and discovers that walking quality (the ratio of productive to total walking) must be a constraint, not just a cost. Study~III tests Voronoi partitioning and discovers that topological contiguity does not imply walkable contiguity. Study~IV formulates all discovered constraints simultaneously and reveals they are in fundamental tension --- the resolution depends on operational decisions (whether ESWs walk or are driven to the neighborhood) rather than algorithmic improvements.
 
 \subsection{Contributions}
 
@@ -903,21 +905,28 @@ The resolution depends on operational context. If ESWs are \emph{driven} to the 
 \section{Discussion}
 %% ==================================================================
 
-\subsection{Why the Winner Depends on Team Size}
+\subsection{The Progressive Discovery of Constraints}
 
-At small $N$ ($\leq 5$), each partition contains many segments, and the quality of the \emph{ordering} within each partition dominates the cost. 2-opt local search directly improves this ordering by swapping segment pairs to reduce transitions. At large $N$ ($\geq 7$), partitions are smaller, ordering matters less, and the quality of the \emph{partition boundaries} dominates. Bisection excels here because its axis-aligned cuts produce compact geographic regions where most segments are adjacent. The RH chain is competitive across all $N$ because its spiral pattern balances both concerns.
+The four studies form a discovery arc. Each optimized a metric that seemed complete and discovered, through simulation, a constraint that the metric failed to capture:
 
-\subsection{The Unproductive Walking Bottleneck}
+\begin{enumerate}
+\item Study~I optimized walk distance $\to$ discovered that ESWs must finish together (time balance).
+\item Study~II optimized finish time $\to$ discovered that ESWs reject assignments with excessive purposeless walking (walking quality).
+\item Study~III guaranteed geographic contiguity $\to$ discovered that topological contiguity does not imply walkable contiguity.
+\item Study~IV imposed all constraints simultaneously $\to$ discovered they are in fundamental tension; the resolution is operational (transport mode), not algorithmic.
+\end{enumerate}
 
-That 46\% of walking is unproductive has two implications:
+This progressive structure is itself a finding: \textbf{no single-metric optimization can capture the full problem.} The constraints interact in ways that are not visible until they are all active. The constraint-solver formulation (Study~IV) makes the tension explicit and identifies the operational lever (drive vs.\ walk to neighborhood) that determines which constraints bind.
 
-\textbf{For algorithm design:} The success of 2-opt at small $N$ confirms that segment ordering is the key lever. The cost matrix already optimizes within-segment traversal to near-optimality; the remaining gains are in inter-segment routing. Future work should explore more sophisticated TSP variants on segment endpoints.
+\subsection{Walk-Ordered Sequences vs.\ Geographic Partitions}
 
-\textbf{For practitioners:} When manually adjusting assignments, prioritize geographic contiguity (\textcolor{unprodred}{minimizing red transitions} in Figs.~\ref{fig:trails-fm}--\ref{fig:trails-cp}) over address-count balance. A slightly unbalanced but contiguous assignment produces less total walking.
+Across all four studies, algorithms that build assignments as walk-ordered sequences of segments (chain+slice, 2-opt, DFS) consistently outperform those that partition geographic space first (BFS, Voronoi, bisect at small $N$). The reason: walking is inherently sequential --- an ESW visits one address, then the next, along a street. Algorithms that respect this sequential structure produce lower unproductive walking because consecutive segments in the chain are geographically adjacent.
 
 \subsection{Practical Considerations}
 
-The oracle (including 2-opt) executes in the browser in $<$1\,s for neighborhoods up to 289 segments (1,476 addresses). The one-time Dijkstra precomputation (1--14\,s per neighborhood) can be cached. The NPC retains the ability to manually adjust assignments after auto-generation.
+The Study~I oracle (including 2-opt) executes in the browser in $<$1\,s for neighborhoods up to 289 segments (1,476 addresses). The one-time Dijkstra precomputation (1--14\,s per neighborhood) can be cached. The NPC retains the ability to manually adjust assignments after auto-generation.
+
+For deployment, we recommend: (1)~use the Study~I oracle for initial assignment; (2)~evaluate the result with Study~II's time metric to check finish-time spread; (3)~if ESWs are walked from the fire station, accept that walking quality will be low for distant neighborhoods and communicate this to ESWs; (4)~if ESWs are driven to the neighborhood fan-out point, walking quality improves substantially and the Study~I assignment is near-optimal.
 
 \subsection{Limitations}
 
@@ -926,6 +935,8 @@ The oracle (including 2-opt) executes in the browser in $<$1\,s for neighborhood
 \textbf{No field validation.} ESWs have not yet been observed using these assignments. A structured field trial is the most important next step.
 
 \textbf{Equal service time.} All addresses are treated equally. Multi-unit buildings and high-rises require different assessment times, which Study~II's time metric could accommodate with per-address weights.
+
+\textbf{Flat terrain.} Walking speed is assumed constant (5\,km/h). In hilly environments, a time-based metric with elevation-adjusted speed would be needed.
 
 %% ==================================================================
 \section{Related Work}
