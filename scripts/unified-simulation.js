@@ -638,6 +638,39 @@ function runOracle(segs, n) {
     return { parts: best.parts, winner: best.name };
 }
 
+
+// ============================================================
+// Random baseline: shuffle segments, slice, NN chain within each
+// ============================================================
+function runRandom(segs, n, iterations = 30) {
+    let bestParts = null, bestScore = Infinity;
+    for (let iter = 0; iter < iterations; iter++) {
+        const shuffled = [...segs];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        const totalAddrs = shuffled.reduce((s, seg) => s + (seg.addressCount || 0), 0);
+        const target = Math.ceil(totalAddrs / n);
+        const groups = Array.from({ length: n }, () => []);
+        let gi = 0, count = 0;
+        for (const seg of shuffled) {
+            groups[gi].push(seg);
+            count += seg.addressCount || 0;
+            if (count >= target && gi < n - 1) { gi++; count = 0; }
+        }
+        const parts = groups.map(group => {
+            if (group.length === 0) return [];
+            const chain = chainNN(group, 0);
+            return chain;
+        });
+        const ev = evaluate(parts, null);
+        const score = 2 * ev.maxTime + ev.totalWalk / SPEED + 5000 * ev.timeSpread;
+        if (score < bestScore) { bestScore = score; bestParts = parts; }
+    }
+    return bestParts;
+}
+
 // ============================================================
 // Run unified simulation
 // ============================================================
@@ -655,7 +688,7 @@ function getHoodSegments(hood) {
 }
 
 const NEIGHBORHOODS = ["Palo Alto Central", "Fairmeadow", "Community Center", "Research Park", "Southgate"];
-const N_VALUES = [3, 5];
+const N_VALUES = [3, 5, 7, 10];
 
 const allResults = [];
 
@@ -703,6 +736,7 @@ for (const hood of NEIGHBORHOODS) {
             { name: "BFS", run: () => runBFS(segs, n, huddleNode) },
             { name: "DFS", run: () => runDFS(segs, n, huddleNode) },
             { name: "BFS+SA", run: () => runBFSplusSA(segs, n, huddleNode) },
+            { name: "Random", run: () => runRandom(segs, n) },
         ];
 
         const results = {};
