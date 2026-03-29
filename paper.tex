@@ -911,6 +911,7 @@ Fig.~\ref{fig:hybrid} shows the key step on Midtown (5,140 addresses, 693 segmen
 \addplot[prodblue, semithick, opacity=0.5] table[x=lon,y=lat] {data/midtown-after-cell0.dat};
 \addplot[unprodred, semithick, opacity=0.5] table[x=lon,y=lat] {data/midtown-after-cell1.dat};
 \addplot[idealgreen!70!black, semithick, opacity=0.5] table[x=lon,y=lat] {data/midtown-after-cell2.dat};
+\addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/midtown-voronoi-straight-lines.dat};
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/midtown-voronoi-seeds.dat};
 \end{groupplot}
 \end{tikzpicture}
