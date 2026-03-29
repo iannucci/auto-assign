@@ -926,7 +926,21 @@ Across all four studies, algorithms that build assignments as walk-ordered seque
 
 The Study~I oracle (including 2-opt) executes in the browser in $<$1\,s for neighborhoods up to 289 segments (1,476 addresses). The one-time Dijkstra precomputation (1--14\,s per neighborhood) can be cached. The NPC retains the ability to manually adjust assignments after auto-generation.
 
-For deployment, we recommend: (1)~use the Study~I oracle for initial assignment; (2)~evaluate the result with Study~II's time metric to check finish-time spread; (3)~if ESWs are walked from the fire station, accept that walking quality will be low for distant neighborhoods and communicate this to ESWs; (4)~if ESWs are driven to the neighborhood fan-out point, walking quality improves substantially and the Study~I assignment is near-optimal.
+\subsection{Recommended Practice}
+
+The four studies converge on a concrete operational procedure:
+
+\begin{enumerate}
+\item \textbf{Transport ESWs to the neighborhood.} Study~IV shows that the walk from fire station to neighborhood dominates walking quality, making the 50\% quality floor infeasible in 94\% of cases. Driving ESWs to a fan-out point at the neighborhood edge eliminates this overhead and makes all other constraints achievable.
+
+\item \textbf{Run the Study~I oracle at the fan-out point.} Chain+slice with 2-opt, starting from the fan-out point, produces walk-ordered, geographically contiguous assignments in under one second. The oracle tries all strategies and selects the best by score.
+
+\item \textbf{Check finish-time spread using Study~II's metric.} Compute $T_k$ for each ESW (Eq.~\ref{eq:time}) with the NPC's estimated $t_{\text{assess}}$. If the spread exceeds the NPC's tolerance (e.g., 30 minutes), manually transfer one or two boundary segments from the slowest ESW to the fastest.
+
+\item \textbf{Brief ESWs using the trail maps.} Show each ESW their walking trail (blue = productive segments, red = transitions). ESWs who can see that their route is logical and efficient --- mostly blue, minimal red --- will work with confidence rather than frustration.
+\end{enumerate}
+
+This procedure addresses every constraint discovered across the four studies: walkable contiguity (chain+slice), time balance (oracle scoring + manual adjustment), walking quality (transport to fan-out), and ESW morale (trail visualization).
 
 \subsection{Limitations}
 
