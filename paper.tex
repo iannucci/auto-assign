@@ -876,7 +876,9 @@ Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for compari
 
 Can post-processing rescue the Voronoi partition? We attempt contiguity-preserving boundary transfers: iteratively move boundary segments from the heaviest cell to a lighter adjacent cell, provided the transfer does not disconnect the source cell. Across 38 test cases, this improves max time by \textbf{3.9\% on average} (up to 37.8\% on Classic Communities at $N = 5$). However, most cases show \textbf{0\% improvement} because Voronoi cells in road networks tend to be \emph{tree-shaped} --- removing any interior segment disconnects the cell. Only cells with cycles (redundant connections) allow productive transfers.
 
-Fig.~\ref{fig:hybrid} shows the balanced Voronoi on Fairmeadow with \textcolor{voronoiorange}{orange} boundary segments highlighted. Despite achieving near-perfect address balance (104/102/106) through exhaustive seed search, no boundary segment can be transferred without disconnecting its source cell --- the cells are tree-shaped. The orange segments show where the partition cuts across streets; an ESW assigned to one cell would need to skip over these shared streets to reach isolated pockets of their cell on the other side.
+Fig.~\ref{fig:hybrid} shows a balanced Voronoi on Midtown --- a rectilinear grid neighborhood with 5,140 addresses and 693 segments. Greedy seed search achieves near-perfect balance (1706/1748/1686). On this regular grid, only \textbf{14 of 693 segments (2\%)} straddle Voronoi cell boundaries, shown in \textcolor{voronoiorange}{orange}. This is far better than Fairmeadow's cul-de-sac layout, where boundary fragmentation was severe. The rectilinear grid aligns well with Voronoi boundaries because streets run in cardinal directions and cells split cleanly along block boundaries.
+
+However, even 14 boundary segments create problems: each is a street that two ESWs must share, with one ESW walking past the other's addresses. And within each cell, the ESW still needs a walk-ordered route --- the Voronoi partition only determines \emph{which} segments to assign, not the walking order. Study~I's chain+slice remains necessary for the intra-cell routing.
 
 \begin{figure}[htbp]
 \centering
@@ -892,17 +894,17 @@ Fig.~\ref{fig:hybrid} shows the balanced Voronoi on Fairmeadow with \textcolor{v
     scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
     label style={font=\small},
     title style={font=\small\bfseries},
-    title={Balanced Voronoi with Boundary Segments (104/102/106)},
+    title={Midtown Balanced Voronoi (1706/1748/1686)},
 ]
-\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
-\addplot[prodblue, thick, opacity=0.6] table[x=lon,y=lat] {data/voronoi-fm-bal-cell0.dat};
-\addplot[unprodred, thick, opacity=0.6] table[x=lon,y=lat] {data/voronoi-fm-bal-cell1.dat};
-\addplot[idealgreen!70!black, thick, opacity=0.6] table[x=lon,y=lat] {data/voronoi-fm-bal-cell2.dat};
-\addplot[voronoiorange, very thick, opacity=0.9] table[x=lon,y=lat] {data/voronoi-fm-bal-boundary.dat};
-\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-bal-seeds.dat};
+\addplot[only marks, mark=*, mark size=0.15pt, gray!20] table[x=lon,y=lat] {data/midtown-all-addrs.dat};
+\addplot[prodblue, semithick, opacity=0.5] table[x=lon,y=lat] {data/midtown-voronoi-cell0.dat};
+\addplot[unprodred, semithick, opacity=0.5] table[x=lon,y=lat] {data/midtown-voronoi-cell1.dat};
+\addplot[idealgreen!70!black, semithick, opacity=0.5] table[x=lon,y=lat] {data/midtown-voronoi-cell2.dat};
+\addplot[voronoiorange, very thick, opacity=0.9] table[x=lon,y=lat] {data/midtown-voronoi-boundary.dat};
+\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/midtown-voronoi-seeds.dat};
 \end{axis}
 \end{tikzpicture}
-\caption{Fairmeadow balanced Voronoi ($N=3$, 104/102/106 addresses). \textcolor{voronoiorange}{Orange} segments straddle cell boundaries --- their endpoints belong to different Voronoi cells. These boundary cuts fragment walking paths: an ESW in the \textcolor{prodblue}{blue} cell must skip over \textcolor{voronoiorange}{orange} segments to reach isolated pockets of their territory. No boundary segment can be transferred without disconnecting its source cell (tree-shaped topology), so the hybrid achieves 0\% improvement on Fairmeadow. Compare with Study~I's chain+slice (Fig.~\ref{fig:trails-fm}), which avoids boundary fragmentation entirely by building walk-ordered sequences.}
+\caption{Midtown balanced Voronoi ($N=3$, 5,140 addresses, 693 segments). \textcolor{prodblue}{Blue}, \textcolor{unprodred}{red}, and \textcolor{idealgreen!70!black}{green} show the three cells (1706/1748/1686 addresses). \textcolor{voronoiorange}{Orange} = 14 boundary segments (2\%) whose endpoints belong to different cells. On this rectilinear grid, Voronoi boundaries align with block edges, producing far less fragmentation than Fairmeadow's cul-de-sacs (Fig.~\ref{fig:voronoi-fm}). Black diamonds = Voronoi seeds. Even here, boundary segments create shared streets where two ESWs' territories interleave.}
 \label{fig:hybrid}
 \end{figure}
 
