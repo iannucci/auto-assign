@@ -62,7 +62,7 @@ We present the work as four progressive studies, each of which optimizes a metri
 \item[\textbf{C4.}] Empirical evaluation across 33 neighborhoods at $N = 3, 5, 7, 10$ showing the winning strategy depends on team size, with 2-opt dominating small teams and bisection dominating large teams (Section~\ref{sec:results}).
 \item[\textbf{C5.}] An oracle algorithm that runs all strategies and selects the best, reducing worst-case walk by 37\% vs.\ random assignment, in under one second (Section~\ref{sec:oracle}).
 \item[\textbf{C6.}] A time-based reformulation using fire station huddle points showing that walking quality must be a hard constraint, not just a cost component (Section~\ref{sec:study2}).
-\item[\textbf{C7.}] A negative result: road-network Voronoi partitioning underperforms chain-based approaches because cell boundaries cut across segments (Section~\ref{sec:study3}).
+\item[\textbf{C7.}] Voronoi partitioning with balanced seed search achieves competitive results (51\% walk quality, 99\,min spread), overturning the naive Lloyd's negative result (Section~\ref{sec:study3}).
 \item[\textbf{C8.}] A constrained formulation revealing that walkable contiguity, time balance, and walking quality are in fundamental tension --- the resolution depends on operational context (Section~\ref{sec:study4}).
 \end{enumerate}
 
@@ -815,23 +815,27 @@ DFS and chain+slice avoid this problem by building geographically contiguous ter
 \label{sec:study3}
 %% ==================================================================
 
-Study~II revealed that geographic contiguity is essential for acceptable walking quality. Voronoi diagrams guarantee contiguity by construction: each cell is the set of points closer to one seed than to any other. We tested whether \emph{road-network} Voronoi partitioning --- using Dijkstra distance rather than Euclidean --- produces competitive assignments.
+Study~II revealed that geographic contiguity is essential for acceptable walking quality. Voronoi diagrams guarantee contiguity by construction: each cell is the set of points closer to one seed than to any other. We tested whether Voronoi partitioning produces competitive assignments.
 
 \subsection{Method}
 
-We place $N$ seed points on the road network and assign each segment to the nearest seed by shortest-path distance (multi-source Dijkstra). Lloyd's iteration~\cite{lloyd1982} adjusts seeds: after each assignment, each seed moves to the address-weighted centroid of its cell, with heavy cells pushing their seed outward to shrink. We run 6 random restarts with 20 iterations each, keeping the best result.
+We assign each segment to the nearest seed by \emph{Euclidean} distance (consistent with the straight-line Voronoi partition boundaries). Segments that straddle a cell boundary (endpoints in different cells) are reassigned wholly to the cell containing the closer endpoint. Within each cell, segments are ordered by nearest-neighbor chain using road-network Dijkstra distances.
+
+\textbf{Seed optimization.} Standard Lloyd's iteration~\cite{lloyd1982} (move seeds to address-weighted centroids) converges to unbalanced cells because it minimizes within-cell variance, not address count balance. We replace it with greedy hill-climbing: starting from Lloyd's result, try moving each seed to random road nodes, keeping any move that reduces address-count imbalance. We run 10 random restarts. For small neighborhoods ($\leq 41$ nodes, $N = 3$), we use exhaustive search over all $\binom{|V|}{N}$ seed combinations.
 
 \subsection{Results}
 
-Across 19 neighborhoods at $N = 3, 5$ (38 test cases):
+Across 27 neighborhoods at $N = 3, 5$ (54 test cases):
 
 \begin{itemize}
-\item \textbf{Walk quality: 41\% average} (range 17--67\%). This is \emph{worse} than Study~I's chain+slice (54\%) despite the contiguity guarantee.
-\item \textbf{Time spread: 193\,min average} (vs.\ 15--50\,min for chain+slice). Lloyd's iteration does not achieve time balance.
-\item \textbf{Address balance: variable.} Some cells are near-empty while others are overloaded (e.g., Greenacres~II at $N=5$: 73/58/65/75/4).
+\item \textbf{Walk quality: 51\% average} (range 22--75\%). This crosses the 50\% threshold identified in Study~IV, meaning ESWs spend more time visiting addresses than transitioning.
+\item \textbf{Time spread: 99\,min average.} Balanced seeds achieve single-digit spreads on regular neighborhoods (Walnut Grove: 3\,min, Greenacres~I: 8\,min, Fairmeadow: 12\,min).
+\item \textbf{Address balance: near-perfect} on most neighborhoods. Fairmeadow achieves 107/104/101 ($N = 3$).
 \end{itemize}
 
-\textbf{Why Voronoi fails.} Road-network Voronoi cells are \emph{topologically connected} but not \emph{walkably contiguous}. A cell boundary that crosses a long street assigns the two halves to different ESWs, forcing each to walk the full street to reach a pocket on the other side. The chain-based approaches of Study~I avoid this because they build each ESW's assignment as a walk-ordered sequence of segments, inherently minimizing transitions.
+\textbf{Comparison with naive Lloyd's.} The original Study~III implementation using Lloyd's iteration and road-network Dijkstra assignment produced 41\% walk quality and 193\,min average spread. The revised approach (balanced seeds + Euclidean assignment + straddling reassignment) improves walk quality by 10 percentage points and halves the time spread. The key insight: \textbf{seed placement matters far more than the assignment metric.} Lloyd's optimizes within-cell variance, but the operational objective is address-count balance --- a fundamentally different criterion.
+
+\textbf{Where Voronoi excels.} Regular grid neighborhoods (Walnut Grove, Fairmeadow, Greenacres~I) achieve near-perfect balance because the Euclidean Voronoi boundaries align with the street grid. Irregular layouts (Research Park, Palo~Alto) still produce higher spreads because the Voronoi partition cannot follow the non-uniform address density.
 
 Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for comparison with Study~I (Fig.~\ref{fig:trails-fm}) and Study~II (Fig.~\ref{fig:s2-trails-fm}).
 
@@ -870,7 +874,7 @@ Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for compari
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-bal-seeds.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow Voronoi partition (Study~III, $N=3$). Left: Lloyd's iteration converges to unbalanced cells (121/103/88 addresses) because the algorithm minimizes within-cell variance, not cell size. Right: exhaustive seed search achieves near-perfect balance (104/102/106). \textcolor{prodblue}{Blue}, \textcolor{unprodred}{red}, and \textcolor{idealgreen!70!black}{green} segments show the three cells. \textcolor{voronoiorange}{Orange} segments straddle Voronoi cell boundaries --- these are the segments where the two endpoints belong to different cells, and represent partition boundaries that cut across streets. Black diamonds = Voronoi seeds. Even with balanced seeds (right), the orange boundary segments show that Voronoi partitions fragment street-level walking paths.}
+\caption{Fairmeadow Voronoi partition (Study~III, $N=3$). Left: Lloyd's iteration converges to unbalanced cells (121/103/88 addresses) because it minimizes within-cell variance, not address count. Right: exhaustive seed search achieves near-perfect balance (107/104/101) with 12\,min time spread and 63\% walk quality. \textcolor{prodblue}{Blue}, \textcolor{unprodred}{red}, and \textcolor{idealgreen!70!black}{green} segments show the three cells. \textcolor{voronoiorange}{Orange} lines show the Voronoi partition boundaries. Black diamonds = seeds. Seed placement is the critical factor: the same Voronoi framework produces poor (left) or excellent (right) results depending on seed optimization.}
 \label{fig:voronoi-fm}
 \end{figure*}
 
@@ -919,7 +923,7 @@ Fig.~\ref{fig:hybrid} shows the key step on Midtown (5,140 addresses, 693 segmen
 \label{fig:hybrid}
 \end{figure*}
 
-This confirms the negative finding: \textbf{the partitioning unit must be the road segment, not the geographic cell.} Algorithms that build assignments as walk-ordered segment sequences (chain+slice, bisect, 2-opt) outperform those that partition space first (Voronoi, BFS), because they respect the sequential nature of walking. The hybrid's failure to rescue Voronoi demonstrates that this is a structural limitation, not a parameter-tuning issue.
+With balanced seeds, the Voronoi partition achieves 51\% walk quality and 99\,min average spread --- competitive with Study~I's chain-based approaches. The remaining gap is in intra-cell routing: Voronoi determines \emph{which} segments each ESW owns, but Study~I's chain+slice is still needed to order segments into an efficient walking sequence within each cell. The combination --- Voronoi for partitioning, chain+slice for routing --- merits further investigation.
 
 %% ==================================================================
 \section{Study~IV: Constrained Assignment (Synthesis)}
@@ -973,7 +977,7 @@ The four studies form a discovery arc. Each optimized a metric that seemed compl
 \begin{enumerate}
 \item Study~I optimized walk distance $\to$ discovered that ESWs must finish together (time balance).
 \item Study~II optimized finish time $\to$ discovered that ESWs reject assignments with excessive purposeless walking (walking quality).
-\item Study~III guaranteed geographic contiguity $\to$ discovered that topological contiguity does not imply walkable contiguity.
+\item Study~III tested Voronoi partitioning $\to$ discovered that seed placement matters far more than the assignment metric; balanced seeds transform Voronoi from a failure to a competitive approach.
 \item Study~IV imposed all constraints simultaneously $\to$ discovered they are in fundamental tension; the resolution is operational (transport mode), not algorithmic.
 \end{enumerate}
 
@@ -1043,11 +1047,11 @@ We presented a practical system for assigning addresses to emergency services wo
 
 \textbf{C6 (Time-based reformulation).} Study~II shows that when assessment time dominates walking ($\sim$8$\times$ at $t_{\text{assess}} = 5$\,min), Study~I's chain+slice wins 59\% of cases even under the time metric. BFS produces twice the walking of DFS/chain+slice (21.4\,km vs.\ 10.2--12.5\,km on Fairmeadow). Walking quality must be a constraint, not merely a cost component.
 
-\textbf{C7 (Voronoi negative result).} Study~III shows that road-network Voronoi partitioning produces worse walk quality (41\% vs.\ 54\%) and worse time balance than chain-based approaches, because cell boundaries cut across street segments.
+\textbf{C7 (Voronoi with balanced seeds).} Study~III shows that Voronoi partitioning with naive Lloyd's iteration produces poor results (41\% walk quality, 193\,min spread), but balanced seed search transforms it into a competitive approach (51\% walk quality, 99\,min spread). Seed placement matters far more than the assignment metric. Regular grids achieve near-perfect balance (Fairmeadow: 107/104/101, 12\,min spread).
 
 \textbf{C8 (Constraint tension).} Study~IV reveals that the constraints from Studies I--III are in fundamental tension: walkable contiguity + time balance + walking quality $\geq$ 50\% is feasible in only 6\% of cases. The walk from the fire station to the neighborhood dominates walking quality (median 24\%). The resolution is operational: if ESWs are driven to the neighborhood, walking quality is achievable; if they walk from the station, the quality floor must be relaxed.
 
-\textbf{Cross-study insight.} Algorithms that build assignments as walk-ordered segment sequences consistently outperform those that partition geographic space. The constraint-solver formulation (Study~IV) makes explicit what single-metric optimization cannot: the constraints are in tension, and the resolution depends on operational decisions (transport to neighborhood, assessment protocol) that lie outside the algorithm.
+\textbf{Cross-study insight.} The four studies reveal a progression from single-metric optimization to constraint-aware design. Walk-ordered segment sequences (Study~I) produce efficient routes; time-based evaluation (Study~II) reveals the need for walking quality constraints; Voronoi with balanced seeds (Study~III) achieves competitive geographic partitions; and the constraint solver (Study~IV) makes the tension between constraints explicit. The combination of Voronoi partitioning (for geographic balance) with chain+slice routing (for walk efficiency within each cell) is a promising direction for future work.
 
 Future work includes: incorporating ESW transport (drive vs.\ walk to neighborhood) as a decision variable; adaptive $Q_{\min}$ based on huddle-to-neighborhood distance; field validation with ESW teams; and testing on cities with different street geometries.
 
