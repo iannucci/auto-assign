@@ -853,7 +853,7 @@ Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for compari
     xmin=-122.1230, xmax=-122.1130,
     ymin=37.4145, ymax=37.4225,
 ]
-\nextgroupplot[title={Lloyd's Iteration (67/63/182)}]
+\nextgroupplot[title={Lloyd's Iteration (121/103/88)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
 \addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-unbal-cell0.dat};
 \addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-unbal-cell1.dat};
@@ -870,7 +870,7 @@ Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for compari
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-bal-seeds.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow Voronoi partition (Study~III, $N=3$). Left: Lloyd's iteration produces severely unbalanced cells (67/63/182 addresses). Right: exhaustive seed search achieves near-perfect balance (104/102/106). \textcolor{prodblue}{Blue}, \textcolor{unprodred}{red}, and \textcolor{idealgreen!70!black}{green} segments show the three cells. \textcolor{voronoiorange}{Orange} segments straddle Voronoi cell boundaries --- these are the segments where the two endpoints belong to different cells, and represent partition boundaries that cut across streets. Black diamonds = Voronoi seeds. Even with balanced seeds (right), the orange boundary segments show that Voronoi partitions fragment street-level walking paths.}
+\caption{Fairmeadow Voronoi partition (Study~III, $N=3$). Left: Lloyd's iteration converges to unbalanced cells (121/103/88 addresses) because the algorithm minimizes within-cell variance, not cell size. Right: exhaustive seed search achieves near-perfect balance (104/102/106). \textcolor{prodblue}{Blue}, \textcolor{unprodred}{red}, and \textcolor{idealgreen!70!black}{green} segments show the three cells. \textcolor{voronoiorange}{Orange} segments straddle Voronoi cell boundaries --- these are the segments where the two endpoints belong to different cells, and represent partition boundaries that cut across streets. Black diamonds = Voronoi seeds. Even with balanced seeds (right), the orange boundary segments show that Voronoi partitions fragment street-level walking paths.}
 \label{fig:voronoi-fm}
 \end{figure*}
 
