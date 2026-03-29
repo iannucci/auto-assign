@@ -60,6 +60,7 @@ A key constraint distinguishes our problem from the standard VRP: \textbf{ESWs m
 \item[\textbf{C5.}] An oracle algorithm that runs all strategies and selects the best, reducing worst-case walk by 37\% vs.\ random assignment, in under one second (Section~\ref{sec:oracle}).
 \item[\textbf{C6.}] A time-based reformulation using fire station huddle points showing that walking quality must be a hard constraint, not just a cost component (Section~\ref{sec:study2}).
 \item[\textbf{C7.}] A negative result: road-network Voronoi partitioning underperforms chain-based approaches because cell boundaries cut across segments (Section~\ref{sec:study3}).
+\item[\textbf{C8.}] A constrained formulation revealing that walkable contiguity, time balance, and walking quality are in fundamental tension --- the resolution depends on operational context (Section~\ref{sec:study4}).
 \end{enumerate}
 
 %% ==================================================================
@@ -858,6 +859,47 @@ Can post-processing rescue the Voronoi partition? We attempt contiguity-preservi
 This confirms the negative finding: \textbf{the partitioning unit must be the road segment, not the geographic cell.} Algorithms that build assignments as walk-ordered segment sequences (chain+slice, bisect, 2-opt) outperform those that partition space first (Voronoi, BFS), because they respect the sequential nature of walking. The hybrid's failure to rescue Voronoi demonstrates that this is a structural limitation, not a parameter-tuning issue.
 
 %% ==================================================================
+\section{Study~IV: Constrained Assignment (Synthesis)}
+\label{sec:study4}
+%% ==================================================================
+
+Studies I--III each optimized one metric and discovered a violated constraint. Study~IV states all constraints up front and attempts to solve within them.
+
+\subsection{Constraint Formulation}
+
+\textbf{Hard constraints} (discovered in prior studies):
+\begin{enumerate}
+\item \textbf{Walkable contiguity} (Study~I, III): Each ESW's segments form a walk-ordered chain, not just a connected subgraph.
+\item \textbf{Walking quality floor} (Study~II): For each ESW, productive walking / total walking $\geq Q_{\min}$.
+\item \textbf{Full coverage}: Every segment assigned to exactly one ESW.
+\end{enumerate}
+
+\textbf{Objective}: Minimize finish-time spread $\max_k T_k - \min_k T_k$ (Eq.~\ref{eq:time}), subject to constraints 1--3.
+
+\subsection{Method}
+
+Initialize with Study~I's chain+slice (satisfies constraints 1 and 3). Evaluate with Study~II's time metric including huddle walk-to-first. Apply constrained SA: transfer boundary segments from the heaviest ESW to the lightest, rejecting any move that violates the walking quality floor.
+
+\subsection{Results}
+
+With $Q_{\min} = 50\%$ across 19 neighborhoods at $N = 3, 5$ (36 test cases):
+
+\textbf{Only 2 of 36 cases (6\%) are feasible.} The SA rejects nearly all transfers because moving a segment from one ESW's chain end to another ESW's chain creates a long unproductive transition that violates the quality floor.
+
+The infeasibility is structural, not algorithmic. The median walking quality across all ESWs is only 24\% --- meaning 76\% of walking is transitions. The dominant factor is not inter-segment transitions (which chain+slice already minimizes) but the \textbf{walk from the fire station huddle to the neighborhood}, which is unavoidable overhead. For neighborhoods far from their fire station (e.g., Southgate: 1.6\,km to Station~1), this single walk consumes most of the walking budget.
+
+\subsection{The Fundamental Tension}
+
+Study~IV reveals that the constraints discovered in Studies I--III are in \textbf{fundamental tension}:
+
+\begin{itemize}
+\item \textbf{Walkable contiguity} (chains) $+$ \textbf{time balance} (balanced address counts) → achieved by chain+slice, producing low spread (avg 70\,min).
+\item \textbf{Walking quality $\geq 50\%$} → requires that most walking is productive, which is impossible when the huddle-to-neighborhood distance is large relative to the intra-neighborhood walking.
+\end{itemize}
+
+The resolution depends on operational context. If ESWs are \emph{driven} to the neighborhood and dropped at the fan-out point (not walked from the fire station), the walk-to-first vanishes and walking quality jumps. If they walk from the station, the quality floor must be relaxed or the huddle redefined as the neighborhood entry point. The constraint solver makes this tension explicit --- something that no single-metric optimization (Studies I--III) could reveal.
+
+%% ==================================================================
 \section{Discussion}
 %% ==================================================================
 
@@ -915,11 +957,13 @@ We presented a practical system for assigning addresses to emergency services wo
 
 \textbf{C6 (Time-based reformulation).} Study~II shows that when assessment time dominates walking ($\sim$8$\times$ at $t_{\text{assess}} = 5$\,min), Study~I's chain+slice wins 59\% of cases even under the time metric. BFS produces twice the walking of DFS/chain+slice (21.4\,km vs.\ 10.2--12.5\,km on Fairmeadow). Walking quality must be a constraint, not merely a cost component.
 
-\textbf{C7 (Voronoi negative result).} Study~III shows that road-network Voronoi partitioning, despite guaranteeing topological contiguity, produces worse walk quality (41\% vs.\ 54\%) and worse time balance (193\,min vs.\ 15--50\,min spread) than chain-based approaches. The reason: Voronoi cell boundaries cut across street segments, creating fragmented walking paths. The partitioning unit must be the road segment, not the geographic cell.
+\textbf{C7 (Voronoi negative result).} Study~III shows that road-network Voronoi partitioning produces worse walk quality (41\% vs.\ 54\%) and worse time balance than chain-based approaches, because cell boundaries cut across street segments.
 
-\textbf{Cross-study insight.} Across all three studies, the algorithms that build assignments as \emph{walk-ordered sequences of segments} (chain+slice, 2-opt, DFS) consistently outperform those that partition geographic space first (BFS, bisect at small $N$, Voronoi). The sequential nature of walking is the fundamental constraint that dominates all others.
+\textbf{C8 (Constraint tension).} Study~IV reveals that the constraints from Studies I--III are in fundamental tension: walkable contiguity + time balance + walking quality $\geq$ 50\% is feasible in only 6\% of cases. The walk from the fire station to the neighborhood dominates walking quality (median 24\%). The resolution is operational: if ESWs are driven to the neighborhood, walking quality is achievable; if they walk from the station, the quality floor must be relaxed.
 
-Future work includes: a constraint-solver formulation that explicitly balances walking quality, time balance, and contiguity as competing constraints; field validation with ESW teams; and testing on cities with different street geometries.
+\textbf{Cross-study insight.} Algorithms that build assignments as walk-ordered segment sequences consistently outperform those that partition geographic space. The constraint-solver formulation (Study~IV) makes explicit what single-metric optimization cannot: the constraints are in tension, and the resolution depends on operational decisions (transport to neighborhood, assessment protocol) that lie outside the algorithm.
+
+Future work includes: incorporating ESW transport (drive vs.\ walk to neighborhood) as a decision variable; adaptive $Q_{\min}$ based on huddle-to-neighborhood distance; field validation with ESW teams; and testing on cities with different street geometries.
 
 \begin{thebibliography}{00}
 
