@@ -242,19 +242,19 @@
             "walkToFirst": 39.7
           },
           {
-            "time": 66.2282491299652,
-            "walkTime": 16.2282491299652,
-            "assessTime": 50,
-            "addrs": 10,
-            "walkDist": 1352.3,
+            "time": 26.985479419176766,
+            "walkTime": 6.985479419176766,
+            "assessTime": 20,
+            "addrs": 4,
+            "walkDist": 582.0999999999999,
             "walkToFirst": 114.7
           },
           {
-            "time": 30.349213968558743,
-            "walkTime": 10.349213968558741,
-            "assessTime": 20,
-            "addrs": 4,
-            "walkDist": 862.4,
+            "time": 69.59198367934718,
+            "walkTime": 19.591983679347173,
+            "assessTime": 50,
+            "addrs": 10,
+            "walkDist": 1632.6,
             "walkToFirst": 258.4
           },
           {
@@ -392,23 +392,23 @@
             "walkToFirst": 366.8999999999999
           },
           {
-            "time": 184.38857554302172,
-            "walkTime": 14.388575543021721,
-            "assessTime": 170,
-            "addrs": 34,
-            "walkDist": 1199,
+            "time": 197.928117124685,
+            "walkTime": 12.928117124684988,
+            "assessTime": 185,
+            "addrs": 37,
+            "walkDist": 1077.3,
             "walkToFirst": 0
           },
           {
-            "time": 235.63961238449536,
-            "walkTime": 10.63961238449538,
-            "assessTime": 225,
-            "addrs": 45,
-            "walkDist": 886.5989,
+            "time": 222.1000708028321,
+            "walkTime": 12.100070802832114,
+            "assessTime": 210,
+            "addrs": 42,
+            "walkDist": 1008.2989,
             "walkToFirst": 291.29999999999995
           }
         ],
-        "maxTime": 235.63961238449536
+        "maxTime": 222.1000708028321
       },
       "chainSlice": {
         "times": [
@@ -440,8 +440,8 @@
         "maxTime": 242.91551662066482
       }
     },
-    "winner": "BFS",
-    "bestMaxTime": 235.63961238449536
+    "winner": "BFS+SA",
+    "bestMaxTime": 222.1000708028321
   },
   {
     "hood": "Evergreen Park",
@@ -551,27 +551,27 @@
             "walkToFirst": 366.8999999999999
           },
           {
-            "time": 126.40645625825033,
-            "walkTime": 11.40645625825033,
-            "assessTime": 115,
-            "addrs": 23,
-            "walkDist": 950.5,
+            "time": 153.44533781351254,
+            "walkTime": 13.445337813512541,
+            "assessTime": 140,
+            "addrs": 28,
+            "walkDist": 1120.4,
             "walkToFirst": 0
           },
           {
-            "time": 158.18311412456498,
-            "walkTime": 18.183114124564984,
-            "assessTime": 140,
-            "addrs": 28,
-            "walkDist": 1515.1989,
+            "time": 135.9816260650426,
+            "walkTime": 10.981626065042601,
+            "assessTime": 125,
+            "addrs": 25,
+            "walkDist": 915.0989,
             "walkToFirst": 291.29999999999995
           },
           {
-            "time": 162.64010560422417,
-            "walkTime": 32.64010560422417,
-            "assessTime": 130,
-            "addrs": 26,
-            "walkDist": 2719.8999999999996,
+            "time": 157.80271210848434,
+            "walkTime": 37.802712108484336,
+            "assessTime": 120,
+            "addrs": 24,
+            "walkDist": 3150.1,
             "walkToFirst": 1163.8999999999999
           },
           {
@@ -583,7 +583,7 @@
             "walkToFirst": 450.3999999999999
           }
         ],
-        "maxTime": 162.64010560422417
+        "maxTime": 157.80271210848434
       },
       "chainSlice": {
         "times": [
@@ -861,11 +861,11 @@
       "bfs_sa": {
         "times": [
           {
-            "time": 352.4965695427817,
-            "walkTime": 227.4965695427817,
-            "assessTime": 125,
-            "addrs": 25,
-            "walkDist": 18957.28914,
+            "time": 565.9791088443538,
+            "walkTime": 300.97910884435385,
+            "assessTime": 265,
+            "addrs": 53,
+            "walkDist": 25080.589140000004,
             "walkToFirst": 2083.6
           },
           {
@@ -893,11 +893,11 @@
             "walkToFirst": 574.5
           },
           {
-            "time": 585.3806624264971,
-            "walkTime": 245.38066242649705,
-            "assessTime": 340,
-            "addrs": 68,
-            "walkDist": 20447.5706,
+            "time": 371.89812312492495,
+            "walkTime": 171.89812312492498,
+            "assessTime": 200,
+            "addrs": 40,
+            "walkDist": 14324.270599999998,
             "walkToFirst": 2307.8999999999996
           }
         ],
@@ -1187,11 +1187,11 @@
             "walkToFirst": 0
           },
           {
-            "time": 142.1438703948158,
-            "walkTime": 42.14387039481579,
+            "time": 143.46392319692788,
+            "walkTime": 43.46392319692788,
             "assessTime": 100,
             "addrs": 20,
-            "walkDist": 3511.84872,
+            "walkDist": 3621.84872,
             "walkToFirst": 76.30000000000001
           },
           {
@@ -1211,11 +1211,11 @@
             "walkToFirst": 76.30000000000001
           },
           {
-            "time": 135.68297131885276,
-            "walkTime": 60.68297131885276,
+            "time": 134.36291851674068,
+            "walkTime": 59.362918516740685,
             "assessTime": 75,
             "addrs": 15,
-            "walkDist": 5056.712,
+            "walkDist": 4946.712000000001,
             "walkToFirst": 105
           }
         ],
@@ -1655,11 +1655,11 @@
       "bfs_sa": {
         "times": [
           {
-            "time": 258.7411695667827,
-            "walkTime": 28.74116956678267,
-            "assessTime": 230,
-            "addrs": 46,
-            "walkDist": 2395.00166,
+            "time": 267.23690939637584,
+            "walkTime": 32.23690939637585,
+            "assessTime": 235,
+            "addrs": 47,
+            "walkDist": 2686.3016599999996,
             "walkToFirst": 127.5
           },
           {
@@ -1671,15 +1671,15 @@
             "walkToFirst": 111.7
           },
           {
-            "time": 234.88659546381857,
-            "walkTime": 24.886595463818555,
-            "assessTime": 210,
-            "addrs": 42,
-            "walkDist": 2073.8,
+            "time": 226.39085563422537,
+            "walkTime": 21.39085563422537,
+            "assessTime": 205,
+            "addrs": 41,
+            "walkDist": 1782.5,
             "walkToFirst": 152.7
           }
         ],
-        "maxTime": 258.7411695667827
+        "maxTime": 267.23690939637584
       },
       "chainSlice": {
         "times": [
@@ -2140,27 +2140,27 @@
             "walkToFirst": 370
           },
           {
-            "time": 174.28329125165007,
-            "walkTime": 34.28329125165006,
-            "assessTime": 140,
-            "addrs": 28,
-            "walkDist": 2856.8266599999997,
+            "time": 110.50674018960758,
+            "walkTime": 30.506740189607584,
+            "assessTime": 80,
+            "addrs": 16,
+            "walkDist": 2542.12666,
             "walkToFirst": 444.90000000000003
           },
           {
-            "time": 124.02190423616945,
-            "walkTime": 24.021904236169448,
-            "assessTime": 100,
-            "addrs": 20,
-            "walkDist": 2001.74528,
+            "time": 190.26455394215768,
+            "walkTime": 30.264553942157686,
+            "assessTime": 160,
+            "addrs": 32,
+            "walkDist": 2521.94528,
             "walkToFirst": 499.90000000000003
           },
           {
-            "time": 197.6940616824673,
-            "walkTime": 32.6940616824673,
+            "time": 195.22796303852155,
+            "walkTime": 30.227963038521544,
             "assessTime": 165,
             "addrs": 33,
-            "walkDist": 2724.3961600000002,
+            "walkDist": 2518.8961600000002,
             "walkToFirst": 515.1
           },
           {
@@ -2466,19 +2466,19 @@
             "walkToFirst": 278.20000000000005
           },
           {
-            "time": 191.77879755190207,
-            "walkTime": 31.778797551902077,
-            "assessTime": 160,
-            "addrs": 32,
-            "walkDist": 2648.1272,
+            "time": 141.71099483979359,
+            "walkTime": 26.710994839793596,
+            "assessTime": 115,
+            "addrs": 23,
+            "walkDist": 2225.8272,
             "walkToFirst": 278.20000000000005
           },
           {
-            "time": 160.22020880835234,
-            "walkTime": 35.22020880835234,
-            "assessTime": 125,
-            "addrs": 25,
-            "walkDist": 2934.9,
+            "time": 210.28801152046083,
+            "walkTime": 40.28801152046082,
+            "assessTime": 170,
+            "addrs": 34,
+            "walkDist": 3357.2,
             "walkToFirst": 260.70000000000005
           },
           {
@@ -2768,11 +2768,11 @@
       "bfs_sa": {
         "times": [
           {
-            "time": 226.96867874714988,
-            "walkTime": 6.9686787471498866,
+            "time": 227.22548901956077,
+            "walkTime": 7.225489019560783,
             "assessTime": 220,
             "addrs": 44,
-            "walkDist": 580.7,
+            "walkDist": 602.1,
             "walkToFirst": 139.9
           },
           {
@@ -2800,11 +2800,11 @@
             "walkToFirst": 318.59999999999997
           },
           {
-            "time": 210.29821192847714,
-            "walkTime": 5.29821192847714,
+            "time": 210.04140165606626,
+            "walkTime": 5.041401656066243,
             "assessTime": 205,
             "addrs": 41,
-            "walkDist": 441.50000000000006,
+            "walkDist": 420.1,
             "walkToFirst": 97.9
           }
         ],
@@ -3085,11 +3085,11 @@
       "bfs_sa": {
         "times": [
           {
-            "time": 288.38950582023284,
-            "walkTime": 48.38950582023282,
-            "assessTime": 240,
-            "addrs": 48,
-            "walkDist": 4032.2975200000005,
+            "time": 276.12621528861155,
+            "walkTime": 46.126215288611554,
+            "assessTime": 230,
+            "addrs": 46,
+            "walkDist": 3843.6975200000006,
             "walkToFirst": 47.1
           },
           {
@@ -3101,11 +3101,11 @@
             "walkToFirst": 54.2
           },
           {
-            "time": 285.5964238569543,
-            "walkTime": 30.59642385695428,
-            "assessTime": 255,
-            "addrs": 51,
-            "walkDist": 2549.6000000000004,
+            "time": 297.8597143885755,
+            "walkTime": 32.85971438857555,
+            "assessTime": 265,
+            "addrs": 53,
+            "walkDist": 2738.2000000000003,
             "walkToFirst": 67
           },
           {
@@ -3244,31 +3244,31 @@
       "bfs_sa": {
         "times": [
           {
-            "time": 632.5492881315253,
-            "walkTime": 87.54928813152524,
-            "assessTime": 545,
-            "addrs": 109,
-            "walkDist": 7295.482179999999,
+            "time": 618.2681168846754,
+            "walkTime": 88.26811688467538,
+            "assessTime": 530,
+            "addrs": 106,
+            "walkDist": 7355.38218,
             "walkToFirst": 27.6
           },
           {
-            "time": 550.9133418936758,
-            "walkTime": 85.91334189367575,
-            "assessTime": 465,
-            "addrs": 93,
-            "walkDist": 7159.15878,
+            "time": 616.5121658466339,
+            "walkTime": 86.51216584663388,
+            "assessTime": 530,
+            "addrs": 106,
+            "walkDist": 7209.05878,
             "walkToFirst": 222.5
           },
           {
-            "time": 632.8354513380535,
-            "walkTime": 82.83545133805353,
-            "assessTime": 550,
-            "addrs": 110,
-            "walkDist": 6902.67816,
+            "time": 581.5177986319453,
+            "walkTime": 81.51779863194528,
+            "assessTime": 500,
+            "addrs": 100,
+            "walkDist": 6792.87816,
             "walkToFirst": 247
           }
         ],
-        "maxTime": 632.8354513380535
+        "maxTime": 618.2681168846754
       },
       "chainSlice": {
         "times": [

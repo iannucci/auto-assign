@@ -544,11 +544,30 @@ if (fmResult) {
     fmHoodNodes.add(fmHuddleNode);
     precomputeDistances(fmHoodNodes);
 
-    // Run BFS+SA for trail data
-    const bfsParts = assignBFS(fmSegs, 3, fmHuddleNode);
-    const saParts = saImprove(bfsParts, fmHuddleNode);
-
+    // Run DFS (the Study II winner) for trail data
+    const dfsParts = assignDFS(fmSegs, 3, fmHuddleNode);
+    // Also save huddle point
     const dataDir = path.join(__dirname, "..", "data");
+    // Find huddle coords
+    let huddleLat, huddleLon;
+    for (const s of fmSegs) {
+        if (s.startNode === fmHuddleNode) { huddleLat = s.polyline[0][0]; huddleLon = s.polyline[0][1]; break; }
+        if (s.endNode === fmHuddleNode) { huddleLat = s.polyline[s.polyline.length-1][0]; huddleLon = s.polyline[s.polyline.length-1][1]; break; }
+    }
+    fs.writeFileSync(path.join(dataDir, "fairmeadow-s2-huddle.dat"), `lon lat\n${huddleLon} ${huddleLat}\n`);
+
+    // Walk-from-huddle lines for each ESW
+    for (let esw = 0; esw < dfsParts.length; esw++) {
+        if (dfsParts[esw].length === 0) continue;
+        const firstSeg = segById.get(dfsParts[esw][0].segId);
+        const firstEntry = dfsParts[esw][0].entryPort;
+        const firstPl = firstSeg.polyline;
+        const firstPt = firstEntry < 2 ? firstPl[0] : firstPl[firstPl.length-1];
+        fs.writeFileSync(path.join(dataDir, `fairmeadow-s2-esw${esw}-fromhuddle.dat`),
+            `lon lat\n${huddleLon} ${huddleLat}\n${firstPt[1]} ${firstPt[0]}\n`);
+    }
+
+    const saParts = dfsParts; // Use DFS result (winner)
     for (let esw = 0; esw < saParts.length; esw++) {
         // Segment polylines (blue)
         const segPts = ["lon lat"];

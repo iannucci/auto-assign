@@ -710,7 +710,7 @@ Final result: ESW~1 = 124\,min (21 addrs), ESW~2 = 124\,min (21 addrs), ESW~3 = 
 
 \subsection{Visual Comparison: Study~I vs.\ Study~II}
 
-Fig.~\ref{fig:s2-trails-fm} shows the BFS+SA assignment for Fairmeadow under Study~II's time metric ($N = 3$), for direct comparison with Study~I's result in Fig.~\ref{fig:trails-fm}. Study~I optimizes walking distance; Study~II optimizes finish time (walking + 5\,min/address assessment).
+Fig.~\ref{fig:s2-trails-fm} shows the DFS assignment (Study~II winner) for Fairmeadow under the time metric ($N = 3$), for direct comparison with Study~I's result in Fig.~\ref{fig:trails-fm}. The \textcolor{idealgreen}{green diamond} marks the huddle point (fan-out node nearest Fire Station~4). \textcolor{idealgreen}{Green dashed} lines show each ESW's walk from the huddle to their first segment.
 
 \begin{figure*}[htbp]
 \centering
@@ -725,23 +725,29 @@ Fig.~\ref{fig:s2-trails-fm} shows the BFS+SA assignment for Fairmeadow under Stu
     label style={font=\small},
     title style={font=\small\bfseries},
 ]
-\nextgroupplot[title={ESW 1 (109a, 633\,min)}]
+\nextgroupplot[title={ESW 1 (105a, 575\,min)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
 \addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/fairmeadow-s2-esw0-segments.dat};
 \addplot[unprodred, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-s2-esw0-transitions.dat};
+\addplot[idealgreen, very thick, dashed] table[x=lon,y=lat] {data/fairmeadow-s2-esw0-fromhuddle.dat};
+\addplot[only marks, mark=diamond*, mark size=4pt, idealgreen] table[x=lon,y=lat] {data/fairmeadow-s2-huddle.dat};
 
-\nextgroupplot[title={ESW 2 (93a, 551\,min)}]
+\nextgroupplot[title={ESW 2 (102a, 543\,min)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
 \addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/fairmeadow-s2-esw1-segments.dat};
 \addplot[unprodred, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-s2-esw1-transitions.dat};
+\addplot[idealgreen, very thick, dashed] table[x=lon,y=lat] {data/fairmeadow-s2-esw1-fromhuddle.dat};
+\addplot[only marks, mark=diamond*, mark size=4pt, idealgreen] table[x=lon,y=lat] {data/fairmeadow-s2-huddle.dat};
 
-\nextgroupplot[title={ESW 3 (110a, 609\,min)}]
+\nextgroupplot[title={ESW 3 (105a, 561\,min)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
 \addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/fairmeadow-s2-esw2-segments.dat};
 \addplot[unprodred, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-s2-esw2-transitions.dat};
+\addplot[idealgreen, very thick, dashed] table[x=lon,y=lat] {data/fairmeadow-s2-esw2-fromhuddle.dat};
+\addplot[only marks, mark=diamond*, mark size=4pt, idealgreen] table[x=lon,y=lat] {data/fairmeadow-s2-huddle.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow under Study~II (BFS+SA, $N=3$, time metric). Compare with Fig.~\ref{fig:trails-fm} (Study~I, distance metric). Study~II produces a different partition: address counts are less balanced (109/93/110 vs.\ Study~I's near-equal splits) but the \textcolor{unprodred}{red transitions} originate from the huddle point and radiate outward, reflecting the BFS fan-out pattern. The time spread is 82\,min (633 vs.\ 551\,min). Assessment time dominates: even the 82-min spread is only 13\% of the 633-min max, compared to the walking-distance differences that dominate Study~I.}
+\caption{Fairmeadow under Study~II (DFS winner, $N=3$, time metric). Compare with Study~I in Fig.~\ref{fig:trails-fm}. \textcolor{idealgreen}{Green diamond} = huddle point (fan-out from Fire Station~4). \textcolor{idealgreen}{Green dashed} = walk from huddle to first segment. \textcolor{prodblue}{Blue} = productive. \textcolor{unprodred}{Red dashed} = unproductive transitions. DFS produces well-balanced address counts (105/102/105) with 10.2\,km total walking --- half the walking of BFS+SA (21.4\,km) and comparable to Study~I's 2-opt (9.4\,km). The partition is geographically contiguous because DFS builds each ESW's territory as a connected cluster from the huddle outward.}
 \label{fig:s2-trails-fm}
 \end{figure*}
 
@@ -772,7 +778,11 @@ BFS (raw) & 0 \\
 
 \textbf{DFS suffers from the dregs problem.} The last ESW in DFS consistently receives scattered remnants, producing time spreads of 100--500\,min (vs.\ 10--50\,min for chain+slice). DFS wins only on neighborhoods where the remnants happen to form a compact cluster.
 
-\textbf{Study~II conclusion:} When assessment time dominates walking time, the choice of assignment strategy is less consequential than in Study~I --- the primary lever is address count balance. Study~I's chain+slice, with its perfect count balance, remains competitive even under Study~II's time-based formulation. The new strategies (BFS+SA) provide value at larger $N$ where chain+slice can produce empty partitions, and in scenarios where $t_{\text{assess}}$ is small relative to walking time (e.g., drive-by visual inspections rather than detailed assessments).
+\textbf{Walking quality matters.} An important finding is that BFS+SA, despite producing reasonable time balance, generates \emph{twice the total walking distance} of DFS or chain+slice (21.4\,km vs.\ 10.2--12.5\,km on Fairmeadow). The BFS fan-out pattern interleaves ESW territories geographically, forcing extensive unproductive transitions. From an operational standpoint, ESWs walking past unvisited addresses to reach their assigned territory would find this unacceptable regardless of what the time metric says. This reveals a limitation of pure time optimization: \textbf{walking quality} --- the ratio of productive to total walking --- must be treated as a constraint, not just a component of the objective.
+
+DFS and chain+slice avoid this problem by building geographically contiguous territories. DFS in particular produces the best of both worlds on Fairmeadow: the lowest max time (575\,min), balanced addresses (105/102/105), and the least total walking (10.2\,km).
+
+\textbf{Study~II conclusion:} When assessment time dominates walking time, address count balance is the primary lever. The BFS approach, while theoretically appealing as a round-robin from the huddle, produces operationally unacceptable walking paths. DFS and chain+slice (Study~I) produce superior assignments because their contiguous geographic partitions naturally minimize unproductive walking. The time metric should include a walking-quality penalty --- or equivalently, geographic contiguity should be a hard constraint rather than an emergent property.
 
 %% ==================================================================
 \section{Discussion}
