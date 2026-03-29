@@ -133,7 +133,7 @@ where $t_n$ is the position of the last address. The exit side $e$ is free (the 
 Consider a 150\,m residential segment ($w = 10$\,m) with 8 addresses at positions and sides:
 
 \begin{center}
-\begin{tabular}{cccccccc}
+\begin{tabular}{ccccccccc}
 $t$:   & 0.10 & 0.20 & 0.30 & 0.45 & 0.55 & 0.70 & 0.80 & 0.90 \\
 side:  & L    & L    & L    & R    & R    & L    & L    & R
 \end{tabular}
@@ -895,7 +895,7 @@ Fig.~\ref{fig:hybrid} shows the key step on Midtown (5,140 addresses, 693 segmen
     title style={font=\small\bfseries},
 ]
 \nextgroupplot[title={Voronoi Partition Lines}]
-\addplot[only marks, mark=*, mark size=0.15pt, gray!20] table[x=lon,y=lat] {data/midtown-all-addrs.dat};
+\addplot[only marks, mark=*, mark size=0.15pt, gray!20] table[x=lon,y=lat] {data/midtown-all-addrs-sampled.dat};
 \addplot[prodblue, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-voronoi-cell0.dat};
 \addplot[unprodred, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-voronoi-cell1.dat};
 \addplot[idealgreen!70!black, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-voronoi-cell2.dat};
@@ -904,7 +904,7 @@ Fig.~\ref{fig:hybrid} shows the key step on Midtown (5,140 addresses, 693 segmen
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/midtown-voronoi-seeds.dat};
 
 \nextgroupplot[title={Segment-Aligned Boundary}]
-\addplot[only marks, mark=*, mark size=0.15pt, gray!20] table[x=lon,y=lat] {data/midtown-all-addrs.dat};
+\addplot[only marks, mark=*, mark size=0.15pt, gray!20] table[x=lon,y=lat] {data/midtown-all-addrs-sampled.dat};
 \addplot[prodblue, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-after-cell0.dat};
 \addplot[unprodred, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-after-cell1.dat};
 \addplot[idealgreen!70!black, semithick, opacity=0.4] table[x=lon,y=lat] {data/midtown-after-cell2.dat};
