@@ -18,6 +18,7 @@
 \definecolor{idealgreen}{RGB}{34,139,34}     % theoretical ideal
 \definecolor{prodblue}{RGB}{31,119,180}      % productive walking
 \definecolor{unprodred}{RGB}{214,39,40}      % unproductive walking
+\definecolor{voronoiorange}{RGB}{255,127,14} % Voronoi boundaries
 
 \begin{document}
 
@@ -174,6 +175,9 @@ Fig.~\ref{fig:diag-subseg} shows a real segment (Starr King Circle, Fairmeadow) 
     xlabel={Longitude},
     ylabel={Latitude},
     tick label style={font=\tiny},
+    x tick label style={rotate=45, anchor=east},
+    scaled x ticks=false, xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
+    scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
     label style={font=\small},
     title style={font=\small\bfseries},
     title={Starr King Circle: Segment with Two Sub-Segments},
@@ -210,6 +214,9 @@ Fig.~\ref{fig:uturn-path} illustrates the extreme case where U-turn saves 81\%.
     xlabel={Longitude},
     ylabel={Latitude},
     tick label style={font=\tiny},
+    x tick label style={rotate=45, anchor=east},
+    scaled x ticks=false, xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
+    scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
     label style={font=\small},
     title style={font=\small\bfseries},
 ]
@@ -272,6 +279,9 @@ Inter-segment transitions --- the \emph{unproductive} component of Eq.~\ref{eq:w
     xlabel={Longitude},
     ylabel={Latitude},
     tick label style={font=\tiny},
+    x tick label style={rotate=45, anchor=east},
+    scaled x ticks=false, xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
+    scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
     label style={font=\small},
     title style={font=\small\bfseries},
     title={Road-Following vs.\ Straight-Line Transition},
@@ -325,6 +335,9 @@ Fig.~\ref{fig:rh-path} compares NN and RH chain traversals.
     xlabel={Longitude},
     ylabel={Latitude},
     tick label style={font=\tiny},
+    x tick label style={rotate=45, anchor=east},
+    scaled x ticks=false, xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
+    scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
     label style={font=\small},
     title style={font=\small\bfseries},
 ]
@@ -499,6 +512,9 @@ Figs.~\ref{fig:trails-fm} and \ref{fig:trails-cp} show per-ESW walking trails fo
     xlabel={Longitude},
     ylabel={Latitude},
     tick label style={font=\tiny},
+    x tick label style={rotate=45, anchor=east},
+    scaled x ticks=false, xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
+    scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
     label style={font=\small},
     title style={font=\small\bfseries},
 ]
@@ -532,6 +548,9 @@ Figs.~\ref{fig:trails-fm} and \ref{fig:trails-cp} show per-ESW walking trails fo
     xlabel={Longitude},
     ylabel={Latitude},
     tick label style={font=\tiny},
+    x tick label style={rotate=45, anchor=east},
+    scaled x ticks=false, xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
+    scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
     label style={font=\small},
     title style={font=\small\bfseries},
 ]
@@ -726,6 +745,9 @@ Fig.~\ref{fig:s2-trails-fm} shows the DFS assignment (Study~II winner) for Fairm
     xlabel={Longitude},
     ylabel={Latitude},
     tick label style={font=\tiny},
+    x tick label style={rotate=45, anchor=east},
+    scaled x ticks=false, xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
+    scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
     label style={font=\small},
     title style={font=\small\bfseries},
 ]
@@ -817,40 +839,36 @@ Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for compari
 \centering
 \begin{tikzpicture}
 \begin{groupplot}[
-    group style={group size=3 by 1, horizontal sep=1.2cm, ylabels at=edge left},
-    width=0.36\textwidth,
-    height=0.3\textwidth,
+    group style={group size=2 by 1, horizontal sep=2.0cm, ylabels at=edge left},
+    width=0.46\textwidth,
+    height=0.38\textwidth,
     xlabel={Longitude},
     ylabel={Latitude},
     tick label style={font=\tiny},
+    x tick label style={rotate=45, anchor=east},
+    scaled x ticks=false, xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
+    scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
     label style={font=\small},
     title style={font=\small\bfseries},
-    xmin=-122.1230, xmax=-122.1135,
-    ymin=37.4150, ymax=37.4215,
 ]
-\nextgroupplot[title={Cell 1 (190 addrs)}]
+\nextgroupplot[title={Lloyd's Iteration (67/63/182)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
-\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-esw0.dat};
-\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-seeds.dat};
-\addplot[idealgreen, very thick, dashed] table[x=lon,y=lat] {data/voronoi-fm-esw0-fromhuddle.dat};
-\addplot[only marks, mark=diamond*, mark size=4pt, idealgreen] table[x=lon,y=lat] {data/fairmeadow-s2-huddle.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-unbal-cell0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-unbal-cell1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-unbal-cell2.dat};
+\addplot[voronoiorange, very thick, opacity=0.8] table[x=lon,y=lat] {data/voronoi-fm-unbal-boundary.dat};
+\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-unbal-seeds.dat};
 
-\nextgroupplot[title={Cell 2 (70 addrs)}]
+\nextgroupplot[title={Balanced Seeds (104/102/106)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
-\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-esw1.dat};
-\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-seeds.dat};
-\addplot[idealgreen, very thick, dashed] table[x=lon,y=lat] {data/voronoi-fm-esw1-fromhuddle.dat};
-\addplot[only marks, mark=diamond*, mark size=4pt, idealgreen] table[x=lon,y=lat] {data/fairmeadow-s2-huddle.dat};
-
-\nextgroupplot[title={Cell 3 (52 addrs)}]
-\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
-\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-esw2.dat};
-\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-seeds.dat};
-\addplot[idealgreen, very thick, dashed] table[x=lon,y=lat] {data/voronoi-fm-esw2-fromhuddle.dat};
-\addplot[only marks, mark=diamond*, mark size=4pt, idealgreen] table[x=lon,y=lat] {data/fairmeadow-s2-huddle.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell2.dat};
+\addplot[voronoiorange, very thick, opacity=0.8] table[x=lon,y=lat] {data/voronoi-fm-bal-boundary.dat};
+\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-bal-seeds.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow Voronoi partition (Study~III, $N=3$). Each panel shows one cell's segments (colored) with Voronoi seed points (black diamonds), \textcolor{idealgreen}{green diamond} = fan-out point from Fire Station~4, and \textcolor{idealgreen}{green dashed} = walk from fan-out to first segment. Address counts are severely unbalanced (190/70/52) despite Lloyd's iteration. Compare with Study~I (Fig.~\ref{fig:trails-fm}: balanced, contiguous trails) and Study~II (Fig.~\ref{fig:s2-trails-fm}: balanced addresses, DFS contiguity). The Voronoi cell boundaries cut across cul-de-sac entrances, fragmenting natural walking clusters.}
+\caption{Fairmeadow Voronoi partition (Study~III, $N=3$). Left: Lloyd's iteration produces severely unbalanced cells (67/63/182 addresses). Right: exhaustive seed search achieves near-perfect balance (104/102/106). \textcolor{prodblue}{Blue}, \textcolor{unprodred}{red}, and \textcolor{idealgreen!70!black}{green} segments show the three cells. \textcolor{voronoiorange}{Orange} segments straddle Voronoi cell boundaries --- these are the segments where the two endpoints belong to different cells, and represent partition boundaries that cut across streets. Black diamonds = Voronoi seeds. Even with balanced seeds (right), the orange boundary segments show that Voronoi partitions fragment street-level walking paths.}
 \label{fig:voronoi-fm}
 \end{figure*}
 
@@ -858,40 +876,35 @@ Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for compari
 
 Can post-processing rescue the Voronoi partition? We attempt contiguity-preserving boundary transfers: iteratively move boundary segments from the heaviest cell to a lighter adjacent cell, provided the transfer does not disconnect the source cell. Across 38 test cases, this improves max time by \textbf{3.9\% on average} (up to 37.8\% on Classic Communities at $N = 5$). However, most cases show \textbf{0\% improvement} because Voronoi cells in road networks tend to be \emph{tree-shaped} --- removing any interior segment disconnects the cell. Only cells with cycles (redundant connections) allow productive transfers.
 
-Fig.~\ref{fig:hybrid} illustrates the process on Classic Communities ($N = 3$). The raw Voronoi partition (left) assigns 42/40/22 addresses. One boundary segment --- Tahoe Lane (10 addresses) --- is transferred from Cell~1 to Cell~3 (right), rebalancing to 32/40/32. The transferred segment (shown in black) is on the boundary between the two cells; its removal does not disconnect Cell~1.
+Fig.~\ref{fig:hybrid} shows the balanced Voronoi on Fairmeadow with \textcolor{voronoiorange}{orange} boundary segments highlighted. Despite achieving near-perfect address balance (104/102/106) through exhaustive seed search, no boundary segment can be transferred without disconnecting its source cell --- the cells are tree-shaped. The orange segments show where the partition cuts across streets; an ESW assigned to one cell would need to skip over these shared streets to reach isolated pockets of their cell on the other side.
 
-\begin{figure*}[htbp]
+\begin{figure}[htbp]
 \centering
 \begin{tikzpicture}
-\begin{groupplot}[
-    group style={group size=2 by 1, horizontal sep=2.0cm, ylabels at=edge left},
-    width=0.46\textwidth,
-    height=0.38\textwidth,
+\begin{axis}[
+    width=\columnwidth,
+    height=0.7\columnwidth,
     xlabel={Longitude},
     ylabel={Latitude},
     tick label style={font=\tiny},
+    x tick label style={rotate=45, anchor=east},
+    scaled x ticks=false, xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
+    scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
     label style={font=\small},
     title style={font=\small\bfseries},
+    title={Balanced Voronoi with Boundary Segments (104/102/106)},
 ]
-\nextgroupplot[title={Before: Voronoi (42/40/22)}]
-\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/hybrid-all-addrs.dat};
-\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/hybrid-before-cell0.dat};
-\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/hybrid-before-cell1.dat};
-\addplot[idealgreen, thick, opacity=0.7] table[x=lon,y=lat] {data/hybrid-before-cell2.dat};
-\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/hybrid-seeds.dat};
-
-\nextgroupplot[title={After: Boundary Transfer (32/40/32)}]
-\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/hybrid-all-addrs.dat};
-\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/hybrid-after-cell0.dat};
-\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/hybrid-after-cell1.dat};
-\addplot[idealgreen, thick, opacity=0.7] table[x=lon,y=lat] {data/hybrid-after-cell2.dat};
-\addplot[black, very thick] table[x=lon,y=lat] {data/hybrid-transferred.dat};
-\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/hybrid-seeds.dat};
-\end{groupplot}
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
+\addplot[prodblue, thick, opacity=0.6] table[x=lon,y=lat] {data/voronoi-fm-bal-cell0.dat};
+\addplot[unprodred, thick, opacity=0.6] table[x=lon,y=lat] {data/voronoi-fm-bal-cell1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.6] table[x=lon,y=lat] {data/voronoi-fm-bal-cell2.dat};
+\addplot[voronoiorange, very thick, opacity=0.9] table[x=lon,y=lat] {data/voronoi-fm-bal-boundary.dat};
+\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-bal-seeds.dat};
+\end{axis}
 \end{tikzpicture}
-\caption{Voronoi + boundary transfer on Classic Communities ($N=3$). Left: raw Voronoi partition with unbalanced address counts (42/40/22). Right: after transferring Tahoe Lane (10 addresses, shown in \textbf{black}) from \textcolor{prodblue}{Cell~1} to \textcolor{idealgreen}{Cell~3}, the partition rebalances to 32/40/32. Black diamonds = Voronoi seed points. This is the mechanism of the hybrid: boundary segments that can be moved without disconnecting their source cell are transferred from heavy cells to light ones.}
+\caption{Fairmeadow balanced Voronoi ($N=3$, 104/102/106 addresses). \textcolor{voronoiorange}{Orange} segments straddle cell boundaries --- their endpoints belong to different Voronoi cells. These boundary cuts fragment walking paths: an ESW in the \textcolor{prodblue}{blue} cell must skip over \textcolor{voronoiorange}{orange} segments to reach isolated pockets of their territory. No boundary segment can be transferred without disconnecting its source cell (tree-shaped topology), so the hybrid achieves 0\% improvement on Fairmeadow. Compare with Study~I's chain+slice (Fig.~\ref{fig:trails-fm}), which avoids boundary fragmentation entirely by building walk-ordered sequences.}
 \label{fig:hybrid}
-\end{figure*}
+\end{figure}
 
 This confirms the negative finding: \textbf{the partitioning unit must be the road segment, not the geographic cell.} Algorithms that build assignments as walk-ordered segment sequences (chain+slice, bisect, 2-opt) outperform those that partition space first (Voronoi, BFS), because they respect the sequential nature of walking. The hybrid's failure to rescue Voronoi demonstrates that this is a structural limitation, not a parameter-tuning issue.
 
