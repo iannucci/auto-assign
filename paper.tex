@@ -376,6 +376,8 @@ The three terms serve distinct purposes:
 \subsection{Oracle Algorithm (C5)}
 \label{sec:oracle}
 
+Since no single strategy dominates (as Study~I will show), the oracle (Algorithm~\ref{alg:oracle}) runs all four and selects the best by score.
+
 \begin{algorithm}[htbp]
 \caption{Oracle Assignment}
 \label{alg:oracle}
@@ -446,7 +448,7 @@ NN Chain & 2 & 3 & 2 & 2 & 9 (7\%) \\
 
 \subsection{Overhead vs.\ Theoretical Ideal}
 
-Using the tighter bound (single-worker chain cost / $N$), overhead ratios $\rho$ average \textbf{1.49$\times$} (range 0.94--3.58). Values below 1.0 occur when bisection finds partitions that avoid costly transitions present in the single-worker chain.
+Using the tighter bound (single-worker chain cost / $N$, refining Eq.~\ref{eq:ideal}), overhead ratios $\rho$ average \textbf{1.49$\times$} (range 0.94--3.58). Values below 1.0 occur when bisection finds partitions that avoid costly transitions present in the single-worker chain.
 
 \subsection{Productive vs.\ Unproductive Walking}
 
@@ -587,7 +589,7 @@ Study~II reformulates the objective to minimize the worst-case \emph{finish time
 
 \subsection{Time Metric}
 
-The finish time for ESW $k$ is:
+The finish time for ESW $k$ is (Eq.~\ref{eq:time}):
 \begin{equation}
 T_k = \frac{d_{\text{road}}(H, \text{first}_k) + W_k^{\text{prod}} + W_k^{\text{unprod}}}{v} + |P_k| \cdot t_{\text{assess}}
 \label{eq:time}
@@ -708,7 +710,7 @@ Final result: ESW~1 = 124\,min (21 addrs), ESW~2 = 124\,min (21 addrs), ESW~3 = 
 
 \subsection{Results}
 
-We test BFS, DFS, BFS+SA, and Study~I's chain+slice (evaluated with the time metric) across 10 neighborhoods at $N = 3, 5$ (20 test cases), with $t_{\text{assess}} = 5$\,min and walking speed 5\,km/h. Huddle points are the nearest intersection node to each neighborhood's serving fire station (6 Palo Alto Fire Department stations, assigned by centroid proximity).
+We test BFS, DFS, BFS+SA, and Study~I's chain+slice (evaluated with the time metric) across 10 neighborhoods at $N = 3, 5$ (20 test cases), with $t_{\text{assess}} = 5$\,min and walking speed 5\,km/h. Huddle points are the nearest intersection node to each neighborhood's serving fire station (6 Palo Alto Fire Department stations, assigned by centroid proximity). Table~\ref{tab:study2wins} summarizes the results.
 
 \begin{table}[htbp]
 \caption{Study~II Strategy Wins (Time Metric)}
