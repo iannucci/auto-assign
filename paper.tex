@@ -753,19 +753,19 @@ Fig.~\ref{fig:s2-trails-fm} shows the DFS assignment (Study~II winner) for Fairm
 
 \subsection{Results}
 
-We test BFS, DFS, BFS+SA, and Study~I's chain+slice (evaluated with the time metric) across 10 neighborhoods at $N = 3, 5$ (20 test cases), with $t_{\text{assess}} = 5$\,min and walking speed 5\,km/h. Huddle points are the nearest intersection node to each neighborhood's serving fire station (6 Palo Alto Fire Department stations, assigned by centroid proximity). Table~\ref{tab:study2wins} summarizes the results.
+We test BFS, DFS, BFS+SA, and Study~I's chain+slice (evaluated with the time metric) across 11 neighborhoods at $N = 3, 5$ (22 test cases), with $t_{\text{assess}} = 5$\,min and walking speed 5\,km/h. Huddle points are the nearest intersection node to each neighborhood's serving fire station (6 Palo Alto Fire Department stations, assigned by centroid proximity). Table~\ref{tab:study2wins} summarizes the results.
 
 \begin{table}[htbp]
-\caption{Study~II Strategy Wins (Time Metric)}
+\caption{Study~II Strategy Wins (Time Metric, 22 test cases)}
 \label{tab:study2wins}
 \begin{center}
 \begin{tabular}{lc}
 \toprule
-\textbf{Strategy} & \textbf{Wins (of 20)} \\
+\textbf{Strategy} & \textbf{Wins} \\
 \midrule
-\textbf{Chain+Slice (Study~I)} & \textbf{13 (65\%)} \\
-BFS+SA & 4 (20\%) \\
-DFS & 3 (15\%) \\
+\textbf{Chain+Slice (Study~I)} & \textbf{13 (59\%)} \\
+DFS & 5 (23\%) \\
+BFS+SA & 4 (18\%) \\
 BFS (raw) & 0 \\
 \bottomrule
 \end{tabular}
@@ -840,9 +840,9 @@ We presented a practical system for assigning addresses to emergency services wo
 
 \textbf{C5 (Oracle algorithm).} Running all four strategies completes in $<$1\,s for neighborhoods up to 1,476 addresses, enabling real-time use during emergency operations. The $N$-dependent winner pattern provides practitioners with a simple rule: use 2-opt for small teams, bisection for large teams, or the oracle when in doubt.
 
-\textbf{C6 (Time-based reformulation).} Study~II shows that when per-address assessment time dominates walking time ($\sim$8$\times$ at $t_{\text{assess}} = 5$\,min), Study~I's chain+slice approach wins 65\% of cases even under the time metric --- because address count balance matters more than walking optimization. BFS+SA from fire station huddle points provides value at larger $N$ where chain+slice produces empty partitions. This finding allows communities to choose their approach based on their assessment protocol: walking-optimized for rapid visual sweeps, time-balanced for detailed assessments.
+\textbf{C6 (Time-based reformulation).} Study~II shows that when assessment time dominates walking ($\sim$8$\times$ at $t_{\text{assess}} = 5$\,min), Study~I's chain+slice wins 59\% of cases even under the time metric. More importantly, BFS --- despite producing acceptable time balance --- generates twice the walking distance of DFS or chain+slice (21.4\,km vs.\ 10.2--12.5\,km on Fairmeadow). ESWs walking past unvisited addresses is operationally unacceptable regardless of what the time metric shows. This reveals that \textbf{walking quality} (ratio of productive to total walking) must be a constraint, not merely a cost component. Geographic contiguity of each ESW's territory is essential.
 
-Future work includes: field validation with ESW teams, incorporating road-closure data, per-address assessment time weights, and testing on cities with different street geometries.
+Future work includes: road-network Voronoi partitioning (which guarantees geographic contiguity by construction); a constraint-solver formulation that explicitly balances competing objectives --- walking quality, time balance, and contiguity --- rather than collapsing them into a single score; field validation with ESW teams; and testing on cities with different street geometries.
 
 \begin{thebibliography}{00}
 
