@@ -808,6 +808,41 @@ Across 19 neighborhoods at $N = 3, 5$ (38 test cases):
 
 \textbf{Why Voronoi fails.} Road-network Voronoi cells are \emph{topologically connected} but not \emph{walkably contiguous}. A cell boundary that crosses a long street assigns the two halves to different ESWs, forcing each to walk the full street to reach a pocket on the other side. The chain-based approaches of Study~I avoid this because they build each ESW's assignment as a walk-ordered sequence of segments, inherently minimizing transitions.
 
+Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for comparison with Study~I (Fig.~\ref{fig:trails-fm}) and Study~II (Fig.~\ref{fig:s2-trails-fm}).
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=3 by 1, horizontal sep=0.8cm},
+    width=0.36\textwidth,
+    height=0.3\textwidth,
+    xlabel={Longitude},
+    ylabel={Latitude},
+    tick label style={font=\tiny},
+    label style={font=\small},
+    title style={font=\small\bfseries},
+]
+\nextgroupplot[title={Cell 1 (190 addrs)}]
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-esw0.dat};
+\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-seeds.dat};
+
+\nextgroupplot[title={Cell 2 (70 addrs)}]
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-esw1.dat};
+\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-seeds.dat};
+
+\nextgroupplot[title={Cell 3 (52 addrs)}]
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
+\addplot[idealgreen, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-esw2.dat};
+\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-seeds.dat};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Fairmeadow Voronoi partition (Study~III, $N=3$). Each panel shows one cell's segments (colored) with Voronoi seed points (black diamonds). Address counts are severely unbalanced (190/70/52) despite Lloyd's iteration. Compare with Study~I (Fig.~\ref{fig:trails-fm}: balanced, contiguous trails) and Study~II (Fig.~\ref{fig:s2-trails-fm}: balanced addresses, DFS contiguity). The Voronoi cell boundaries cut across cul-de-sac entrances, fragmenting natural walking clusters. Cell~1 absorbs most addresses because the seed placement cannot compensate for the non-uniform address density of the cul-de-sac layout.}
+\label{fig:voronoi-fm}
+\end{figure*}
+
 The Voronoi result is a valuable negative finding: \textbf{the partitioning unit must be the road segment, not the Voronoi cell.} Algorithms that assign whole segments in walk order (chain+slice, bisect) outperform those that partition geographic space (Voronoi, BFS) because they respect the sequential nature of walking.
 
 %% ==================================================================
