@@ -858,6 +858,41 @@ Fig.~\ref{fig:voronoi-fm} shows the Voronoi partition on Fairmeadow, for compari
 
 Can post-processing rescue the Voronoi partition? We attempt contiguity-preserving boundary transfers: iteratively move boundary segments from the heaviest cell to a lighter adjacent cell, provided the transfer does not disconnect the source cell. Across 38 test cases, this improves max time by \textbf{3.9\% on average} (up to 37.8\% on Classic Communities at $N = 5$). However, most cases show \textbf{0\% improvement} because Voronoi cells in road networks tend to be \emph{tree-shaped} --- removing any interior segment disconnects the cell. Only cells with cycles (redundant connections) allow productive transfers.
 
+Fig.~\ref{fig:hybrid} illustrates the process on Classic Communities ($N = 3$). The raw Voronoi partition (left) assigns 42/40/22 addresses. One boundary segment --- Tahoe Lane (10 addresses) --- is transferred from Cell~1 to Cell~3 (right), rebalancing to 32/40/32. The transferred segment (shown in black) is on the boundary between the two cells; its removal does not disconnect Cell~1.
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 1, horizontal sep=2.0cm, ylabels at=edge left},
+    width=0.46\textwidth,
+    height=0.38\textwidth,
+    xlabel={Longitude},
+    ylabel={Latitude},
+    tick label style={font=\tiny},
+    label style={font=\small},
+    title style={font=\small\bfseries},
+]
+\nextgroupplot[title={Before: Voronoi (42/40/22)}]
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/hybrid-all-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/hybrid-before-cell0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/hybrid-before-cell1.dat};
+\addplot[idealgreen, thick, opacity=0.7] table[x=lon,y=lat] {data/hybrid-before-cell2.dat};
+\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/hybrid-seeds.dat};
+
+\nextgroupplot[title={After: Boundary Transfer (32/40/32)}]
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/hybrid-all-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/hybrid-after-cell0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/hybrid-after-cell1.dat};
+\addplot[idealgreen, thick, opacity=0.7] table[x=lon,y=lat] {data/hybrid-after-cell2.dat};
+\addplot[black, very thick] table[x=lon,y=lat] {data/hybrid-transferred.dat};
+\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/hybrid-seeds.dat};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Voronoi + boundary transfer on Classic Communities ($N=3$). Left: raw Voronoi partition with unbalanced address counts (42/40/22). Right: after transferring Tahoe Lane (10 addresses, shown in \textbf{black}) from \textcolor{prodblue}{Cell~1} to \textcolor{idealgreen}{Cell~3}, the partition rebalances to 32/40/32. Black diamonds = Voronoi seed points. This is the mechanism of the hybrid: boundary segments that can be moved without disconnecting their source cell are transferred from heavy cells to light ones.}
+\label{fig:hybrid}
+\end{figure*}
+
 This confirms the negative finding: \textbf{the partitioning unit must be the road segment, not the geographic cell.} Algorithms that build assignments as walk-ordered segment sequences (chain+slice, bisect, 2-opt) outperform those that partition space first (Voronoi, BFS), because they respect the sequential nature of walking. The hybrid's failure to rescue Voronoi demonstrates that this is a structural limitation, not a parameter-tuning issue.
 
 %% ==================================================================
