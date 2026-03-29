@@ -1,0 +1,1622 @@
+[
+  {
+    "hood": "Greater Miranda",
+    "addrs": 54,
+    "segs": 14,
+    "n": 3,
+    "initial": {
+      "spread": 8.117124684987402,
+      "maxTime": 108.11232449297972,
+      "minWalkQuality": 0.28940568475452194,
+      "feasible": false
+    },
+    "final": {
+      "spread": 7.693507740309613,
+      "maxTime": 107.68870754830193,
+      "minWalkQuality": 0.29633649932157397,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 100.81603264130565,
+          "addrs": 18,
+          "walkQuality": 0.548430045489848
+        },
+        {
+          "time": 107.68870754830193,
+          "addrs": 18,
+          "walkQuality": 0.29633649932157397
+        },
+        {
+          "time": 99.99519980799232,
+          "addrs": 18,
+          "walkQuality": 0.5028214671629246
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Greater Miranda",
+    "addrs": 54,
+    "segs": 14,
+    "n": 5,
+    "initial": {
+      "spread": 10.587423496939877,
+      "maxTime": 85.31201248049922,
+      "minWalkQuality": 0.31111161057233533,
+      "feasible": false
+    },
+    "final": {
+      "spread": 10.125405016200645,
+      "maxTime": 84.84999399975999,
+      "minWalkQuality": 0.31111161057233533,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 84.84999399975999,
+          "addrs": 15,
+          "walkQuality": 0.5056042884990254
+        },
+        {
+          "time": 74.72458898355934,
+          "addrs": 12,
+          "walkQuality": 0.31198044009779946
+        },
+        {
+          "time": 76.08438689547582,
+          "addrs": 13,
+          "walkQuality": 0.31111161057233533
+        },
+        {
+          "time": 77.32029281171246,
+          "addrs": 14,
+          "walkQuality": 0.4337704918032787
+        },
+        {
+          "time": 0,
+          "addrs": 0,
+          "walkQuality": 1
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Evergreen Park",
+    "addrs": 62,
+    "segs": 9,
+    "n": 3,
+    "initial": {
+      "spread": 70.20160806432258,
+      "maxTime": 218.35353414136566,
+      "minWalkQuality": 0.0622107629247653,
+      "feasible": false
+    },
+    "final": {
+      "spread": 70.20160806432258,
+      "maxTime": 218.35353414136566,
+      "minWalkQuality": 0.0622107629247653,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 218.35353414136566,
+          "addrs": 42,
+          "walkQuality": 0.23976440166642723
+        },
+        {
+          "time": 206.25405016200648,
+          "addrs": 37,
+          "walkQuality": 0.21224098018180795
+        },
+        {
+          "time": 148.15192607704307,
+          "addrs": 26,
+          "walkQuality": 0.0622107629247653
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 4000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Evergreen Park",
+    "addrs": 62,
+    "segs": 9,
+    "n": 5,
+    "initial": {
+      "spread": 110.97743909756389,
+      "maxTime": 152.44629785191407,
+      "minWalkQuality": 0.035047512576858585,
+      "feasible": false
+    },
+    "final": {
+      "spread": 110.97743909756389,
+      "maxTime": 152.44629785191407,
+      "minWalkQuality": 0.035047512576858585,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 152.44629785191407,
+          "addrs": 29,
+          "walkQuality": 0.19065269943593882
+        },
+        {
+          "time": 133.7327493099724,
+          "addrs": 23,
+          "walkQuality": 0.16989109545163358
+        },
+        {
+          "time": 142.03348133925357,
+          "addrs": 27,
+          "walkQuality": 0.26155946084285964
+        },
+        {
+          "time": 119.29557182287292,
+          "addrs": 22,
+          "walkQuality": 0.04053705138135812
+        },
+        {
+          "time": 41.46885875435018,
+          "addrs": 4,
+          "walkQuality": 0.035047512576858585
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 4000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Palo Alto",
+    "addrs": 77,
+    "segs": 35,
+    "n": 3,
+    "initial": {
+      "spread": 52.08532749309961,
+      "maxTime": 702.6415497419896,
+      "minWalkQuality": 0.04290922268236539,
+      "feasible": false
+    },
+    "final": {
+      "spread": 29.139986559462272,
+      "maxTime": 679.6962088083523,
+      "minWalkQuality": 0.04986108264593087,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 679.6962088083523,
+          "addrs": 101,
+          "walkQuality": 0.11460364211358037
+        },
+        {
+          "time": 650.55622224889,
+          "addrs": 117,
+          "walkQuality": 0.3821849600937248
+        },
+        {
+          "time": 663.2343734549381,
+          "addrs": 84,
+          "walkQuality": 0.04986108264593087
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Palo Alto",
+    "addrs": 77,
+    "segs": 35,
+    "n": 5,
+    "initial": {
+      "spread": 121.78044809792397,
+      "maxTime": 490.11502556102243,
+      "minWalkQuality": 0.014539357593019914,
+      "feasible": false
+    },
+    "final": {
+      "spread": 107.86949165966644,
+      "maxTime": 476.2040691227649,
+      "minWalkQuality": 0.014539357593019914,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 476.2040691227649,
+          "addrs": 63,
+          "walkQuality": 0.09265410290209039
+        },
+        {
+          "time": 404.56978279131164,
+          "addrs": 70,
+          "walkQuality": 0.19730389461878478
+        },
+        {
+          "time": 454.45517820712826,
+          "addrs": 85,
+          "walkQuality": 0.65768995722143
+        },
+        {
+          "time": 401.7508700348014,
+          "addrs": 66,
+          "walkQuality": 0.11262752968723866
+        },
+        {
+          "time": 368.33457746309847,
+          "addrs": 18,
+          "walkQuality": 0.014539357593019914
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Palo Alto Hills",
+    "addrs": 85,
+    "segs": 58,
+    "n": 3,
+    "initial": {
+      "spread": 9.878656906276234,
+      "maxTime": 199.49637033481338,
+      "minWalkQuality": 0.238656457971848,
+      "feasible": false
+    },
+    "final": {
+      "spread": 8.32339469578784,
+      "maxTime": 197.94110812432498,
+      "minWalkQuality": 0.24566751957450622,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 197.94110812432498,
+          "addrs": 29,
+          "walkQuality": 0.24566751957450622
+        },
+        {
+          "time": 191.17463554542184,
+          "addrs": 29,
+          "walkQuality": 0.32009304659592774
+        },
+        {
+          "time": 189.61771342853714,
+          "addrs": 27,
+          "walkQuality": 0.315930819025128
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Palo Alto Hills",
+    "addrs": 85,
+    "segs": 58,
+    "n": 5,
+    "initial": {
+      "spread": 16.420840753630145,
+      "maxTime": 126.49458850354014,
+      "minWalkQuality": 0.19688678027980802,
+      "feasible": false
+    },
+    "final": {
+      "spread": 12.737893435737433,
+      "maxTime": 122.81164118564743,
+      "minWalkQuality": 0.19688678027980802,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 121.00682443297731,
+          "addrs": 17,
+          "walkQuality": 0.19688678027980802
+        },
+        {
+          "time": 120.06580895235811,
+          "addrs": 17,
+          "walkQuality": 0.2678045147635626
+        },
+        {
+          "time": 110.07374774991,
+          "addrs": 18,
+          "walkQuality": 0.4977717469735681
+        },
+        {
+          "time": 110.40125981039242,
+          "addrs": 17,
+          "walkQuality": 0.34288819596745473
+        },
+        {
+          "time": 122.81164118564743,
+          "addrs": 16,
+          "walkQuality": 0.23030004988992192
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Classic Communities",
+    "addrs": 104,
+    "segs": 17,
+    "n": 3,
+    "initial": {
+      "spread": 10.547932797311887,
+      "maxTime": 188.7267490699628,
+      "minWalkQuality": 0.5394664466446645,
+      "feasible": true
+    },
+    "final": {
+      "spread": 10.547932797311887,
+      "maxTime": 188.7267490699628,
+      "minWalkQuality": 0.5394664466446645,
+      "feasible": true,
+      "evals": [
+        {
+          "time": 188.7267490699628,
+          "addrs": 36,
+          "walkQuality": 0.5394664466446645
+        },
+        {
+          "time": 181.78267130685228,
+          "addrs": 35,
+          "walkQuality": 0.7123142250530785
+        },
+        {
+          "time": 178.17881627265092,
+          "addrs": 33,
+          "walkQuality": 0.6058061898098651
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Classic Communities",
+    "addrs": 104,
+    "segs": 17,
+    "n": 5,
+    "initial": {
+      "spread": 89.06111436457456,
+      "maxTime": 192.53630145205807,
+      "minWalkQuality": 0.3825022052784692,
+      "feasible": false
+    },
+    "final": {
+      "spread": 89.06111436457456,
+      "maxTime": 192.53630145205807,
+      "minWalkQuality": 0.3825022052784692,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 132.80027601104044,
+          "addrs": 25,
+          "walkQuality": 0.561690284724391
+        },
+        {
+          "time": 192.53630145205807,
+          "addrs": 37,
+          "walkQuality": 0.7463375796178344
+        },
+        {
+          "time": 121.61954182167287,
+          "addrs": 23,
+          "walkQuality": 0.6069661408219289
+        },
+        {
+          "time": 103.4751870874835,
+          "addrs": 19,
+          "walkQuality": 0.3825022052784692
+        },
+        {
+          "time": 0,
+          "addrs": 0,
+          "walkQuality": 1
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 1,
+      "rejected_quality": 7998,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Greenacres I",
+    "addrs": 108,
+    "segs": 22,
+    "n": 3,
+    "initial": {
+      "spread": 23.826845553822153,
+      "maxTime": 247.5371837273491,
+      "minWalkQuality": 0.322803056715268,
+      "feasible": false
+    },
+    "final": {
+      "spread": 21.05353462138487,
+      "maxTime": 244.7638727949118,
+      "minWalkQuality": 0.3409591874995425,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 232.17633985359413,
+          "addrs": 43,
+          "walkQuality": 0.5884872567987635
+        },
+        {
+          "time": 244.7638727949118,
+          "addrs": 43,
+          "walkQuality": 0.3528809048629617
+        },
+        {
+          "time": 223.71033817352694,
+          "addrs": 38,
+          "walkQuality": 0.3409591874995425
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Greenacres I",
+    "addrs": 108,
+    "segs": 22,
+    "n": 5,
+    "initial": {
+      "spread": 48.45543069722788,
+      "maxTime": 162.97340117604705,
+      "minWalkQuality": 0.13019217110514453,
+      "feasible": false
+    },
+    "final": {
+      "spread": 45.08089571582863,
+      "maxTime": 159.5988661946478,
+      "minWalkQuality": 0.13019217110514453,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 148.65121876875074,
+          "addrs": 28,
+          "walkQuality": 0.8076032264176001
+        },
+        {
+          "time": 136.91887675507022,
+          "addrs": 25,
+          "walkQuality": 0.5490334273056786
+        },
+        {
+          "time": 143.87975519020762,
+          "addrs": 26,
+          "walkQuality": 0.4922185716756009
+        },
+        {
+          "time": 159.5988661946478,
+          "addrs": 29,
+          "walkQuality": 0.4582102284384933
+        },
+        {
+          "time": 114.51797047881917,
+          "addrs": 16,
+          "walkQuality": 0.13019217110514453
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Walnut Grove",
+    "addrs": 138,
+    "segs": 28,
+    "n": 3,
+    "initial": {
+      "spread": 6.17651098043919,
+      "maxTime": 261.53292523700947,
+      "minWalkQuality": 0.3789187751699926,
+      "feasible": false
+    },
+    "final": {
+      "spread": 6.17651098043919,
+      "maxTime": 261.53292523700947,
+      "minWalkQuality": 0.3789187751699926,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 255.35641425657028,
+          "addrs": 47,
+          "walkQuality": 0.5135883982786064
+        },
+        {
+          "time": 261.53292523700947,
+          "addrs": 48,
+          "walkQuality": 0.5699808418551268
+        },
+        {
+          "time": 256.29184495379815,
+          "addrs": 45,
+          "walkQuality": 0.3789187751699926
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 2000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Walnut Grove",
+    "addrs": 138,
+    "segs": 28,
+    "n": 5,
+    "initial": {
+      "spread": 39.28375471018842,
+      "maxTime": 172.49508316332654,
+      "minWalkQuality": 0.28600971978078793,
+      "feasible": false
+    },
+    "final": {
+      "spread": 39.28375471018842,
+      "maxTime": 172.49508316332654,
+      "minWalkQuality": 0.28600971978078793,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 172.49508316332654,
+          "addrs": 31,
+          "walkQuality": 0.48129637877102055
+        },
+        {
+          "time": 164.8300571222849,
+          "addrs": 29,
+          "walkQuality": 0.3571924781764668
+        },
+        {
+          "time": 163.58034321372855,
+          "addrs": 29,
+          "walkQuality": 0.3194471355680424
+        },
+        {
+          "time": 159.63578543141725,
+          "addrs": 29,
+          "walkQuality": 0.46449655624795017
+        },
+        {
+          "time": 133.21132845313812,
+          "addrs": 22,
+          "walkQuality": 0.28600971978078793
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Meadow Park",
+    "addrs": 142,
+    "segs": 33,
+    "n": 3,
+    "initial": {
+      "spread": 7.8368270730829295,
+      "maxTime": 289.9153102124085,
+      "minWalkQuality": 0.16267262987047182,
+      "feasible": false
+    },
+    "final": {
+      "spread": 7.8368270730829295,
+      "maxTime": 289.9153102124085,
+      "minWalkQuality": 0.16267262987047182,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 289.9153102124085,
+          "addrs": 53,
+          "walkQuality": 0.5696931421783179
+        },
+        {
+          "time": 282.07848313932556,
+          "addrs": 52,
+          "walkQuality": 0.5972388303076421
+        },
+        {
+          "time": 285.8593135725429,
+          "addrs": 44,
+          "walkQuality": 0.16267262987047182
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 0,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Meadow Park",
+    "addrs": 142,
+    "segs": 33,
+    "n": 5,
+    "initial": {
+      "spread": 18.678147125885033,
+      "maxTime": 184.53678147125885,
+      "minWalkQuality": 0.10856484209702902,
+      "feasible": false
+    },
+    "final": {
+      "spread": 16.35219248769951,
+      "maxTime": 182.21082683307333,
+      "minWalkQuality": 0.10856484209702902,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 165.85863434537382,
+          "addrs": 30,
+          "walkQuality": 0.4174801362088536
+        },
+        {
+          "time": 182.21082683307333,
+          "addrs": 32,
+          "walkQuality": 0.4726685059153518
+        },
+        {
+          "time": 173.21072842913716,
+          "addrs": 31,
+          "walkQuality": 0.41080724876441516
+        },
+        {
+          "time": 182.0346813872555,
+          "addrs": 33,
+          "walkQuality": 0.4395209580838324
+        },
+        {
+          "time": 170.1052586103444,
+          "addrs": 23,
+          "walkQuality": 0.10856484209702902
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Palo Alto Central",
+    "addrs": 145,
+    "segs": 11,
+    "n": 3,
+    "initial": {
+      "spread": 54.66458658346335,
+      "maxTime": 347.2752910116405,
+      "minWalkQuality": 0.3497319457584358,
+      "feasible": false
+    },
+    "final": {
+      "spread": 54.66458658346335,
+      "maxTime": 347.2752910116405,
+      "minWalkQuality": 0.3497319457584358,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 347.2752910116405,
+          "addrs": 69,
+          "walkQuality": 0.8069620253164557
+        },
+        {
+          "time": 340.6990279611184,
+          "addrs": 67,
+          "walkQuality": 0.6188671299220888
+        },
+        {
+          "time": 292.61070442817714,
+          "addrs": 57,
+          "walkQuality": 0.3497319457584358
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Palo Alto Central",
+    "addrs": 145,
+    "segs": 11,
+    "n": 5,
+    "initial": {
+      "spread": 47.73670946837876,
+      "maxTime": 274.29857194287774,
+      "minWalkQuality": 0.28969643899591363,
+      "feasible": false
+    },
+    "final": {
+      "spread": 47.73670946837876,
+      "maxTime": 274.29857194287774,
+      "minWalkQuality": 0.28969643899591363,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 274.29857194287774,
+          "addrs": 54,
+          "walkQuality": 0.4642657733109994
+        },
+        {
+          "time": 226.56186247449898,
+          "addrs": 44,
+          "walkQuality": 0.33174835405998543
+        },
+        {
+          "time": 255.0810032401296,
+          "addrs": 50,
+          "walkQuality": 0.3460085025980161
+        },
+        {
+          "time": 233.22272890915636,
+          "addrs": 45,
+          "walkQuality": 0.28969643899591363
+        },
+        {
+          "time": 0,
+          "addrs": 0,
+          "walkQuality": 1
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Charleston Gardens",
+    "addrs": 194,
+    "segs": 34,
+    "n": 3,
+    "initial": {
+      "spread": 1.9209727589103522,
+      "maxTime": 432.3911215648626,
+      "minWalkQuality": 0.27183727238361244,
+      "feasible": false
+    },
+    "final": {
+      "spread": 1.0713387735509627,
+      "maxTime": 431.5414875795032,
+      "minWalkQuality": 0.2773970681098126,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 430.47014880595225,
+          "addrs": 80,
+          "walkQuality": 0.6584980174886352
+        },
+        {
+          "time": 430.7390001200048,
+          "addrs": 81,
+          "walkQuality": 0.604351089909709
+        },
+        {
+          "time": 431.5414875795032,
+          "addrs": 78,
+          "walkQuality": 0.2773970681098126
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Charleston Gardens",
+    "addrs": 194,
+    "segs": 34,
+    "n": 5,
+    "initial": {
+      "spread": 36.89007560302409,
+      "maxTime": 282.87711508460336,
+      "minWalkQuality": 0.2388362964673286,
+      "feasible": false
+    },
+    "final": {
+      "spread": 36.89007560302409,
+      "maxTime": 282.87711508460336,
+      "minWalkQuality": 0.2388362964673286,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 265.2202088083523,
+          "addrs": 48,
+          "walkQuality": 0.42467643700038066
+        },
+        {
+          "time": 282.87711508460336,
+          "addrs": 51,
+          "walkQuality": 0.4853207059836419
+        },
+        {
+          "time": 258.6911182047282,
+          "addrs": 48,
+          "walkQuality": 0.5439576774233843
+        },
+        {
+          "time": 251.1553752550102,
+          "addrs": 48,
+          "walkQuality": 0.586693919480101
+        },
+        {
+          "time": 245.98703948157927,
+          "addrs": 44,
+          "walkQuality": 0.2388362964673286
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Greenhouse",
+    "addrs": 230,
+    "segs": 20,
+    "n": 3,
+    "initial": {
+      "spread": 245.32133349333972,
+      "maxTime": 493.07304356174245,
+      "minWalkQuality": 0.1567852437417655,
+      "feasible": false
+    },
+    "final": {
+      "spread": 245.32133349333972,
+      "maxTime": 493.07304356174245,
+      "minWalkQuality": 0.1567852437417655,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 493.07304356174245,
+          "addrs": 96,
+          "walkQuality": 0.5418481129282806
+        },
+        {
+          "time": 460.2839851194048,
+          "addrs": 89,
+          "walkQuality": 0.4693841734588318
+        },
+        {
+          "time": 247.75171006840273,
+          "addrs": 47,
+          "walkQuality": 0.1567852437417655
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Greenhouse",
+    "addrs": 230,
+    "segs": 20,
+    "n": 5,
+    "initial": {
+      "spread": 149.9650810032401,
+      "maxTime": 292.0790831633265,
+      "minWalkQuality": 0.13296632020989432,
+      "feasible": false
+    },
+    "final": {
+      "spread": 146.65654866194646,
+      "maxTime": 288.7705508220329,
+      "minWalkQuality": 0.13296632020989432,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 259.40279035161404,
+          "addrs": 49,
+          "walkQuality": 0.3414345987398671
+        },
+        {
+          "time": 270.4069324372975,
+          "addrs": 52,
+          "walkQuality": 0.13296632020989432
+        },
+        {
+          "time": 288.7705508220329,
+          "addrs": 55,
+          "walkQuality": 0.3591285403050109
+        },
+        {
+          "time": 244.8541941677667,
+          "addrs": 48,
+          "walkQuality": 0.669221260815822
+        },
+        {
+          "time": 142.11400216008641,
+          "addrs": 28,
+          "walkQuality": 0.8285647463269146
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Palo Alto Orchard",
+    "addrs": 230,
+    "segs": 28,
+    "n": 3,
+    "initial": {
+      "spread": 228.8233757350294,
+      "maxTime": 507.282514100564,
+      "minWalkQuality": 0.3067101716555539,
+      "feasible": false
+    },
+    "final": {
+      "spread": 226.0632653306132,
+      "maxTime": 504.5224036961478,
+      "minWalkQuality": 0.3067101716555539,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 452.87267682707306,
+          "addrs": 83,
+          "walkQuality": 0.5354143071404344
+        },
+        {
+          "time": 504.5224036961478,
+          "addrs": 95,
+          "walkQuality": 0.3387265787648878
+        },
+        {
+          "time": 278.4591383655346,
+          "addrs": 54,
+          "walkQuality": 0.3067101716555539
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Palo Alto Orchard",
+    "addrs": 230,
+    "segs": 28,
+    "n": 5,
+    "initial": {
+      "spread": 373.1033241329653,
+      "maxTime": 390.8364334573383,
+      "minWalkQuality": 0.11297330850403478,
+      "feasible": false
+    },
+    "final": {
+      "spread": 371.0308412336493,
+      "maxTime": 388.7639505580223,
+      "minWalkQuality": 0.11297330850403478,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 271.44073514940595,
+          "addrs": 48,
+          "walkQuality": 0.38769974826222875
+        },
+        {
+          "time": 317.17928717148686,
+          "addrs": 59,
+          "walkQuality": 0.5107131262850341
+        },
+        {
+          "time": 249.01896075843035,
+          "addrs": 47,
+          "walkQuality": 0.3049135422016778
+        },
+        {
+          "time": 388.7639505580223,
+          "addrs": 76,
+          "walkQuality": 0.44406408325345753
+        },
+        {
+          "time": 17.733109324372975,
+          "addrs": 2,
+          "walkQuality": 0.11297330850403478
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 4000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Greenacres II",
+    "addrs": 264,
+    "segs": 45,
+    "n": 3,
+    "initial": {
+      "spread": 15.069757830313165,
+      "maxTime": 514.7079318372735,
+      "minWalkQuality": 0.3616515236515403,
+      "feasible": false
+    },
+    "final": {
+      "spread": 14.702543141725641,
+      "maxTime": 514.3407171486859,
+      "minWalkQuality": 0.3616515236515403,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 514.3407171486859,
+          "addrs": 92,
+          "walkQuality": 0.4257998470548626
+        },
+        {
+          "time": 507.1816843873755,
+          "addrs": 94,
+          "walkQuality": 0.6040795600816868
+        },
+        {
+          "time": 499.6381740069603,
+          "addrs": 89,
+          "walkQuality": 0.3616515236515403
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Greenacres II",
+    "addrs": 264,
+    "segs": 45,
+    "n": 5,
+    "initial": {
+      "spread": 31.969595823832947,
+      "maxTime": 328.82155286211446,
+      "minWalkQuality": 0.20240562023931918,
+      "feasible": false
+    },
+    "final": {
+      "spread": 29.558699387975537,
+      "maxTime": 326.41065642625705,
+      "minWalkQuality": 0.20240562023931918,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 299.89859594383773,
+          "addrs": 55,
+          "walkQuality": 0.5029400424137267
+        },
+        {
+          "time": 316.4634585383415,
+          "addrs": 58,
+          "walkQuality": 0.5010429892980228
+        },
+        {
+          "time": 302.9935197407896,
+          "addrs": 55,
+          "walkQuality": 0.5056801131735756
+        },
+        {
+          "time": 326.41065642625705,
+          "addrs": 60,
+          "walkQuality": 0.4442929843693203
+        },
+        {
+          "time": 296.8519570382815,
+          "addrs": 47,
+          "walkQuality": 0.20240562023931918
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Commercial",
+    "addrs": 267,
+    "segs": 85,
+    "n": 3,
+    "initial": {
+      "spread": 58.85909468378736,
+      "maxTime": 591.8058430337213,
+      "minWalkQuality": 0.14676727549586616,
+      "feasible": false
+    },
+    "final": {
+      "spread": 58.85909468378736,
+      "maxTime": 591.8058430337213,
+      "minWalkQuality": 0.14676727549586616,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 535.5351306852274,
+          "addrs": 95,
+          "walkQuality": 0.34259674689386377
+        },
+        {
+          "time": 591.8058430337213,
+          "addrs": 94,
+          "walkQuality": 0.17076523005841263
+        },
+        {
+          "time": 532.946748349934,
+          "addrs": 83,
+          "walkQuality": 0.14676727549586616
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Commercial",
+    "addrs": 267,
+    "segs": 85,
+    "n": 5,
+    "initial": {
+      "spread": 67.51377991119648,
+      "maxTime": 373.62340597623904,
+      "minWalkQuality": 0.11721381529677599,
+      "feasible": false
+    },
+    "final": {
+      "spread": 67.51377991119648,
+      "maxTime": 373.62340597623904,
+      "minWalkQuality": 0.11721381529677599,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 328.1230704428177,
+          "addrs": 60,
+          "walkQuality": 0.3030496419224981
+        },
+        {
+          "time": 311.654265450618,
+          "addrs": 58,
+          "walkQuality": 0.3212890128722551
+        },
+        {
+          "time": 370.8764116164647,
+          "addrs": 59,
+          "walkQuality": 0.2021549225224042
+        },
+        {
+          "time": 373.62340597623904,
+          "addrs": 63,
+          "walkQuality": 0.18183671279382907
+        },
+        {
+          "time": 306.10962606504256,
+          "addrs": 32,
+          "walkQuality": 0.11721381529677599
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Southgate",
+    "addrs": 268,
+    "segs": 44,
+    "n": 3,
+    "initial": {
+      "spread": 17.548058562342476,
+      "maxTime": 775.7098749549982,
+      "minWalkQuality": 0.07099940762122148,
+      "feasible": false
+    },
+    "final": {
+      "spread": 16.93963422536899,
+      "maxTime": 775.1014506180247,
+      "minWalkQuality": 0.07099940762122148,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 758.1618163926557,
+          "addrs": 138,
+          "walkQuality": 0.40441106171389446
+        },
+        {
+          "time": 775.1014506180247,
+          "addrs": 138,
+          "walkQuality": 0.3705143400415089
+        },
+        {
+          "time": 758.5615792631705,
+          "addrs": 138,
+          "walkQuality": 0.07099940762122148
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Southgate",
+    "addrs": 268,
+    "segs": 44,
+    "n": 5,
+    "initial": {
+      "spread": 254.88428897155887,
+      "maxTime": 748.1495259810392,
+      "minWalkQuality": 0.058550071316628226,
+      "feasible": false
+    },
+    "final": {
+      "spread": 249.8344869794792,
+      "maxTime": 743.0997239889596,
+      "minWalkQuality": 0.06323576957456115,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 494.8097923916957,
+          "addrs": 86,
+          "walkQuality": 0.2561196904047698
+        },
+        {
+          "time": 493.26523700948036,
+          "addrs": 86,
+          "walkQuality": 0.3029637442131309
+        },
+        {
+          "time": 596.5146295451818,
+          "addrs": 106,
+          "walkQuality": 0.3808031750681163
+        },
+        {
+          "time": 743.0997239889596,
+          "addrs": 136,
+          "walkQuality": 0.06323576957456115
+        },
+        {
+          "time": 0,
+          "addrs": 0,
+          "walkQuality": 1
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 4000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Fairmeadow",
+    "addrs": 307,
+    "segs": 43,
+    "n": 3,
+    "initial": {
+      "spread": 18.899840153606192,
+      "maxTime": 566.9609367574703,
+      "minWalkQuality": 0.6057246320010959,
+      "feasible": true
+    },
+    "final": {
+      "spread": 18.899840153606192,
+      "maxTime": 566.9609367574703,
+      "minWalkQuality": 0.6057246320010959,
+      "feasible": true,
+      "evals": [
+        {
+          "time": 566.669633025321,
+          "addrs": 107,
+          "walkQuality": 0.7953036177846098
+        },
+        {
+          "time": 566.9609367574703,
+          "addrs": 104,
+          "walkQuality": 0.6057246320010959
+        },
+        {
+          "time": 548.0610966038641,
+          "addrs": 101,
+          "walkQuality": 0.640245584098847
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 218,
+      "rejected_quality": 0,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Fairmeadow",
+    "addrs": 307,
+    "segs": 43,
+    "n": 5,
+    "initial": {
+      "spread": 127.25913596543865,
+      "maxTime": 384.3219260770431,
+      "minWalkQuality": 0.47136194342851395,
+      "feasible": false
+    },
+    "final": {
+      "spread": 36.64771270850832,
+      "maxTime": 355.76503060122405,
+      "minWalkQuality": 0.47136194342851395,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 319.11731789271573,
+          "addrs": 58,
+          "walkQuality": 0.5467258360214975
+        },
+        {
+          "time": 353.27853114124565,
+          "addrs": 66,
+          "walkQuality": 0.6686256315084029
+        },
+        {
+          "time": 353.24252970118806,
+          "addrs": 66,
+          "walkQuality": 0.5672759190417183
+        },
+        {
+          "time": 355.76503060122405,
+          "addrs": 64,
+          "walkQuality": 0.47136194342851395
+        },
+        {
+          "time": 322.41740429617187,
+          "addrs": 58,
+          "walkQuality": 0.6385500645364344
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 1,
+      "rejected_quality": 7996,
+      "improved": 1
+    }
+  },
+  {
+    "hood": "Adobe Meadows",
+    "addrs": 316,
+    "segs": 72,
+    "n": 3,
+    "initial": {
+      "spread": 32.921253090123514,
+      "maxTime": 652.7754472578903,
+      "minWalkQuality": 0.40175943529235325,
+      "feasible": false
+    },
+    "final": {
+      "spread": 30.696364094563705,
+      "maxTime": 650.5505582623305,
+      "minWalkQuality": 0.41539578210830336,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 643.7145594623785,
+          "addrs": 117,
+          "walkQuality": 0.5018480898329952
+        },
+        {
+          "time": 650.5505582623305,
+          "addrs": 117,
+          "walkQuality": 0.41539578210830336
+        },
+        {
+          "time": 619.8541941677668,
+          "addrs": 115,
+          "walkQuality": 0.60205473954571
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Adobe Meadows",
+    "addrs": 316,
+    "segs": 72,
+    "n": 5,
+    "initial": {
+      "spread": 86.6326653066123,
+      "maxTime": 418.64574582983323,
+      "minWalkQuality": 0.3571961222967935,
+      "feasible": false
+    },
+    "final": {
+      "spread": 84.78339133565345,
+      "maxTime": 416.7964718588744,
+      "minWalkQuality": 0.3571961222967935,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 399.4944183367335,
+          "addrs": 71,
+          "walkQuality": 0.42587356410538757
+        },
+        {
+          "time": 416.7964718588744,
+          "addrs": 75,
+          "walkQuality": 0.40512216830801917
+        },
+        {
+          "time": 379.7455898235929,
+          "addrs": 70,
+          "walkQuality": 0.5767539435994675
+        },
+        {
+          "time": 395.91983679347175,
+          "addrs": 74,
+          "walkQuality": 0.657391545904903
+        },
+        {
+          "time": 332.01308052322094,
+          "addrs": 59,
+          "walkQuality": 0.3571961222967935
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Baylands",
+    "addrs": 324,
+    "segs": 105,
+    "n": 3,
+    "initial": {
+      "spread": 42.08708340333612,
+      "maxTime": 689.3077952718108,
+      "minWalkQuality": 0.1746876257669943,
+      "feasible": false
+    },
+    "final": {
+      "spread": 42.08708340333612,
+      "maxTime": 689.3077952718108,
+      "minWalkQuality": 0.1746876257669943,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 689.3077952718108,
+          "addrs": 109,
+          "walkQuality": 0.2143311807109818
+        },
+        {
+          "time": 677.1002340093603,
+          "addrs": 110,
+          "walkQuality": 0.1746876257669943
+        },
+        {
+          "time": 647.2207118684747,
+          "addrs": 105,
+          "walkQuality": 0.3055040019472753
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  },
+  {
+    "hood": "Baylands",
+    "addrs": 324,
+    "segs": 105,
+    "n": 5,
+    "initial": {
+      "spread": 146.4167142685708,
+      "maxTime": 461.8499786391456,
+      "minWalkQuality": 0.12905939192873875,
+      "feasible": false
+    },
+    "final": {
+      "spread": 146.4167142685708,
+      "maxTime": 461.8499786391456,
+      "minWalkQuality": 0.12905939192873875,
+      "feasible": false,
+      "evals": [
+        {
+          "time": 442.24587039481577,
+          "addrs": 65,
+          "walkQuality": 0.16926117994729964
+        },
+        {
+          "time": 450.77801608064317,
+          "addrs": 65,
+          "walkQuality": 0.12905939192873875
+        },
+        {
+          "time": 413.52025009000363,
+          "addrs": 66,
+          "walkQuality": 0.14334473561352076
+        },
+        {
+          "time": 461.8499786391456,
+          "addrs": 72,
+          "walkQuality": 0.28807741208355764
+        },
+        {
+          "time": 315.4332643705748,
+          "addrs": 56,
+          "walkQuality": 0.3975589255648356
+        }
+      ]
+    },
+    "sa": {
+      "accepted": 0,
+      "rejected_quality": 8000,
+      "improved": 0
+    }
+  }
+]
