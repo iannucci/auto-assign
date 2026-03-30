@@ -14,9 +14,9 @@
 \usepgfplotslibrary{groupplots}
 
 % Consistent colors used throughout all figures
-\definecolor{idealgreen}{RGB}{34,139,34}     % theoretical ideal
-\definecolor{prodblue}{RGB}{31,119,180}      % productive walking
-\definecolor{unprodred}{RGB}{214,39,40}      % unproductive walking
+\definecolor{idealgreen}{RGB}{34,139,34}   % theoretical ideal
+\definecolor{prodblue}{RGB}{31,119,180}   % productive walking
+\definecolor{unprodred}{RGB}{214,39,40}   % unproductive walking
 \definecolor{voronoiorange}{RGB}{255,127,14} % Voronoi boundaries
 
 \begin{document}
@@ -135,8 +135,8 @@ Consider a 150\,m residential segment ($w = 10$\,m) with 8 addresses at position
 
 \begin{center}
 \begin{tabular}{ccccccccc}
-$t$:   & 0.10 & 0.20 & 0.30 & 0.45 & 0.55 & 0.70 & 0.80 & 0.90 \\
-side:  & L    & L    & L    & R    & R    & L    & L    & R
+$t$:  & 0.10 & 0.20 & 0.30 & 0.45 & 0.55 & 0.70 & 0.80 & 0.90 \\
+side: & L  & L  & L  & R  & R  & L  & L  & R
 \end{tabular}
 \end{center}
 
@@ -152,12 +152,12 @@ The full $4 \times 4$ matrix (rows = entry, columns = exit, in meters):
 
 \begin{center}
 \begin{tabular}{l|cccc}
-        & $S_L$ & $S_R$ & $E_L$ & $E_R$ \\
+    & $S_L$ & $S_R$ & $E_L$ & $E_R$ \\
 \hline
-$S_L$   & 300   & 300   & 190   & \textbf{180} \\
-$S_R$   & 310   & 310   & 200   & 190 \\
-$E_L$   & 190   & 200   & 314   & 314 \\
-$E_R$   & \textbf{180}   & 190   & 304   & 304
+$S_L$  & 300  & 300  & 190  & \textbf{180} \\
+$S_R$  & 310  & 310  & 200  & 190 \\
+$E_L$  & 190  & 200  & 314  & 314 \\
+$E_R$  & \textbf{180}  & 190  & 304  & 304
 \end{tabular}
 \end{center}
 
@@ -171,13 +171,13 @@ Fig.~\ref{fig:diag-subseg} shows a real segment (Starr King Circle, Fairmeadow) 
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    width=\columnwidth,
-    height=0.6\columnwidth,
-    ticks=none,
-    label style={font=\small},
-    title style={font=\small\bfseries},
-    title={Starr King Circle: 19 Addresses, 14 Runs},
-    legend style={at={(0.02,0.98)},anchor=north west,font=\small},
+  width=\columnwidth,
+  height=0.6\columnwidth,
+  ticks=none,
+  label style={font=\small},
+  title style={font=\small\bfseries},
+  title={Starr King Circle: 19 Addresses, 14 Runs},
+  legend style={at={(0.02,0.98)},anchor=north west,font=\small},
 ]
 \addplot[black, very thick, opacity=0.4] table[x=lon,y=lat] {data/diag1-centerline.dat};
 \addplot[only marks, mark=*, mark size=2.5pt, prodblue] table[x=lon,y=lat] {data/diag1-left-addrs.dat};
@@ -185,7 +185,7 @@ Fig.~\ref{fig:diag-subseg} shows a real segment (Starr King Circle, Fairmeadow) 
 \legend{Road centerline, Left side (8), Right side (11)}
 \end{axis}
 \end{tikzpicture}
-\caption{Starr King Circle segment (243\,m, 19 addresses). \textcolor{prodblue}{Blue circles} = left-side addresses (8). \textcolor{unprodred}{Red triangles} = right-side addresses (11). Black line = road centerline from OSM. Side classification uses the cross product of the road direction vector and the address displacement vector (Eq.~\ref{eq:side}). The 14 address runs make this a candidate for U-turn, but the cost matrix selects zigzag (373\,m vs.\ 496\,m) because the segment is long enough.}
+\caption{Starr King Circle segment (243\,m, 19 addresses). Blue circles = left-side addresses (8). Red triangles = right-side addresses (11). Black line = road centerline from OSM. Side classification uses the cross product of the road direction vector and the address displacement vector (Eq.~\ref{eq:side}). The 14 address runs make this a candidate for U-turn, but the cost matrix selects zigzag (373\,m vs.\ 496\,m) because the segment is long enough.}
 \label{fig:diag-subseg}
 \end{figure}
 
@@ -204,12 +204,12 @@ Fig.~\ref{fig:uturn-path} illustrates the extreme case where U-turn saves 81\%.
 \centering
 \begin{tikzpicture}
 \begin{groupplot}[
-    group style={group size=2 by 1, horizontal sep=0.6cm},
-    width=0.48\columnwidth,
-    height=0.45\columnwidth,
-    ticks=none,
-    label style={font=\small},
-    title style={font=\small\bfseries},
+  group style={group size=2 by 1, horizontal sep=0.6cm},
+  width=0.48\columnwidth,
+  height=0.45\columnwidth,
+  ticks=none,
+  label style={font=\small},
+  title style={font=\small\bfseries},
 ]
 \nextgroupplot[title={Zigzag (381\,m)}]
 \addplot[prodblue, thick, opacity=0.6] table[x=lon,y=lat] {data/street-zigzag.dat};
@@ -281,13 +281,13 @@ Inter-segment transitions --- the \emph{unproductive} component of Eq.~\ref{eq:w
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    width=\columnwidth,
-    height=0.65\columnwidth,
-    ticks=none,
-    label style={font=\small},
-    title style={font=\small\bfseries},
-    title={Road-Following vs.\ Straight-Line Transition},
-    legend style={at={(0.02,0.02)},anchor=south west,font=\small},
+  width=\columnwidth,
+  height=0.65\columnwidth,
+  ticks=none,
+  label style={font=\small},
+  title style={font=\small\bfseries},
+  title={Road-Following vs.\ Straight-Line Transition},
+  legend style={at={(0.02,0.02)},anchor=south west,font=\small},
 ]
 \addplot[prodblue, very thick, opacity=0.8] table[x=lon,y=lat] {data/diag2b-segA.dat};
 \addplot[prodblue, very thick, opacity=0.8] table[x=lon,y=lat] {data/diag2b-segB.dat};
@@ -298,7 +298,7 @@ Inter-segment transitions --- the \emph{unproductive} component of Eq.~\ref{eq:w
 \legend{Segments (productive), , Road path (540\,m), Straight line (346\,m)}
 \end{axis}
 \end{tikzpicture}
-\caption{Transition from Roosevelt Circle to East Meadow Drive (Fairmeadow). \textcolor{prodblue}{Blue} = the two address-bearing segments. \textcolor{unprodred}{Red} = actual road-following path (540\,m through 4 intersections). Gray dashed = straight-line distance (346\,m). The road path is 56\% longer because the ESW must navigate around a cul-de-sac. Using haversine distances would undercount this transition by 194\,m, biasing the algorithm toward scattered partitions that incur many such detours.}
+\caption{Transition from Roosevelt Circle to East Meadow Drive (Fairmeadow). Blue = the two address-bearing segments. Red = actual road-following path (540\,m through 4 intersections). Gray dashed = straight-line distance (346\,m). The road path is 56\% longer because the ESW must navigate around a cul-de-sac. Using haversine distances would undercount this transition by 194\,m, biasing the algorithm toward scattered partitions that incur many such detours.}
 \label{fig:diag-road}
 \end{figure}
 
@@ -357,13 +357,13 @@ We select five Palo Alto neighborhoods spanning the widest diversity of geometry
 \begin{tabular}{l r r r r l}
 \toprule
 \textbf{Hood} & \textbf{Addrs} & \textbf{Segs} & \textbf{Dens.} & \textbf{Grid} & \textbf{Character} \\
-              &                &               & (/km$^2$)      & (\%)          & \\
+       &        &        & (/km$^2$)   & (\%)     & \\
 \midrule
 PAC & 145 & 11 & 9686 & 9 & Dense commercial \\
-FM  & 307 & 43 & 796  & 28 & Cul-de-sacs \\
-CC  & 489 & 117 & 736 & 71 & Regular grid \\
-RP  & 584 & 289 & 70  & 44 & Sparse campus \\
-SG  & 268 & 44 & 100  & 20 & Elongated \\
+FM & 307 & 43 & 796 & 28 & Cul-de-sacs \\
+CC & 489 & 117 & 736 & 71 & Regular grid \\
+RP & 584 & 289 & 70 & 44 & Sparse campus \\
+SG & 268 & 44 & 100 & 20 & Elongated \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -419,13 +419,13 @@ Build a single-worker walk order using nearest-neighbor on ports: from the curre
 \REQUIRE Segments $\mathcal{S}$ with cost matrices, worker count $N$
 \STATE $\text{best} \leftarrow \infty$
 \FOR{each starting segment $s_0 \in \mathcal{S}$}
-    \STATE $\text{chain} \leftarrow [s_0]$; mark $s_0$ visited
-    \WHILE{unvisited segments remain}
-        \STATE $s^* \leftarrow \arg\min_{s \notin \text{chain}} [\text{transition}(\text{chain.last}, s) + C_s]$
-        \STATE Append $s^*$ to chain
-    \ENDWHILE
-    \STATE Slice chain into $N$ groups at $\lceil A/N \rceil$ boundaries
-    \STATE Score partition; update best if improved
+  \STATE $\text{chain} \leftarrow [s_0]$; mark $s_0$ visited
+  \WHILE{unvisited segments remain}
+    \STATE $s^* \leftarrow \arg\min_{s \notin \text{chain}} [\text{transition}(\text{chain.last}, s) + C_s]$
+    \STATE Append $s^*$ to chain
+  \ENDWHILE
+  \STATE Slice chain into $N$ groups at $\lceil A/N \rceil$ boundaries
+  \STATE Score partition; update best if improved
 \ENDFOR
 \end{algorithmic}
 \end{algorithm}
@@ -440,7 +440,7 @@ Build a single-worker walk order using nearest-neighbor on ports: from the curre
 \addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-chainnn-esw2.dat};
 \end{axis}
 \end{tikzpicture}
-\caption{Chain+Slice (NN) on Fairmeadow, $N=3$. Three ESWs' segments are colored \textcolor{prodblue}{blue}, \textcolor{unprodred}{red}, \textcolor{idealgreen!70!black}{green}. The chain follows a nearest-neighbor path; cut points at 106/107/99 addresses produce geographically interleaved partitions.}
+\caption{Chain+Slice (NN) on Fairmeadow, $N=3$. Three ESWs' segments are colored blue, red, green. The chain follows a nearest-neighbor path; cut points at 106/107/99 addresses produce geographically interleaved partitions.}
 \end{figure}
 
 \subsection{Right-Hand Rule Chain}
@@ -460,12 +460,12 @@ Fig.~\ref{fig:rh-path} compares NN and RH chain traversals on Fairmeadow.
 \centering
 \begin{tikzpicture}
 \begin{groupplot}[
-    group style={group size=2 by 1, horizontal sep=0.6cm},
-    width=0.48\columnwidth,
-    height=0.45\columnwidth,
-    ticks=none,
-    label style={font=\small},
-    title style={font=\small\bfseries},
+  group style={group size=2 by 1, horizontal sep=0.6cm},
+  width=0.48\columnwidth,
+  height=0.45\columnwidth,
+  ticks=none,
+  label style={font=\small},
+  title style={font=\small\bfseries},
 ]
 \nextgroupplot[title={Nearest-Neighbor Chain}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
@@ -478,7 +478,7 @@ Fig.~\ref{fig:rh-path} compares NN and RH chain traversals on Fairmeadow.
 \addplot[unprodred, semithick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fm-rh-chain-trans.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow single-worker traversal (43 segments). \textcolor{prodblue}{Blue} = segment traversals (productive). \textcolor{unprodred}{Red dashed} = inter-segment transitions (unproductive). Left: NN greedily selects the nearest unvisited segment, occasionally jumping across the neighborhood. Right: RH rule's clockwise bias produces a tighter spiral with shorter transitions.}
+\caption{Fairmeadow single-worker traversal (43 segments). Blue = segment traversals (productive). Red dashed = inter-segment transitions (unproductive). Left: NN greedily selects the nearest unvisited segment, occasionally jumping across the neighborhood. Right: RH rule's clockwise bias produces a tighter spiral with shorter transitions.}
 \label{fig:rh-path}
 \end{figure}
 
@@ -545,13 +545,13 @@ Assign segments to the nearest of $N$ seed points by Euclidean distance (consist
 \centering
 \begin{tikzpicture}
 \begin{groupplot}[
-    group style={group size=2 by 1, horizontal sep=2.0cm, ylabels at=edge left},
-    width=0.46\textwidth,
-    height=0.38\textwidth,
-    ticks=none,
-    title style={font=\small\bfseries},
-    xmin=-122.1235, xmax=-122.1135,
-    ymin=37.4145, ymax=37.4220,
+  group style={group size=2 by 1, horizontal sep=2.0cm, ylabels at=edge left},
+  width=0.46\textwidth,
+  height=0.38\textwidth,
+  ticks=none,
+  title style={font=\small\bfseries},
+  xmin=-122.1235, xmax=-122.1135,
+  ymin=37.4145, ymax=37.4220,
 ]
 \nextgroupplot[title={Lloyd's Iteration (121/103/88)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
@@ -570,7 +570,7 @@ Assign segments to the nearest of $N$ seed points by Euclidean distance (consist
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-bal-seeds.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow Voronoi ($N=3$). Left: Lloyd's iteration converges to unbalanced cells (121/103/88) because it minimizes variance, not balance. Right: balanced seed search achieves near-perfect balance (104/102/106) with 63\% walk quality. \textcolor{voronoiorange}{Orange} = Voronoi partition lines. Black diamonds = seeds. Same framework, different seed optimization --- seed placement is the critical factor.}
+\caption{Fairmeadow Voronoi ($N=3$). Left: Lloyd's iteration converges to unbalanced cells (121/103/88) because it minimizes variance, not balance. Right: balanced seed search achieves near-perfect balance (104/102/106) with 63\% walk quality. orange = Voronoi partition lines. Black diamonds = seeds. Same framework, different seed optimization --- seed placement is the critical factor.}
 \label{fig:voronoi}
 \end{figure*}
 
@@ -582,13 +582,13 @@ Fig.~\ref{fig:hybrid} shows the boundary transfer process on Midtown, where the 
 \centering
 \begin{tikzpicture}
 \begin{groupplot}[
-    group style={group size=2 by 1, horizontal sep=2.0cm, ylabels at=edge left},
-    width=0.46\textwidth,
-    height=0.38\textwidth,
-    ticks=none,
-    title style={font=\small\bfseries},
-    xmin=-122.1402, xmax=-122.1113,
-    ymin=37.4173, ymax=37.4470,
+  group style={group size=2 by 1, horizontal sep=2.0cm, ylabels at=edge left},
+  width=0.46\textwidth,
+  height=0.38\textwidth,
+  ticks=none,
+  title style={font=\small\bfseries},
+  xmin=-122.1402, xmax=-122.1113,
+  ymin=37.4173, ymax=37.4470,
 ]
 \nextgroupplot[title={Voronoi (1616/1855/1669)}]
 \addplot[only marks, mark=*, mark size=0.15pt, gray!20] table[x=lon,y=lat] {data/midtown-all-addrs-sampled.dat};
@@ -607,7 +607,7 @@ Fig.~\ref{fig:hybrid} shows the boundary transfer process on Midtown, where the 
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/midtown-voronoi-seeds.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Midtown ($N=3$, 5,140 addresses). Left: Voronoi partition with \textcolor{voronoiorange}{orange} straight-line cell boundaries. These geometric boundaries cut through 14 road segments, splitting streets between cells. Right: each split segment is reassigned wholly to one cell (by closer endpoint). The cell boundary now follows segment edges rather than straight lines. Black diamonds = Voronoi seeds.}
+\caption{Midtown ($N=3$, 5,140 addresses). Left: Voronoi partition with orange straight-line cell boundaries. These geometric boundaries cut through 14 road segments, splitting streets between cells. Right: each split segment is reassigned wholly to one cell (by closer endpoint). The cell boundary now follows segment edges rather than straight lines. Black diamonds = Voronoi seeds.}
 \label{fig:hybrid}
 \end{figure*}
 
@@ -740,17 +740,17 @@ Table~\ref{tab:master} shows walk quality for all algorithms on all neighborhood
 \midrule
 \emph{Prod.\ (km)} & \emph{0.7} & \emph{6.7} & \emph{11.8} & \emph{17.1} & \emph{5.4} \\
 \midrule
-ChainNN  & \textbf{76} & 72 & 68 & 25 & 50 \\
-ChainRH  & 67 & 70 & 65 & \textbf{29} & 51 \\
-2-Opt    & \textbf{76} & \textbf{73} & \textbf{71} & 27 & 52 \\
-Bisect   & 47 & 70 & 67 & 26 & 47 \\
-Voronoi  & 48 & 64 & 67 & 24 & \textbf{74} \\
-BFS      & 37 & 63 & 61 & 20 & 31 \\
-DFS      & 60 & 68 & 66 & 26 & 32 \\
-BFS+SA   & 38 & 64 & 61 & 21 & 28 \\
-Random   & 72 & 46 & 43 & 16 & 39 \\
+ChainNN & \textbf{76} & 72 & 68 & 25 & 50 \\
+ChainRH & 67 & 70 & 65 & \textbf{29} & 51 \\
+2-Opt  & \textbf{76} & \textbf{73} & \textbf{71} & 27 & 52 \\
+Bisect  & 47 & 70 & 67 & 26 & 47 \\
+Voronoi & 48 & 64 & 67 & 24 & \textbf{74} \\
+BFS   & 37 & 63 & 61 & 20 & 31 \\
+DFS   & 60 & 68 & 66 & 26 & 32 \\
+BFS+SA  & 38 & 64 & 61 & 21 & 28 \\
+Random  & 72 & 46 & 43 & 16 & 39 \\
 \midrule
-Oracle   & 67 & 70 & 68 & 29 & 52 \\
+Oracle  & 67 & 70 & 68 & 29 & 52 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -765,17 +765,17 @@ Oracle   & 67 & 70 & 68 & 29 & 52 \\
  & \textbf{PAC} & \textbf{FM} & \textbf{CC} & \textbf{RP} & \textbf{SG} \\
 \textbf{Algorithm} & 145a & 307a & 489a & 584a & 268a \\
 \midrule
-ChainNN  & 55 & 43 & \textbf{10} & 128 & 24 \\
-ChainRH  & 52 & \textbf{6} & 12 & \textbf{95} & 25 \\
-2-Opt    & 55 & 23 & 12 & 138 & \textbf{18} \\
-Bisect   & 167 & 39 & 32 & 330 & 20 \\
-Voronoi  & \textbf{35} & 94 & 26 & 441 & 109 \\
-BFS      & 255 & 364 & 96 & 628 & 739 \\
-DFS      & 51 & 32 & 173 & 391 & 60 \\
-BFS+SA   & 102 & 55 & 95 & 13 & \textbf{18} \\
-Random   & 43 & 24 & \textbf{9} & 27 & 47 \\
+ChainNN & 55 & 43 & \textbf{10} & 128 & 24 \\
+ChainRH & 52 & \textbf{6} & 12 & \textbf{95} & 25 \\
+2-Opt  & 55 & 23 & 12 & 138 & \textbf{18} \\
+Bisect  & 167 & 39 & 32 & 330 & 20 \\
+Voronoi & \textbf{35} & 94 & 26 & 441 & 109 \\
+BFS   & 255 & 364 & 96 & 628 & 739 \\
+DFS   & 51 & 32 & 173 & 391 & 60 \\
+BFS+SA  & 102 & 55 & 95 & 13 & \textbf{18} \\
+Random  & 43 & 24 & \textbf{9} & 27 & 47 \\
 \midrule
-Oracle   & 52 & \textbf{6} & \textbf{10} & \textbf{95} & \textbf{18} \\
+Oracle  & 52 & \textbf{6} & \textbf{10} & \textbf{95} & \textbf{18} \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -802,10 +802,10 @@ Oracle   & 52 & \textbf{6} & \textbf{10} & \textbf{95} & \textbf{18} \\
 \textbf{Neighborhood} & $N{=}3$ & $N{=}5$ & $N{=}7$ & $N{=}10$ \\
 \midrule
 PAC & ChainRH & ChainRH & ChainRH & ChainRH \\
-FM  & ChainRH & ChainRH & ChainNN & TwoOpt \\
-CC  & ChainNN & ChainNN & ChainNN & TwoOpt \\
-RP  & ChainRH & ChainRH & TwoOpt & TwoOpt \\
-SG  & TwoOpt  & TwoOpt  & ChainRH & TwoOpt \\
+FM & ChainRH & ChainRH & ChainNN & TwoOpt \\
+CC & ChainNN & ChainNN & ChainNN & TwoOpt \\
+RP & ChainRH & ChainRH & TwoOpt & TwoOpt \\
+SG & TwoOpt & TwoOpt & ChainRH & TwoOpt \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -821,26 +821,26 @@ Fig.~\ref{fig:wq-comparison} shows the productive-distance invariant visually: p
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    ybar stacked,
-    bar width=4pt,
-    xlabel={Algorithm},
-    ylabel={Total Walk (km)},
-    symbolic x coords={NN, RH, 2opt, Bi, Vor, BFS, DFS, SA, Rnd},
-    xtick=data,
-    x tick label style={font=\tiny, rotate=45, anchor=east},
-    ymin=0, ymax=16,
-    width=\columnwidth,
-    height=5.5cm,
-    legend style={at={(0.98,0.98)},anchor=north east,font=\tiny},
-    title={Fairmeadow ($N=3$): Productive vs.\ Unproductive},
-    title style={font=\small\bfseries},
+  ybar stacked,
+  bar width=4pt,
+  xlabel={Algorithm},
+  ylabel={Total Walk (km)},
+  symbolic x coords={NN, RH, 2opt, Bi, Vor, BFS, DFS, SA, Rnd},
+  xtick=data,
+  x tick label style={font=\tiny, rotate=45, anchor=east},
+  ymin=0, ymax=16,
+  width=\columnwidth,
+  height=5.5cm,
+  legend style={at={(0.98,0.98)},anchor=north east,font=\tiny},
+  title={Fairmeadow ($N=3$): Productive vs.\ Unproductive},
+  title style={font=\small\bfseries},
 ]
 \addplot[fill=prodblue, draw=prodblue!80] coordinates {(NN,6.7) (RH,6.7) (2opt,6.7) (Bi,6.7) (Vor,6.6) (BFS,6.7) (DFS,6.7) (SA,6.7) (Rnd,6.7)};
 \addplot[fill=unprodred, draw=unprodred!80] coordinates {(NN,2.7) (RH,3.2) (2opt,2.6) (Bi,3.1) (Vor,3.7) (BFS,4.2) (DFS,3.3) (SA,4.2) (Rnd,7.9)};
-\legend{\textcolor{prodblue}{Productive}, \textcolor{unprodred}{Unproductive}}
+\legend{Productive, Unproductive}
 \end{axis}
 \end{tikzpicture}
-\caption{Fairmeadow ($N=3$): productive (\textcolor{prodblue}{blue}, constant at 6.7\,km) vs.\ unproductive (\textcolor{unprodred}{red}, varies 2.6--7.9\,km). The productive-distance invariant is confirmed: all algorithms visit the same segments. 2-opt achieves the lowest unproductive distance; Random the highest.}
+\caption{Fairmeadow ($N=3$): productive (blue, constant at 6.7\,km) vs.\ unproductive (red, varies 2.6--7.9\,km). The productive-distance invariant is confirmed: all algorithms visit the same segments. 2-opt achieves the lowest unproductive distance; Random the highest.}
 \label{fig:wq-comparison}
 \end{figure}
 
@@ -848,20 +848,20 @@ Fig.~\ref{fig:wq-comparison} shows the productive-distance invariant visually: p
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    ybar,
-    bar width=3pt,
-    xlabel={Neighborhood},
-    ylabel={Walk Quality (\%)},
-    symbolic x coords={PAC, FM, CC, RP, SG},
-    xtick=data,
-    x tick label style={font=\small},
-    ymin=0, ymax=85,
-    width=\columnwidth,
-    height=6cm,
-    legend style={at={(0.02,0.98)},anchor=north west,font=\tiny, legend columns=3},
-    enlarge x limits=0.15,
-    title={Walk Quality by Neighborhood ($N=3$)},
-    title style={font=\small\bfseries},
+  ybar,
+  bar width=3pt,
+  xlabel={Neighborhood},
+  ylabel={Walk Quality (\%)},
+  symbolic x coords={PAC, FM, CC, RP, SG},
+  xtick=data,
+  x tick label style={font=\small},
+  ymin=0, ymax=85,
+  width=\columnwidth,
+  height=6cm,
+  legend style={at={(0.02,0.98)},anchor=north west,font=\tiny, legend columns=3},
+  enlarge x limits=0.15,
+  title={Walk Quality by Neighborhood ($N=3$)},
+  title style={font=\small\bfseries},
 ]
 \addplot coordinates {(PAC,76) (FM,73) (CC,71) (RP,27) (SG,52)};
 \addplot coordinates {(PAC,48) (FM,64) (CC,67) (RP,24) (SG,74)};
@@ -881,20 +881,20 @@ Fig.~\ref{fig:spread} shows time spread for key algorithms at $N = 3$. BFS produ
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    ybar,
-    bar width=4pt,
-    xlabel={Neighborhood},
-    ylabel={Time Spread (min)},
-    symbolic x coords={PAC, FM, CC, RP, SG},
-    xtick=data,
-    x tick label style={font=\small},
-    ymin=0, ymax=400,
-    width=\columnwidth,
-    height=5.5cm,
-    legend style={at={(0.02,0.98)},anchor=north west,font=\tiny, legend columns=2},
-    enlarge x limits=0.15,
-    title={Time Spread by Neighborhood ($N=3$)},
-    title style={font=\small\bfseries},
+  ybar,
+  bar width=4pt,
+  xlabel={Neighborhood},
+  ylabel={Time Spread (min)},
+  symbolic x coords={PAC, FM, CC, RP, SG},
+  xtick=data,
+  x tick label style={font=\small},
+  ymin=0, ymax=400,
+  width=\columnwidth,
+  height=5.5cm,
+  legend style={at={(0.02,0.98)},anchor=north west,font=\tiny, legend columns=2},
+  enlarge x limits=0.15,
+  title={Time Spread by Neighborhood ($N=3$)},
+  title style={font=\small\bfseries},
 ]
 \addplot coordinates {(PAC,55) (FM,23) (CC,12) (RP,138) (SG,18)};
 \addplot coordinates {(PAC,35) (FM,94) (CC,26) (RP,441) (SG,109)};
@@ -915,12 +915,12 @@ Figs.~\ref{fig:trails-fm} and \ref{fig:trails-cp} show per-ESW walking trails fo
 \centering
 \begin{tikzpicture}
 \begin{groupplot}[
-    group style={group size=3 by 1, horizontal sep=1.2cm, ylabels at=edge left},
-    width=0.36\textwidth,
-    height=0.3\textwidth,
-    ticks=none,
-    label style={font=\small},
-    title style={font=\small\bfseries},
+  group style={group size=3 by 1, horizontal sep=1.2cm, ylabels at=edge left},
+  width=0.36\textwidth,
+  height=0.3\textwidth,
+  ticks=none,
+  label style={font=\small},
+  title style={font=\small\bfseries},
 ]
 \nextgroupplot[title={ESW 1 (18 segments)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
@@ -938,7 +938,7 @@ Figs.~\ref{fig:trails-fm} and \ref{fig:trails-cp} show per-ESW walking trails fo
 \addplot[unprodred, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-esw2-transitions.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow (307 addresses, $N=3$, 2-opt winner). Each panel is one ESW's route. \textcolor{prodblue}{Blue} = productive walking within road segments. \textcolor{unprodred}{Red dashed} = unproductive transitions following the road network. Gray dots = all addresses. Fairmeadow's compact cul-de-sac layout keeps transitions short. ESW~3 has only 6 segments, reflecting a naturally isolated cul-de-sac cluster.}
+\caption{Fairmeadow (307 addresses, $N=3$, 2-opt winner). Each panel is one ESW's route. Blue = productive walking within road segments. Red dashed = unproductive transitions following the road network. Gray dots = all addresses. Fairmeadow's compact cul-de-sac layout keeps transitions short. ESW~3 has only 6 segments, reflecting a naturally isolated cul-de-sac cluster.}
 \label{fig:trails-fm}
 \end{figure*}
 
@@ -946,12 +946,12 @@ Figs.~\ref{fig:trails-fm} and \ref{fig:trails-cp} show per-ESW walking trails fo
 \centering
 \begin{tikzpicture}
 \begin{groupplot}[
-    group style={group size=3 by 1, horizontal sep=1.2cm, ylabels at=edge left},
-    width=0.36\textwidth,
-    height=0.3\textwidth,
-    ticks=none,
-    label style={font=\small},
-    title style={font=\small\bfseries},
+  group style={group size=3 by 1, horizontal sep=1.2cm, ylabels at=edge left},
+  width=0.36\textwidth,
+  height=0.3\textwidth,
+  ticks=none,
+  label style={font=\small},
+  title style={font=\small\bfseries},
 ]
 \nextgroupplot[title={ESW 1 (88 segments)}]
 \addplot[only marks, mark=*, mark size=0.2pt, gray!30] table[x=lon,y=lat] {data/crescentpark-all-addrs.dat};
@@ -969,7 +969,7 @@ Figs.~\ref{fig:trails-fm} and \ref{fig:trails-cp} show per-ESW walking trails fo
 \addplot[unprodred, thick, opacity=0.4, dashed] table[x=lon,y=lat] {data/crescentpark-esw2-transitions.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Crescent Park (1,476 addresses, $N=3$, 2-opt winner). The 2-opt-improved chain produces geographically contiguous assignments on this rectilinear grid. \textcolor{unprodred}{Red} transition paths follow actual streets through intersections --- not straight-line jumps --- reflecting road-network-constrained routing.}
+\caption{Crescent Park (1,476 addresses, $N=3$, 2-opt winner). The 2-opt-improved chain produces geographically contiguous assignments on this rectilinear grid. Red transition paths follow actual streets through intersections --- not straight-line jumps --- reflecting road-network-constrained routing.}
 \label{fig:trails-cp}
 \end{figure*}
 
@@ -1002,12 +1002,12 @@ Fig.~\ref{fig:s2-trails-fm} shows the DFS assignment for Fairmeadow under the ti
 \centering
 \begin{tikzpicture}
 \begin{groupplot}[
-    group style={group size=3 by 1, horizontal sep=1.2cm, ylabels at=edge left},
-    width=0.36\textwidth,
-    height=0.3\textwidth,
-    ticks=none,
-    label style={font=\small},
-    title style={font=\small\bfseries},
+  group style={group size=3 by 1, horizontal sep=1.2cm, ylabels at=edge left},
+  width=0.36\textwidth,
+  height=0.3\textwidth,
+  ticks=none,
+  label style={font=\small},
+  title style={font=\small\bfseries},
 ]
 \nextgroupplot[title={ESW 1 (105a, 575\,min)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
@@ -1031,7 +1031,7 @@ Fig.~\ref{fig:s2-trails-fm} shows the DFS assignment for Fairmeadow under the ti
 \addplot[only marks, mark=diamond*, mark size=4pt, idealgreen] table[x=lon,y=lat] {data/fairmeadow-s2-huddle.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow under DFS ($N=3$, time metric). \textcolor{idealgreen}{Green diamond} = huddle point (fan-out from Fire Station~4). \textcolor{idealgreen}{Green dashed} = walk from huddle to first segment. \textcolor{prodblue}{Blue} = productive. \textcolor{unprodred}{Red dashed} = unproductive transitions. DFS produces well-balanced address counts (105/102/105) with 10.2\,km total walking --- half the walking of BFS+SA (21.4\,km).}
+\caption{Fairmeadow under DFS ($N=3$, time metric). Green diamond = huddle point (fan-out from Fire Station~4). Green dashed = walk from huddle to first segment. Blue = productive. Red dashed = unproductive transitions. DFS produces well-balanced address counts (105/102/105) with 10.2\,km total walking --- half the walking of BFS+SA (21.4\,km).}
 \label{fig:s2-trails-fm}
 \end{figure*}
 
@@ -1048,11 +1048,11 @@ We trace simulated annealing on Greater Miranda (54 addresses, 14 segments, $N =
 \toprule
 \textbf{Iter} & \textbf{Move} & \textbf{ESW Times Before} & \textbf{After} & \textbf{$\Delta$} \\
 \midrule
-   & \emph{(start)} & [106, 142, 75] & & max = 142 \\
+  & \emph{(start)} & [106, 142, 75] & & max = 142 \\
 14 & Miranda Grn (14a): ESW2$\to$ESW1 & [106, 142, 75] & [124, 64, 135] & +11 (accepted) \\
 18 & Moana Ct (11a): ESW3$\to$ESW2 & [124, 64, 135] & [\textbf{124, 124}, 75] & \textbf{--11} \\
 \midrule
-   & \emph{(final)} & & [124, 124, 75] & max = \textbf{124} (--12.5\%) \\
+  & \emph{(final)} & & [124, 124, 75] & max = \textbf{124} (--12.5\%) \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -1118,11 +1118,11 @@ Table~\ref{tab:comparison} compares the oracle and Voronoi on the 5 diverse neig
 \textbf{Neighborhood} & \textbf{Addrs} & \textbf{Character} & Prod & Unprod & WQ & Prod & Unprod & WQ & $\Delta$Unprod \\
 & & & (km) & (km) & (\%) & (km) & (km) & (\%) & \\
 \midrule
-Palo Alto Central & 145  & Dense commercial   & 0.7 & 0.2 & 76 & 0.7 & 1.0 & 41 & +350\% \\
-Fairmeadow        & 307  & Cul-de-sacs        & 6.7 & 2.2 & 75 & 6.6 & 4.6 & 59 & +108\% \\
-Community Center  & 489  & Regular grid       & 11.9& 5.1 & 70 & 11.8& 7.0 & 63 & +38\%  \\
-Research Park     & 584  & Sparse campus      & 17.1& 49.8& 26 & 17.3& 54.6& 24 & +10\%  \\
-Southgate         & 268  & Elongated          & 5.4 & 4.9 & 52 & 5.3 & 4.0 & 57 & \textbf{--19\%} \\
+Palo Alto Central & 145 & Dense commercial  & 0.7 & 0.2 & 76 & 0.7 & 1.0 & 41 & +350\% \\
+Fairmeadow    & 307 & Cul-de-sacs    & 6.7 & 2.2 & 75 & 6.6 & 4.6 & 59 & +108\% \\
+Community Center & 489 & Regular grid    & 11.9& 5.1 & 70 & 11.8& 7.0 & 63 & +38\% \\
+Research Park   & 584 & Sparse campus   & 17.1& 49.8& 26 & 17.3& 54.6& 24 & +10\% \\
+Southgate     & 268 & Elongated     & 5.4 & 4.9 & 52 & 5.3 & 4.0 & 57 & \textbf{--19\%} \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -1142,20 +1142,20 @@ Fig.~\ref{fig:comparison} shows the productive/unproductive breakdown visually.
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    ybar stacked,
-    bar width=8pt,
-    xlabel={Neighborhood},
-    ylabel={Total Walk Distance (km)},
-    symbolic x coords={PAC, FM, CC, RP, SG},
-    xtick=data,
-    x tick label style={font=\small},
-    ymin=0,
-    width=\columnwidth,
-    height=5.5cm,
-    legend style={at={(0.02,0.98)},anchor=north west,font=\small},
-    enlarge x limits=0.15,
-    title={Oracle ($N=3$)},
-    title style={font=\small\bfseries},
+  ybar stacked,
+  bar width=8pt,
+  xlabel={Neighborhood},
+  ylabel={Total Walk Distance (km)},
+  symbolic x coords={PAC, FM, CC, RP, SG},
+  xtick=data,
+  x tick label style={font=\small},
+  ymin=0,
+  width=\columnwidth,
+  height=5.5cm,
+  legend style={at={(0.02,0.98)},anchor=north west,font=\small},
+  enlarge x limits=0.15,
+  title={Oracle ($N=3$)},
+  title style={font=\small\bfseries},
 ]
 \addplot[fill=prodblue, draw=prodblue!80] coordinates {(PAC,0.7) (FM,6.7) (CC,11.9) (RP,17.1) (SG,5.4)};
 \addplot[fill=unprodred, draw=unprodred!80] coordinates {(PAC,0.2) (FM,2.2) (CC,5.1) (RP,49.8) (SG,4.9)};
@@ -1165,27 +1165,27 @@ Fig.~\ref{fig:comparison} shows the productive/unproductive breakdown visually.
 
 \begin{tikzpicture}
 \begin{axis}[
-    ybar stacked,
-    bar width=8pt,
-    xlabel={Neighborhood},
-    ylabel={Total Walk Distance (km)},
-    symbolic x coords={PAC, FM, CC, RP, SG},
-    xtick=data,
-    x tick label style={font=\small},
-    ymin=0,
-    width=\columnwidth,
-    height=5.5cm,
-    legend style={at={(0.02,0.98)},anchor=north west,font=\small},
-    enlarge x limits=0.15,
-    title={Voronoi ($N=3$)},
-    title style={font=\small\bfseries},
+  ybar stacked,
+  bar width=8pt,
+  xlabel={Neighborhood},
+  ylabel={Total Walk Distance (km)},
+  symbolic x coords={PAC, FM, CC, RP, SG},
+  xtick=data,
+  x tick label style={font=\small},
+  ymin=0,
+  width=\columnwidth,
+  height=5.5cm,
+  legend style={at={(0.02,0.98)},anchor=north west,font=\small},
+  enlarge x limits=0.15,
+  title={Voronoi ($N=3$)},
+  title style={font=\small\bfseries},
 ]
 \addplot[fill=prodblue, draw=prodblue!80] coordinates {(PAC,0.7) (FM,6.6) (CC,11.8) (RP,17.3) (SG,5.3)};
 \addplot[fill=unprodred, draw=unprodred!80] coordinates {(PAC,1.0) (FM,4.6) (CC,7.0) (RP,54.6) (SG,4.0)};
 \legend{Productive, Unproductive}
 \end{axis}
 \end{tikzpicture}
-\caption{Productive vs.\ unproductive walking for oracle (top) and Voronoi (bottom) on 5 neighborhoods at $N=3$. \textcolor{prodblue}{Blue} = productive, \textcolor{unprodred}{red} = unproductive in both panels. Productive bars are nearly identical; unproductive bars tell the story. Note Research Park's extreme unproductive walking (both $>$70\% unproductive) vs.\ Palo Alto Central where the oracle achieves 76\% productive.}
+\caption{Productive vs.\ unproductive walking for oracle (top) and Voronoi (bottom) on 5 neighborhoods at $N=3$. blue = productive, red = unproductive in both panels. Productive bars are nearly identical; unproductive bars tell the story. Note Research Park's extreme unproductive walking (both $>$70\% unproductive) vs.\ Palo Alto Central where the oracle achieves 76\% productive.}
 \label{fig:comparison}
 \end{figure}
 
