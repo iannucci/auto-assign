@@ -104,9 +104,26 @@ W_k = \underbrace{\sum_{i=1}^{m} C(\text{in}_i, \text{out}_i)}_{\displaystyle W_
 \end{equation}
 where $C(\text{in}_i, \text{out}_i)$ is the cost of traversing segment $i$ (productive walking) and $d_{\text{road}}$ is the shortest-path distance along the road network between segments (unproductive walking).
 
+\subsection{General Constraints}
+
+The following constraints apply to all algorithms and evaluations:
+
+\textbf{Whole-segment assignment.} Each segment is assigned to exactly one ESW. No segment is split between workers. This is a hard constraint: an ESW visiting half a street while another visits the other half is operationally confusing and creates boundary disputes.
+
+\textbf{Shared starting location (huddle point).} All ESWs begin at a shared staging area --- the neighborhood intersection nearest to the serving fire station. The walk from huddle to each ESW's first segment is included in their total walking distance and time. We assume ESWs are transported to the huddle by vehicle; the walk from fire station to huddle is not counted.
+
+\textbf{Street-constrained walking.} ESWs must follow the road network at all times. They may walk along a segment, turn at an intersection, or cross a street, but may not jump over houses or cut through properties. All inter-segment distances use Dijkstra shortest paths on the road network.
+
+\textbf{Assessment time.} Each address requires a fixed assessment time $t_{\text{assess}} = 5$\,min. The finish time for ESW $k$ is:
+\begin{equation}
+T_k = \frac{W_k}{v} + |P_k| \cdot t_{\text{assess}}
+\label{eq:finish-time}
+\end{equation}
+where $v = 5$\,km/h is walking speed and $|P_k|$ is the address count. Assessment time typically dominates walking time by $\sim$8$\times$.
+
 \subsection{Data}
 
-Segments are extracted from OpenStreetMap via \texttt{osm2pgsql} (Geofabrik California PBF, filtered to Palo Alto). From 35,912 road ways we build 64,482 segments; 7,430 have at least one snapped address from the City of Palo Alto municipal database (41,854 addresses). Road-network shortest paths are precomputed by Dijkstra within each neighborhood.
+Segments are extracted from OpenStreetMap via \texttt{osm2pgsql} (Geofabrik California PBF, filtered to Palo Alto). From 35,912 road ways we build 64,482 segments; 7,430 have at least one snapped address from the City of Palo Alto municipal database (41,854 addresses). Road-network shortest paths are precomputed by Dijkstra within each neighborhood. Huddle points use 6 Palo Alto Fire Department stations, assigned to neighborhoods by centroid proximity.
 
 %% ==================================================================
 \section{Three Metrics}
@@ -281,11 +298,11 @@ Assign segments to the nearest of $N$ seed points by Euclidean distance (consist
 
 \subsection{BFS from Huddle}
 
-All $N$ ESWs start at the fire station fan-out point (the neighborhood intersection nearest to the serving fire station). Round-robin: each round, for each ESW $k$, assign the unvisited segment minimizing marginal time increase $\Delta T_k = (d_{\text{road}} + C_s)/v + n_s \cdot t_{\text{assess}}$. Produces ``pizza slice'' partitions radiating from the huddle, but these interleave geographically, doubling unproductive walking vs.\ chain methods.
+Starting from the huddle point (Section~\ref{sec:formulation}), assign segments round-robin: each round, for each ESW $k$, assign the unvisited segment minimizing marginal time increase $\Delta T_k = (d_{\text{road}} + C_s)/v + n_s \cdot t_{\text{assess}}$. Produces ``pizza slice'' partitions radiating from the huddle, but these interleave geographically, doubling unproductive walking vs.\ chain methods.
 
 \subsection{DFS from Huddle}
 
-Build one ESW's assignment at a time. Starting from the huddle, greedily add nearest segments until estimated time reaches $T^* = (\text{total time}) / N$. Move to next ESW. The last ESW takes all remaining segments. Suffers from the ``dregs problem'': the last ESW inherits scattered remnants, producing time spreads of 100--500\,min.
+Build one ESW's assignment at a time. Starting from the huddle point, greedily add nearest segments until estimated time reaches the target $T^* = (\sum_k T_k) / N$ (Eq.~\ref{eq:finish-time}). Move to next ESW. The last ESW takes all remaining segments. Suffers from the ``dregs problem'': the last ESW inherits scattered remnants, producing time spreads of 100--500\,min.
 
 \subsection{SA Post-Processing}
 
@@ -317,9 +334,9 @@ Shuffle segments, partition by address count, NN chain within each group. Run 30
 
 \textbf{Distance computation.} Dijkstra shortest paths are precomputed between all intersection nodes within each neighborhood (2--31\,s depending on size). All inter-segment distances use road-network paths, not haversine.
 
-\textbf{Parameters.} $t_{\text{assess}} = 5$\,min/address, walking speed $v = 5$\,km/h. Huddle point = nearest intersection node to the serving fire station (6 Palo Alto Fire Department stations, assigned by centroid proximity).
+\textbf{Parameters.} As specified in the general constraints (Section~\ref{sec:formulation}): $t_{\text{assess}} = 5$\,min/address, $v = 5$\,km/h, huddle at nearest intersection to serving fire station.
 
-\textbf{Test matrix.} 10 algorithms $\times$ 5 neighborhoods $\times$ $N \in \{3, 5, 7, 10\}$ = 200 test cases. Each evaluated with all three metrics. All algorithms use the same segment data, distance matrices, and evaluation function.
+\textbf{Test matrix.} 10 algorithms $\times$ 5 neighborhoods $\times$ $N \in \{3, 5, 7, 10\}$ = 200 test cases. Each evaluated with all three metrics. All algorithms use the same segment data, distance matrices, huddle points, and evaluation function. The walk from huddle to first segment is included in every algorithm's unproductive distance --- even for algorithms (e.g., chain+slice) that do not explicitly model the starting location during construction.
 
 %% ==================================================================
 \section{Results}
