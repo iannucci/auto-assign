@@ -404,7 +404,7 @@ Fig.~\ref{fig:neighborhoods} shows OpenStreetMap views of each neighborhood, ill
 \label{sec:algorithms}
 %% ==================================================================
 
-All algorithms operate on the segment graph: segments are nodes with four ports and precomputed cost matrices; edges carry road-network distances between shared intersections. We describe nine algorithms below, each with pseudocode and a Fairmeadow $N=3$ map.
+All algorithms operate on the segment graph: segments are nodes with four ports and precomputed cost matrices; edges carry road-network distances between shared intersections. We describe eleven algorithms below, each with pseudocode.
 
 \subsection{Chain+Slice (Nearest-Neighbor)}
 
@@ -649,7 +649,34 @@ Assign segments to the nearest of $N$ seed points by Euclidean distance (consist
 \label{fig:voronoi}
 \end{figure*}
 
-\textbf{Hybrid: Voronoi + Boundary Transfer.} We also test contiguity-preserving boundary transfers: iteratively move boundary segments from the heaviest cell to a lighter adjacent cell, provided the transfer does not disconnect the source cell. Across 38 test cases, this improves max time by 3.9\% on average (up to 37.8\% on Classic Communities at $N = 5$). However, most cases show 0\% improvement because Voronoi cells in road networks tend to be tree-shaped --- removing any interior segment disconnects the cell.
+\subsection{Voronoi + Boundary Transfer (Vor+BT)}
+
+Starting from the Voronoi balanced-seeds result, iteratively transfer boundary segments from the heaviest cell (by time) to a lighter adjacent cell, provided the transfer does not disconnect the source cell. Connectivity is checked by BFS on the segment adjacency graph. Transfers continue until no improving move exceeds a 0.5-minute threshold or 200 iterations are reached. Within each resulting cell, segments are ordered by NN chain.
+
+The key limitation: Voronoi cells in road networks tend to be \emph{tree-shaped} --- removing any interior segment disconnects the cell. Only cells with cycles (redundant connections) allow productive transfers. This means Vor+BT helps most on grid neighborhoods and least on cul-de-sac or sparse layouts.
+
+\begin{algorithm}[htbp]
+\caption{Voronoi + Boundary Transfer}
+\begin{algorithmic}[1]
+\REQUIRE Voronoi partition from balanced seeds
+\FOR{$\text{iter} = 1$ to 200}
+    \STATE $k_{\max} \leftarrow$ cell with highest estimated time
+    \FOR{each boundary segment $s$ in cell $k_{\max}$}
+        \IF{removing $s$ would disconnect $k_{\max}$}
+            \STATE Skip $s$
+        \ENDIF
+        \FOR{each adjacent cell $k_{\text{adj}}$}
+            \STATE Compute improvement from transferring $s$
+        \ENDFOR
+    \ENDFOR
+    \IF{best improvement $< 0.5$\,min}
+        \STATE \textbf{break}
+    \ENDIF
+    \STATE Transfer best segment; update cell membership
+\ENDFOR
+\STATE Order each cell's segments by NN chain
+\end{algorithmic}
+\end{algorithm}
 
 Fig.~\ref{fig:hybrid} shows the boundary transfer process on Midtown, where the straight Voronoi partition lines (left) cut through 14 segments that must be reassigned wholly to one cell (right).
 
