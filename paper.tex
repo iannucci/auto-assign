@@ -1250,9 +1250,9 @@ We formulate all discovered constraints simultaneously and attempt to solve with
 
 \textbf{Result: only 6\% of cases are feasible.} With $Q_{\min} = 50\%$ across 19 neighborhoods at $N = 3, 5$ (36 test cases), SA rejects nearly all transfers because moving a boundary segment creates long unproductive transitions that violate the quality floor.
 
-The infeasibility is structural. The median walking quality across all ESWs is only 24\% --- meaning 76\% of walking is transitions. The dominant factor is the \textbf{walk from the fire station huddle to the neighborhood}, which is unavoidable overhead. For neighborhoods far from their fire station (e.g., Southgate: 1.6\,km to Station~1), this single walk consumes most of the walking budget.
+The infeasibility is structural. The median walking quality across all ESWs is only 24\% --- meaning 76\% of walking is transitions. The dominant factor is the \textbf{walk from the huddle point to each ESW's first assigned segment}, which is unavoidable overhead.
 
-\textbf{The fundamental tension:} Walkable contiguity + time balance is achievable (chain+slice produces 70\,min average spread). Walking quality $\geq 50\%$ requires that most walking is productive, which is difficult when the huddle-to-neighborhood distance is large relative to the intra-neighborhood walking. The quality floor may need to be relaxed on neighborhoods far from their fire station.
+\textbf{The fundamental tension:} Walkable contiguity + time balance is achievable (chain+slice produces 70\,min average spread). Walking quality $\geq 50\%$ requires that most walking is productive, which is difficult when the huddle-to-first-segment distance is large relative to the intra-neighborhood walking.
 
 %% ==================================================================
 \section{Discussion}
@@ -1422,7 +1422,7 @@ We presented a practical system for assigning addresses to emergency services wo
 
 \textbf{C7 (Voronoi with balanced seeds).} Balanced seed search transforms Voronoi from a failure (Lloyd's produces unbalanced cells) into a competitive approach. Adding boundary transfers (Voronoi+BT) wins decisively on elongated neighborhoods (59\% on Southgate vs.\ 28\% for chain methods). Seed placement matters far more than the assignment metric.
 
-\textbf{C8 (Constraint tension).} Walkable contiguity + time balance + walking quality $\geq$ 50\% is feasible in only 6\% of cases. The walk from the fire station huddle to the first assigned segment dominates walking quality (median 24\%), particularly for neighborhoods far from their fire station.
+\textbf{C8 (Constraint tension).} Walkable contiguity + time balance + walking quality $\geq$ 50\% is feasible in only 6\% of cases. The walk from the huddle to the first assigned segment dominates walking quality (median 24\%).
 
 \textbf{Cross-study insight.} The productive-distance invariant reveals that algorithms can only reduce waste, not work. This reframes future research: the objective is not ``better routing'' but ``less unproductive walking.'' Promising directions include Voronoi + chain+slice hybrids (Voronoi for geographic partitioning, chain+slice for intra-cell routing), constraint-solver formulations that explicitly balance walk quality and time spread, and field validation with ESW teams.
 
