@@ -103,24 +103,35 @@ const seedPts = ["lon lat"];
 for (const s of bestSeeds) seedPts.push(`${s.lon} ${s.lat}`);
 fs.writeFileSync(path.join(dataDir, "voronoi-fm-bal-seeds.dat"), seedPts.join("\n") + "\n");
 
-// Write straight partition lines (perpendicular bisectors extended)
-// The perpendicular bisector of seeds i,j passes through their midpoint
-// and is perpendicular to the line connecting them.
-// Direction: rotate (dLat, dLon) by 90 degrees → (-dLon, dLat)
+// Write straight partition lines as 3 RAYS from the circumcenter.
+// For N=3, the three perpendicular bisectors meet at the circumcenter
+// of the three seeds. Each Voronoi edge is a ray from the circumcenter
+// extending outward (away from the third seed).
+const ax = bestSeeds[0].lon, ay = bestSeeds[0].lat;
+const bx = bestSeeds[1].lon, by = bestSeeds[1].lat;
+const cx = bestSeeds[2].lon, cy = bestSeeds[2].lat;
+const D2 = 2 * (ax*(by-cy) + bx*(cy-ay) + cx*(ay-by));
+const ccLon = ((ax*ax+ay*ay)*(by-cy) + (bx*bx+by*by)*(cy-ay) + (cx*cx+cy*cy)*(ay-by)) / D2;
+const ccLat = ((ax*ax+ay*ay)*(cx-bx) + (bx*bx+by*by)*(ax-cx) + (cx*cx+cy*cy)*(bx-ax)) / D2;
+console.log("Circumcenter:", ccLon.toFixed(6), ccLat.toFixed(6));
+
 const linePts = ["lon lat"];
 for (let i = 0; i < N; i++) {
-    for (let j = i + 1; j < N; j++) {
-        const s1 = bestSeeds[i], s2 = bestSeeds[j];
-        const midLat = (s1.lat + s2.lat) / 2, midLon = (s1.lon + s2.lon) / 2;
-        const dLat = s2.lat - s1.lat, dLon = s2.lon - s1.lon;
-        const len = Math.sqrt(dLat * dLat + dLon * dLon);
-        // Perpendicular unit vector: (-dLon, dLat) / len
-        const perpLat = -dLon / len, perpLon = dLat / len;
-        const ext = 0.015; // extend far enough for pgfplots to clip
-        linePts.push(`${midLon + perpLon * ext} ${midLat + perpLat * ext}`);
-        linePts.push(`${midLon - perpLon * ext} ${midLat - perpLat * ext}`);
-        linePts.push("");
-    }
+    const j = (i + 1) % N, k = (i + 2) % N;
+    // Bisector between seeds i and j: perpendicular to (si→sj), passes through circumcenter
+    const dLat = bestSeeds[j].lat - bestSeeds[i].lat;
+    const dLon = bestSeeds[j].lon - bestSeeds[i].lon;
+    const len = Math.sqrt(dLat * dLat + dLon * dLon);
+    // Perpendicular direction: (-dLon, dLat) / len
+    let perpLat = -dLon / len, perpLon = dLat / len;
+    // Orient away from seed k
+    const toK_lat = bestSeeds[k].lat - ccLat, toK_lon = bestSeeds[k].lon - ccLon;
+    if (perpLat * toK_lat + perpLon * toK_lon > 0) { perpLat = -perpLat; perpLon = -perpLon; }
+    // Ray from circumcenter outward
+    const ext = 0.015;
+    linePts.push(`${ccLon} ${ccLat}`);
+    linePts.push(`${ccLon + perpLon * ext} ${ccLat + perpLat * ext}`);
+    linePts.push("");
 }
 fs.writeFileSync(path.join(dataDir, "voronoi-fm-bal-straight-lines.dat"), linePts.join("\n") + "\n");
 
