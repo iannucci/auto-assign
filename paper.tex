@@ -404,7 +404,7 @@ Fig.~\ref{fig:neighborhoods} shows OpenStreetMap views of each neighborhood, ill
 \label{sec:algorithms}
 %% ==================================================================
 
-All algorithms operate on the segment graph: segments are nodes with four ports and precomputed cost matrices; edges carry road-network distances. We describe nine algorithms, each with its key idea. Pseudocode for the most important algorithms appears in Algorithm~\ref{alg:chainslice} and Algorithm~\ref{alg:oracle}.
+All algorithms operate on the segment graph: segments are nodes with four ports and precomputed cost matrices; edges carry road-network distances between shared intersections. We describe nine algorithms below, each with pseudocode and a Fairmeadow $N=3$ map.
 
 \subsection{Chain+Slice (Nearest-Neighbor)}
 
@@ -453,6 +453,22 @@ A variant of Chain+Slice that adds a directional bias. After exiting a segment, 
 where $d_{\text{road}}$ is the road-network transition distance, $\theta_{\text{cw}} \in [0^\circ, 360^\circ)$ is the clockwise turn angle from the current heading to the candidate entry point, and $C_s$ is the candidate's traversal cost. The 0.5 weight on turn angle (in degrees, so $0.5 \times 180^\circ = 90$\,m equivalent for a U-turn) biases toward continuing in roughly the same direction, producing a spiral traversal pattern. The 0.1 weight on segment cost is a tiebreaker favoring cheaper segments.
 
 \textbf{Complexity:} Same as NN, $O(M^3)$.
+
+\begin{algorithm}[htbp]
+\caption{Right-Hand Rule Chain}
+\begin{algorithmic}[1]
+\REQUIRE Segments $\mathcal{S}$, worker count $N$, current heading $\vec{h}$
+\STATE $\text{best} \leftarrow \infty$
+\FOR{each starting segment $s_0 \in \mathcal{S}$}
+    \STATE $\text{chain} \leftarrow [s_0]$; $\vec{h} \leftarrow$ direction of $s_0$
+    \WHILE{unvisited segments remain}
+        \STATE $s^* \leftarrow \arg\min_{s} [d_{\text{road}} + 0.5 \cdot \theta_{\text{cw}}(\vec{h}, s) + 0.1 \cdot C_s]$
+        \STATE Append $s^*$; $\vec{h} \leftarrow$ exit direction of $s^*$
+    \ENDWHILE
+    \STATE Slice into $N$ groups; score; update best
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
 
 Fig.~\ref{fig:rh-path} compares NN and RH chain traversals on Fairmeadow.
 
@@ -503,6 +519,26 @@ Starting from the best NN chain, iteratively improve segment ordering by reversi
 
 \textbf{Complexity:} $O(M^2)$ per pass, typically converging in $O(M)$ passes, giving $O(M^3)$ total.
 
+\begin{algorithm}[htbp]
+\caption{2-Opt Local Search}
+\begin{algorithmic}[1]
+\REQUIRE Chain from best Chain+Slice run
+\REPEAT
+    \STATE $\text{improved} \leftarrow \text{false}$
+    \FOR{each pair $(i, j)$ in chain}
+        \STATE Reverse sub-chain $[i..j]$; swap entry/exit ports
+        \STATE Recompute transition costs at boundaries
+        \IF{total walk distance decreased}
+            \STATE Accept reversal; $\text{improved} \leftarrow \text{true}$
+        \ELSE
+            \STATE Undo reversal
+        \ENDIF
+    \ENDFOR
+\UNTIL{$\neg\text{improved}$ or 500 passes}
+\STATE Slice into $N$ groups; score
+\end{algorithmic}
+\end{algorithm}
+
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}
@@ -522,6 +558,24 @@ Split segments by centroid along the longer geographic axis (latitude or longitu
 
 \textbf{Complexity:} $O(M \log N)$ for splitting, plus $O((M/N)^3)$ for NN within each group.
 
+\begin{algorithm}[htbp]
+\caption{Recursive Bisection}
+\begin{algorithmic}[1]
+\REQUIRE Segments $\mathcal{S}$, worker count $N$
+\STATE $\text{groups} \leftarrow [\mathcal{S}]$
+\WHILE{$|\text{groups}| < N$}
+    \STATE Select largest group $G$
+    \STATE $\text{axis} \leftarrow$ longer of latitude, longitude span of $G$
+    \STATE Sort $G$ by centroid along axis
+    \STATE Split $G$ at address-count midpoint into $G_1, G_2$
+    \STATE Replace $G$ with $G_1, G_2$ in groups
+\ENDWHILE
+\FOR{each group $G_k$}
+    \STATE Order segments in $G_k$ by NN chain
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}
@@ -540,6 +594,27 @@ Split segments by centroid along the longer geographic axis (latitude or longitu
 Assign segments to the nearest of $N$ seed points by Euclidean distance (consistent with straight-line Voronoi partition boundaries). Segments straddling a cell boundary (endpoints in different cells) are reassigned wholly to the closer cell.
 
 \textbf{Seed optimization.} Standard Lloyd's iteration~\cite{lloyd1982} minimizes within-cell variance, not address count balance --- it converges to unbalanced cells (Fig.~\ref{fig:voronoi}, left). We replace it with greedy hill-climbing: starting from Lloyd's result, try moving each seed to random road nodes (50 trials per seed, 10 restarts), keeping any move that reduces imbalance. For small neighborhoods ($\leq 41$ nodes, $N = 3$), we use exhaustive search over all $\binom{|V|}{N}$ seed combinations (Fig.~\ref{fig:voronoi}, right). Within each cell, segments are ordered by NN chain.
+
+\begin{algorithm}[htbp]
+\caption{Voronoi with Balanced Seeds}
+\begin{algorithmic}[1]
+\REQUIRE Segments $\mathcal{S}$, worker count $N$, road nodes $V$
+\STATE Initialize seeds via Lloyd's iteration (address-weighted centroids)
+\FOR{10 random restarts}
+    \FOR{each seed $k = 1 \ldots N$}
+        \FOR{50 random trials}
+            \STATE Move seed $k$ to random node $v \in V$
+            \STATE Assign segments to nearest seed (Euclidean)
+            \IF{address-count imbalance decreased}
+                \STATE Keep new seed position
+            \ENDIF
+        \ENDFOR
+    \ENDFOR
+\ENDFOR
+\STATE Reassign straddling segments wholly to closer cell
+\STATE Order each cell's segments by NN chain
+\end{algorithmic}
+\end{algorithm}
 
 \begin{figure*}[htbp]
 \centering
@@ -620,6 +695,20 @@ Starting from the huddle point (Section~\ref{sec:formulation}), assign segments 
 \end{equation}
 where $\text{frontier}_k$ is ESW $k$'s current exit port and $n_s$ is the segment's address count. Produces ``pizza slice'' partitions radiating from the huddle, but these interleave geographically, doubling unproductive walking vs.\ chain methods.
 
+\begin{algorithm}[htbp]
+\caption{BFS from Huddle}
+\begin{algorithmic}[1]
+\REQUIRE Segments $\mathcal{S}$, worker count $N$, huddle point $H$
+\STATE $\text{frontier}_k \leftarrow H$ for all $k = 1 \ldots N$
+\WHILE{unassigned segments remain}
+    \FOR{$k = 1$ to $N$}
+        \STATE $s^* \leftarrow \arg\min_s \Delta T_k(s)$ \COMMENT{Eq.~\ref{eq:marginal}}
+        \STATE Assign $s^*$ to ESW $k$; update $\text{frontier}_k$
+    \ENDFOR
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}
@@ -637,6 +726,22 @@ where $\text{frontier}_k$ is ESW $k$'s current exit port and $n_s$ is the segmen
 
 Build one ESW's assignment at a time. Starting from the huddle point, compute a target finish time $T^* = (\text{total walk time} + A \cdot t_{\text{assess}}) / N$. For ESW 1, greedily add nearest segments until $T_1 \approx T^*$. Repeat for ESW 2 from the huddle with remaining segments. The last ESW takes all remaining segments. Suffers from the ``dregs problem'': the last ESW inherits scattered remnants, producing time spreads of 100--500\,min.
 
+\begin{algorithm}[htbp]
+\caption{DFS from Huddle}
+\begin{algorithmic}[1]
+\REQUIRE Segments $\mathcal{S}$, worker count $N$, huddle $H$
+\STATE $T^* \leftarrow (\text{total walk} + A \cdot t_{\text{assess}}) / N$
+\FOR{$k = 1$ to $N - 1$}
+    \STATE $\text{frontier} \leftarrow H$; $T_k \leftarrow 0$
+    \WHILE{$T_k < T^*$ and unassigned segments remain}
+        \STATE $s^* \leftarrow$ nearest unassigned segment to frontier
+        \STATE Assign $s^*$ to ESW $k$; update frontier and $T_k$
+    \ENDWHILE
+\ENDFOR
+\STATE Assign all remaining segments to ESW $N$
+\end{algorithmic}
+\end{algorithm}
+
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}
@@ -653,6 +758,25 @@ Build one ESW's assignment at a time. Starting from the huddle point, compute a 
 \subsection{SA Post-Processing}
 
 Starting from BFS's result, apply simulated annealing~\cite{kirkpatrick1983}: transfer boundary segments from the heaviest ESW to the lightest, accepting worse solutions with Boltzmann probability $e^{-\Delta/T}$ to escape local optima. Temperature cools from $T_0 = 0.5 \cdot \text{spread}$ to $T_f = 0.01$ over 500 iterations. The key mechanism: a two-move backtracking sequence can achieve gains that no single greedy transfer finds (12.5\% improvement demonstrated on Greater Miranda --- see Section~\ref{sec:sa-trace}).
+
+\begin{algorithm}[htbp]
+\caption{SA Post-Processing}
+\begin{algorithmic}[1]
+\REQUIRE Partition from BFS, temperature schedule $T_0 \to T_f$
+\FOR{$\text{iter} = 1$ to 500}
+    \STATE $k_{\max} \leftarrow \arg\max_k T_k$; select boundary segment $s$
+    \STATE $k_{\text{target}} \leftarrow$ adjacent ESW with lowest $T_k$
+    \STATE Transfer $s$: $k_{\max} \to k_{\text{target}}$
+    \STATE $\Delta \leftarrow \max_k T_k^{\text{new}} - \max_k T_k^{\text{old}}$
+    \IF{$\Delta < 0$ or $\text{rand}() < e^{-\Delta / T}$}
+        \STATE Accept transfer
+    \ELSE
+        \STATE Reject; undo transfer
+    \ENDIF
+    \STATE Cool: $T \leftarrow T \cdot \alpha$
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
 
 \subsection{Oracle}
 \label{sec:oracle}
@@ -691,6 +815,20 @@ The three terms serve distinct purposes:
 \subsection{Random Baseline}
 
 Shuffle segments, partition by address count, NN chain within each group. Run 30 trials, keep best. Quantifies the value of optimization: the oracle improves over random by 37\% on average.
+
+\begin{algorithm}[htbp]
+\caption{Random Baseline}
+\begin{algorithmic}[1]
+\REQUIRE Segments $\mathcal{S}$, worker count $N$, trials $R = 30$
+\STATE $\text{best} \leftarrow \infty$
+\FOR{$r = 1$ to $R$}
+    \STATE Randomly shuffle $\mathcal{S}$
+    \STATE Partition into $N$ groups at $\lceil A/N \rceil$ address boundaries
+    \STATE Order each group by NN chain
+    \STATE Score partition; update best if improved
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
 
 \begin{figure}[htbp]
 \centering

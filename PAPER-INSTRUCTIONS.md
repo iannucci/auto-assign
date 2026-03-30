@@ -57,6 +57,7 @@ Selected for maximum geometric diversity:
 
 Each algorithm section must include:
 - Full description of how the algorithm works
+- **Pseudocode** (every algorithm gets its own `algorithm` environment)
 - Complexity analysis
 - A Fairmeadow N=3 map showing 3 ESWs' segments in blue/red/green with address count splits in the title
 
