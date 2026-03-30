@@ -117,7 +117,7 @@ Given a segment with addresses, how should an ESW walk it? The answer depends on
 
 \subsubsection{Definitions}
 
-Let $D$ be the segment length, $w$ the street width (estimated from OSM road class: residential $\approx 10$\,m, service $\approx 6$\,m, secondary $\approx 14$\,m), and $n$ the address count. Each segment endpoint has two \emph{ports} (one per sidewalk): $S_L, S_R$ at the start intersection and $E_L, E_R$ at the end, giving four ports total. Address positions are expressed as fractional distance $t \in [0,1]$ along the segment. Each address is classified as left or right of the centerline (Eq.~\ref{eq:side}). A \emph{run} is a maximal consecutive group of addresses on the same side when sorted by $t$; the number of runs $r$ determines how many street crossings are needed.
+Let $D$ be the segment length, $w$ the street width (estimated from OSM road class: residential $\approx 10$\,m, service $\approx 6$\,m, secondary $\approx 14$\,m), and $n$ the address count. Each segment endpoint has two \emph{ports} (one per sidewalk): $S_L, S_R$ at the start intersection and $E_L, E_R$ at the end, giving four ports total. Address positions are expressed as fractional distance $t \in [0,1]$ along the segment. Each address is classified as left or right of the centerline (Eq.~\ref{eq:side}). A \emph{run} is a maximal consecutive group of addresses on the same side when sorted by $t$; the number of runs $r$ determines how many street crossings are needed. The \emph{mean same-side inter-address gap} $\bar{g}$ is the average distance between consecutive addresses on the same side of the street; it governs the choice of traversal strategy (Section~\ref{sec:strategy-choice}).
 
 \textbf{Traversal strategies.} Two strategies cover all cases:
 
@@ -150,6 +150,7 @@ Both strategies are monotonic --- the ESW always progresses forward (or backward
 The cost matrix $\mathbf{C}$ is a $4 \times 4$ matrix encoding the minimum walking distance for every (entry port, exit port) combination. It evaluates both strategies for all 16 port pairings and records the cheaper result. The matrix is precomputed in $O(n)$ time from the sorted address sequence --- even for the 135-address worst case, this is instantaneous.
 
 \subsubsection{When Does Each Strategy Win?}
+\label{sec:strategy-choice}
 
 The governing geometric condition is the \emph{mean same-side inter-address gap} $\bar{g}$ relative to the street width $w$.
 
