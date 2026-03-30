@@ -369,40 +369,23 @@ SG  & 268 & 44 & 100  & 20 & Elongated \\
 \end{center}
 \end{table}
 
-Fig.~\ref{fig:neighborhoods} shows the road segments and address locations for each neighborhood.
+Fig.~\ref{fig:neighborhoods} shows OpenStreetMap views of each neighborhood, illustrating the dramatic differences in street geometry.
 
 \begin{figure*}[htbp]
 \centering
-\begin{tikzpicture}
-\begin{groupplot}[
-    group style={group size=5 by 1, horizontal sep=0.5cm, ylabels at=edge left},
-    width=0.22\textwidth,
-    height=0.22\textwidth,
-    ticks=none,
-    title style={font=\scriptsize\bfseries},
-]
-\nextgroupplot[title={PAC (145a, 11s)}]
-\addplot[only marks, mark=*, mark size=0.3pt, gray!40] table[x=lon,y=lat] {data/pac-addresses.dat};
-\addplot[prodblue, semithick, opacity=0.6] table[x=lon,y=lat] {data/pac-road-segments.dat};
-
-\nextgroupplot[title={FM (307a, 43s)}]
-\addplot[only marks, mark=*, mark size=0.3pt, gray!40] table[x=lon,y=lat] {data/fairmeadow-addresses.dat};
-\addplot[prodblue, semithick, opacity=0.6] table[x=lon,y=lat] {data/fairmeadow-road-segments.dat};
-
-\nextgroupplot[title={CC (489a, 117s)}]
-\addplot[only marks, mark=*, mark size=0.2pt, gray!40] table[x=lon,y=lat] {data/cc-addresses.dat};
-\addplot[prodblue, semithick, opacity=0.6] table[x=lon,y=lat] {data/cc-road-segments.dat};
-
-\nextgroupplot[title={RP (584a, 289s)}]
-\addplot[only marks, mark=*, mark size=0.2pt, gray!40] table[x=lon,y=lat] {data/rp-addresses.dat};
-\addplot[prodblue, semithick, opacity=0.6] table[x=lon,y=lat] {data/rp-road-segments.dat};
-
-\nextgroupplot[title={SG (268a, 44s)}]
-\addplot[only marks, mark=*, mark size=0.3pt, gray!40] table[x=lon,y=lat] {data/sg-addresses.dat};
-\addplot[prodblue, semithick, opacity=0.6] table[x=lon,y=lat] {data/sg-road-segments.dat};
-\end{groupplot}
-\end{tikzpicture}
-\caption{Road segments (\textcolor{prodblue}{blue}) and addresses (gray dots) for each test neighborhood. PAC is a dense cluster; FM has radial cul-de-sacs; CC is a regular grid; RP is a sparse campus with many roads but few addresses; SG is elongated along one axis. These five layouts produce the widest spread of algorithm performance in our study.}
+\begin{tabular}{@{}ccccc@{}}
+\includegraphics[height=3.2cm]{figures/osm-pac.png} &
+\includegraphics[height=3.2cm]{figures/osm-fm.png} &
+\includegraphics[height=3.2cm]{figures/osm-cc.png} &
+\includegraphics[height=3.2cm]{figures/osm-rp.png} &
+\includegraphics[height=3.2cm]{figures/osm-sg.png} \\
+\scriptsize\textbf{PAC} (145a, 11s) &
+\scriptsize\textbf{FM} (307a, 43s) &
+\scriptsize\textbf{CC} (489a, 117s) &
+\scriptsize\textbf{RP} (584a, 289s) &
+\scriptsize\textbf{SG} (268a, 44s) \\
+\end{tabular}
+\caption{OpenStreetMap views of the five test neighborhoods. PAC is a dense commercial cluster around California Avenue; FM has radial cul-de-sacs (Starr King Circle visible at center); CC is a regular grid; RP is a sparse campus with many roads but few addresses; SG is elongated along a single axis. These five layouts produce the widest spread of algorithm performance in our study. Map data \copyright\ OpenStreetMap contributors.}
 \label{fig:neighborhoods}
 \end{figure*}
 
