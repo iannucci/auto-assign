@@ -110,67 +110,66 @@ This geometric classification is more reliable than house-number parity (even/od
 
 From 41,857 municipal addresses within the Palo Alto bounding box, 41,854 snap successfully to one of 7,430 address-bearing segments. Snap distances have median 22.9\,m (consistent with the typical setback of houses from the road centerline), 87\% are within 30\,m, and only 1\% exceed 50\,m. Segment lengths have median 63\,m, mean 83\,m, and range from 0.5\,m to 2,288\,m. Addresses per segment: 31\% have one address, 39\% have 2--5, 15\% have 6--10, and 15\% have 11 or more (up to 135).
 
-\subsection{Segment Cost Matrix (C2)}
+\subsection{Segment Walking Distance (C2)}
 \label{sec:costmatrix}
 
-The cost matrix $\mathbf{C}$ is a $4 \times 4$ matrix giving the minimum walking distance for every (entry port, exit port) combination.
+Given a segment with addresses, how should an ESW walk it? The answer depends on \emph{which end} they enter from, \emph{which end} they exit, and \emph{which side} of the street they are on at each end. Since segments are stitched together into ESW assignments, the entry and exit are degrees of freedom that the assignment algorithm must choose. We need a representation that captures all options.
 
-\textbf{Definitions.} Let $D$ be the segment length, $w$ the street width (estimated from OSM road class: residential $\approx 10$\,m, service $\approx 6$\,m, secondary $\approx 14$\,m), $n$ the address count, and $r$ the number of \emph{runs} --- maximal consecutive groups of addresses on the same side when sorted by fractional position $t$.
+\subsubsection{Definitions}
 
-\textbf{Through-traversal} (enter at $S$, exit at $E$ or vice versa). The ESW walks monotonically along the segment, crossing the street at each run boundary. The cost is:
+Let $D$ be the segment length, $w$ the street width (estimated from OSM road class: residential $\approx 10$\,m, service $\approx 6$\,m, secondary $\approx 14$\,m), and $n$ the address count. Each segment endpoint has two \emph{ports} (one per sidewalk): $S_L, S_R$ at the start intersection and $E_L, E_R$ at the end, giving four ports total. Address positions are expressed as fractional distance $t \in [0,1]$ along the segment. Each address is classified as left or right of the centerline (Eq.~\ref{eq:side}). A \emph{run} is a maximal consecutive group of addresses on the same side when sorted by $t$; the number of runs $r$ determines how many street crossings are needed.
+
+\textbf{Traversal strategies.} Two strategies cover all cases:
+
+\textbf{Through-traversal} (enter at one end, exit at the other). The ESW walks monotonically along the segment, crossing the street at each run boundary:
 \begin{equation}
 C(S_s, E_e) = D + k(s,e) \cdot w
 \label{eq:through}
 \end{equation}
-where $k(s,e) = (r{-}1) + [s \neq s_1] + [e \neq s_r]$ counts street crossings: $(r{-}1)$ mandatory crossings at run boundaries, plus one if the entry side $s$ differs from the first run's side $s_1$, plus one if the exit side $e$ differs from the last run's side $s_r$. The notation $[\cdot]$ is the Iverson bracket (1 if true, 0 if false).
+where $k(s,e) = (r{-}1) + [s \neq s_1] + [e \neq s_r]$ counts street crossings: $(r{-}1)$ mandatory crossings at run boundaries, plus one if the entry side $s$ differs from the first run's side $s_1$, plus one if the exit side $e$ differs from the last run's side $s_r$. The notation $[\cdot]$ is the Iverson bracket.
 
-\textbf{Out-and-back} (enter and exit at the same end). The ESW walks to the farthest address and returns. The return carries no unvisited addresses, so incurs zero crossings:
+\textbf{Out-and-back} (enter and exit at the same end). The ESW walks to the farthest address and returns:
 \begin{equation}
 C(S_s, S_e) = 2 \cdot t_n \cdot D + k_{\text{out}}(s) \cdot w
 \label{eq:outback}
 \end{equation}
-where $t_n$ is the position of the last address. The exit side $e$ is free (the ESW returns on whichever sidewalk is convenient).
+where $t_n$ is the fractional position of the farthest address.
 
-\textbf{Monotonicity.} Within a segment, the ESW never backtracks. Backtracking costs $2g$ (twice the gap) while crossing costs $w$; since residential street widths ($w \approx 10$\,m) are less than typical inter-address gaps ($g \approx 15$--$30$\,m), crossing always dominates.
+\textbf{Cul-de-sac constraint.} A segment with a dead end (one endpoint has degree 1 in the road graph) can only be entered and exited from its open end. Through-traversal is physically impossible --- the ESW would walk into a dead end with no connecting street. The cost matrix still has 16 entries, but the assignment algorithm must only use the out-and-back entries from the open end.
+
+\subsubsection{Why Not Solve TSP per Segment?}
+
+The within-segment problem --- visiting $n$ addresses on two sides of a street --- is a special case of the TSP. Solving it exactly on general points would be intractable for our largest segment (135 addresses: $135!$ permutations). However, the 1D structure of a street reduces the problem dramatically. Addresses lie along a line; the only choice is whether to cross the street or continue on the same side. The \emph{monotonicity principle} eliminates backtracking: backtracking costs $2g$ (twice the gap to the missed address) while crossing costs $w$ (one street width). Since typical inter-address gaps ($g \approx 15$--$30$\,m) exceed the street width ($w \approx 10$\,m), crossing always dominates. The optimal within-segment walk is therefore monotonic (no backtracking), and the cost depends only on which side the ESW starts and finishes --- precisely the four ports.
+
+The cost matrix $\mathbf{C}$ is a $4 \times 4$ matrix encoding the minimum walking distance for every (entry port, exit port) combination. It is precomputed in $O(n)$ time from the sorted address sequence --- even for the 135-address worst case, this is instantaneous.
+
+\subsubsection{Zigzag vs.\ U-Turn}
+
+Which strategy does the cost matrix select? The governing geometric condition is the \emph{mean same-side inter-address gap} $\bar{g}$ relative to the street width $w$.
+
+When $\bar{g} > w$, consecutive addresses on the same side are farther apart than the street is wide. The ESW might as well cross the street each time an address appears on the opposite side --- \textbf{zigzag} (through-traversal) dominates. When $\bar{g} < w$, addresses on each side are packed tighter than a street crossing would cost. It is cheaper to sweep one side, cross once, and sweep the other --- \textbf{U-turn} (out-and-back) dominates.
+
+In our dataset of 3,222 segments with addresses on both sides:
+
+\begin{itemize}
+\item \textbf{88\% prefer zigzag} (2,823 segments). Median $\bar{g}/w = 1.9$: same-side addresses are nearly two street-widths apart.
+\item \textbf{12\% prefer U-turn} (399 segments). Median $\bar{g}/w = 0.5$: same-side addresses are packed at half the street width.
+\end{itemize}
+
+The cost matrix computes the exact optimum for every port combination, but the $\bar{g}/w$ ratio predicts the outcome with 79\% accuracy, confirming that same-side density relative to street width is the governing geometric factor.
+
+\subsubsection{Segments vs.\ Sub-Segments}
+
+Should the assignment algorithm operate on whole segments or split them into sub-segments? We use whole segments for three reasons. First, the $4 \times 4$ matrix already captures all traversal options --- splitting would add complexity without changing the cost. Second, whole-segment assignment is operationally unambiguous: an ESW owns an entire street between intersections, with no boundary disputes. Third, 69\% of address-bearing segments have 2 or more addresses (up to 135), and the cost matrix handles all of them in $O(n)$ time. The only case where splitting might help is a very long segment where an ESW could productively visit a portion, but this is rare: median segment length is 63\,m, and the assignment algorithm already balances address counts across ESWs.
+
+From this point forward, the \textbf{segment with its $4 \times 4$ cost matrix} is the atomic unit of assignment.
 
 \subsubsection{Worked Example}
 \label{sec:example}
 
-Consider a 150\,m residential segment ($w = 10$\,m) with 8 addresses at positions and sides:
+We compute the cost matrix for two representative Fairmeadow segments: a through-segment (Starr King Circle, both ends connected) and a cul-de-sac (Wright Place, dead end at the start node).
 
-\begin{center}
-\begin{tabular}{ccccccccc}
-$t$:  & 0.10 & 0.20 & 0.30 & 0.45 & 0.55 & 0.70 & 0.80 & 0.90 \\
-side: & L  & L  & L  & R  & R  & L  & L  & R
-\end{tabular}
-\end{center}
-
-The runs are: LLL (3 left), RR (2 right), LL (2 left), R (1 right) --- so $r = 4$ with $s_1 = L$, $s_r = R$. Mandatory crossings: $r - 1 = 3$.
-
-\textbf{Through-traversal $S_L \to E_R$:} $k = 3 + [L \neq L] + [R \neq R] = 3$. Cost $= 150 + 3 \times 10 = 180$\,m.
-
-\textbf{Through-traversal $S_R \to E_R$:} $k = 3 + [R \neq L] + [R \neq R] = 4$. Cost $= 150 + 40 = 190$\,m.
-
-\textbf{Out-and-back $S_L \to S_L$:} $t_n = 0.90$, $k_{\text{out}} = 3$. Cost $= 2 \times 0.90 \times 150 + 30 = 300$\,m. Much more expensive because the ESW backtracks 135\,m.
-
-The full $4 \times 4$ matrix (rows = entry, columns = exit, in meters):
-
-\begin{center}
-\begin{tabular}{l|cccc}
-    & $S_L$ & $S_R$ & $E_L$ & $E_R$ \\
-\hline
-$S_L$  & 300  & 300  & 190  & \textbf{180} \\
-$S_R$  & 310  & 310  & 200  & 190 \\
-$E_L$  & 190  & 200  & 314  & 314 \\
-$E_R$  & \textbf{180}  & 190  & 304  & 304
-\end{tabular}
-\end{center}
-
-The cheapest option is $S_L \to E_R$ (or equivalently $E_R \to S_L$) at 180\,m: enter on the left, cross three times as runs alternate, exit on the right. The algorithm never computes this matrix at runtime --- it is precomputed in $O(n)$ time from the sorted address sequence.
-
-\subsubsection{Real Segment Example}
-
-Fig.~\ref{fig:diag-subseg} shows a real segment (Starr King Circle, Fairmeadow) with addresses classified by side. The segment has 19 addresses (8 left, 11 right), length $D = 243$\,m, and 14 runs. The cost matrix yields cheapest traversal $S_R \to E_L = 373$\,m (through-traversal with 13 crossings at $w = 10$\,m: $243 + 13 \times 10 = 373$\,m). The U-turn alternative would cost $2 \times 243 + 10 = 496$\,m --- 33\% more. Despite having 14 runs (dense alternation), zigzag through-traversal wins because the segment is long enough that the backtrack penalty outweighs the crossing cost.
+\textbf{Starr King Circle} (Fig.~\ref{fig:diag-subseg}): $D = 243$\,m, 19 addresses (8 left, 11 right), $r = 14$ runs, $w = 10$\,m. Both endpoints connect to other streets (degree 3), so all four traversal directions are reachable.
 
 \begin{figure}[htbp]
 \centering
@@ -190,26 +189,39 @@ Fig.~\ref{fig:diag-subseg} shows a real segment (Starr King Circle, Fairmeadow) 
 \legend{Road centerline, Left side (8), Right side (11)}
 \end{axis}
 \end{tikzpicture}
-\caption{Starr King Circle segment (243\,m, 19 addresses). Blue circles = left-side addresses (8). Red triangles = right-side addresses (11). Black line = road centerline from OSM. Side classification uses the cross product of the road direction vector and the address displacement vector (Eq.~\ref{eq:side}). The 14 address runs make this a candidate for U-turn, but the cost matrix selects zigzag (373\,m vs.\ 496\,m) because the segment is long enough.}
+\caption{Starr King Circle (243\,m, 19 addresses). Blue circles = left-side addresses (8). Red triangles = right-side addresses (11). Black line = road centerline. Both endpoints connect to the road network, so through-traversal and out-and-back are both feasible. The 14 runs produce 13 mandatory crossings.}
 \label{fig:diag-subseg}
 \end{figure}
 
-\subsubsection{Zigzag vs.\ U-Turn}
+The through-traversal cost is $C(S_R, E_L) = 243 + 13 \times 10 = 373$\,m (the cheapest entry: start on the right to match the first run's side, exit left to match the last). The out-and-back alternative $C(E_R, E_R) = 2 \times 243 + 10 = 531$\,m --- 42\% more. With $\bar{g}/w = 1.1$, the cost matrix correctly selects zigzag. The full matrix (meters):
 
-The matrix automatically selects between zigzag (through-traversal with crossings) and U-turn (one side out, cross, other side back). The geometric condition governing this choice is the \emph{mean same-side inter-address gap} $\bar{g}$ relative to the street width $w$.
+\begin{center}
+\begin{tabular}{l|cccc}
+    & $S_L$ & $S_R$ & $E_L$ & $E_R$ \\
+\hline
+$S_L$  & 569  & 569  & 383  & 393 \\
+$S_R$  & 559  & 559  & \textbf{373}  & 383 \\
+$E_L$  & 383  & 393  & 531  & 531 \\
+$E_R$  & \textbf{373}  & 383  & 541  & 541
+\end{tabular}
+\end{center}
 
-When $\bar{g} > w$, consecutive addresses on the same side are farther apart than the street is wide. The ESW might as well cross the street each time an address appears on the opposite side --- zigzag dominates. When $\bar{g} < w$, addresses on each side are packed tighter than a street crossing would cost. It is cheaper to sweep one side, cross once, and sweep the other --- U-turn dominates.
+\textbf{Wright Place} (cul-de-sac): $D = 76$\,m, 7 addresses (4 left, 3 right), $r = 6$ runs, $w = 10$\,m. The start node is a dead end (degree 1); the end node connects to the network (degree 4). An ESW arriving from the road network \emph{must} enter at $E$ and \emph{must} exit at $E$ --- through-traversal would strand them at the dead end. The relevant matrix entries are the out-and-back cells $E \to E$:
 
-In our dataset of 3,222 segments with addresses on both sides:
+\begin{center}
+\begin{tabular}{l|cccc}
+    & $S_L$ & $S_R$ & $E_L$ & $E_R$ \\
+\hline
+$S_L$  & 160  & 160  & 136  & 126 \\
+$S_R$  & 170  & 170  & 146  & 136 \\
+$E_L$  & 136  & 126  & 212  & 212 \\
+$E_R$  & 146  & 136  & \textbf{202}  & \textbf{202}
+\end{tabular}
+\end{center}
 
-\begin{itemize}
-\item \textbf{88\% prefer zigzag} (2,823 segments). Median $\bar{g}/w = 1.9$: same-side addresses are nearly two street-widths apart, so crossing at each run boundary adds less distance than backtracking would.
-\item \textbf{12\% prefer U-turn} (399 segments). Median $\bar{g}/w = 0.5$: same-side addresses are packed at half the street width, so sweeping each side sequentially avoids the accumulated crossing penalty.
-\end{itemize}
+The cheapest reachable option is $E_R \to E_L = 202$\,m (or $E_R \to E_R = 202$\,m): enter on the right, walk to the dead end visiting addresses, return. The matrix also contains through-traversal entries ($E \to S$: 126--146\,m) that are geometrically cheaper but \emph{unreachable} --- the dead end has no connecting street. The assignment algorithm enforces this by checking node degree when selecting ports.
 
-The cost matrix computes the exact optimum for every (entry, exit) port combination, but the $\bar{g}/w$ ratio predicts the outcome with 79\% accuracy, confirming that same-side density relative to street width is the governing geometric factor.
-
-Fig.~\ref{fig:uturn-path} illustrates the extreme case where U-turn saves 81\%.
+Fig.~\ref{fig:uturn-path} shows the extreme case of Roosevelt Circle, where the U-turn strategy saves 81\% over zigzag on a short, densely addressed segment ($\bar{g}/w \ll 1$).
 
 \begin{figure}[htbp]
 \centering
@@ -231,7 +243,7 @@ Fig.~\ref{fig:uturn-path} illustrates the extreme case where U-turn saves 81\%.
 \addplot[only marks, mark=*, mark size=1pt, black] table[x=lon,y=lat] {data/street-points.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Roosevelt Circle (71 addresses on a short, densely addressed segment). Left: zigzag through-traversal crosses at every address pair (381\,m). Right: U-turn walks one side then returns (71\,m), an 81\% reduction. This extreme case illustrates why the cost matrix is needed: a blanket zigzag rule would be catastrophic here, while a blanket U-turn rule would hurt the 97\% of segments where zigzag is cheaper.}
+\caption{Roosevelt Circle (71 addresses, $\bar{g}/w \ll 1$). Left: zigzag crosses at every run boundary (381\,m). Right: U-turn sweeps each side (71\,m), an 81\% reduction. The cost matrix selects the optimal strategy automatically for every segment.}
 \label{fig:uturn-path}
 \end{figure}
 
