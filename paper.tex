@@ -67,7 +67,7 @@ Through development and evaluation of eleven algorithms, we discover three insig
 \item[\textbf{C3.}] Three walking metrics --- walk quality, time spread, and the productive-distance invariant --- that capture what matters operationally (Section~\ref{sec:metrics}).
 \item[\textbf{C4.}] Empirical evaluation across five diverse neighborhoods at $N = 3, 5, 7, 10$ showing the winning strategy depends on neighborhood geometry (Section~\ref{sec:results}).
 \item[\textbf{C5.}] An oracle algorithm that runs all strategies and selects the best, reducing worst-case walk by 25\% vs.\ random assignment, in under one second (Section~\ref{sec:oracle}).
-\item[\textbf{C6.}] A time-based reformulation using fire station huddle points showing that walking quality must be a hard constraint, not just a cost component (Section~\ref{sec:time-results}).
+\item[\textbf{C6.}] A time-based reformulation showing that walking quality must be a hard constraint, not just a cost component (Section~\ref{sec:time-results}).
 \item[\textbf{C7.}] Voronoi partitioning with balanced seeds and boundary transfer wins decisively on elongated neighborhoods (59\% walk quality on Southgate vs.\ 28\% for chain methods), overturning the naive Lloyd's negative result (Section~\ref{sec:voronoi-results}).
 \item[\textbf{C8.}] A constrained formulation revealing that walkable contiguity, time balance, and walking quality are in fundamental tension --- the resolution depends on operational context (Section~\ref{sec:constraint-results}).
 \end{enumerate}
@@ -647,7 +647,7 @@ Assign segments to the nearest of $N$ seed points by Euclidean distance (consist
 \addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/voronoi-fm-unbal-straight-lines.dat};
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-unbal-seeds.dat};
 
-\nextgroupplot[title={Balanced Seeds (104/102/106)}]
+\nextgroupplot[title={Balanced Seeds (98/104/110)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
 \addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell0.dat};
 \addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell1.dat};
@@ -656,7 +656,7 @@ Assign segments to the nearest of $N$ seed points by Euclidean distance (consist
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-bal-seeds.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow Voronoi ($N=3$). Left: Lloyd's iteration converges to unbalanced cells (121/103/88) because it minimizes variance, not balance. Right: balanced seed search achieves near-perfect balance (108/105/99) with 53\% walk quality. Orange = Voronoi partition lines. Black diamonds = seeds. Same framework, different seed optimization --- seed placement is the critical factor.}
+\caption{Fairmeadow Voronoi ($N=3$). Left: Lloyd's iteration converges to unbalanced cells (121/103/88) because it minimizes variance, not balance. Right: balanced seed search achieves near-perfect balance (98/104/110) with 53\% walk quality. Orange = Voronoi partition lines. Black diamonds = seeds. Same framework, different seed optimization --- seed placement is the critical factor.}
 \label{fig:voronoi}
 \end{figure*}
 
@@ -723,6 +723,19 @@ Fig.~\ref{fig:hybrid} shows the boundary transfer process on Midtown, where the 
 \caption{Midtown ($N=3$, 5,140 addresses). Left: Voronoi partition with orange straight-line cell boundaries. These geometric boundaries cut through 14 road segments, splitting streets between cells. Right: each split segment is reassigned wholly to one cell (by closer endpoint). The cell boundary now follows segment edges rather than straight lines. Black diamonds = Voronoi seeds.}
 \label{fig:hybrid}
 \end{figure*}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.7\columnwidth, height=0.55\columnwidth, ticks=none, title={Voronoi+BT on Fairmeadow (98/104/110)}, title style={font=\scriptsize\bfseries}]
+\addplot[only marks, mark=*, mark size=0.2pt, gray!30] table[x=lon,y=lat] {data/alg-fm-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-voronoibt-esw0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-voronoibt-esw1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-voronoibt-esw2.dat};
+\end{axis}
+\end{tikzpicture}
+\caption{Voronoi+BT on Fairmeadow, $N=3$ (98/104/110). Boundary transfers adjust the Voronoi partition to improve time balance. Each cell is geographically contiguous; segments within each cell are ordered by NN chain.}
+\end{figure}
 
 \subsection{BFS (Breadth-First Search)}
 
@@ -1421,7 +1434,7 @@ We presented a practical system for assigning addresses to emergency services wo
 
 \textbf{C2 (Cost matrix).} The $4 \times 4$ matrix captures zigzag, U-turn, through-walk, and out-and-back in a unified formulation. 97\% of segments favor zigzag; the 3\% favoring U-turn are identified automatically. Port choice produces 74\% cost variation on a single segment (Section~\ref{sec:example}), justifying the matrix.
 
-\textbf{C3 (Three metrics).} Walk quality, time spread, and the productive-distance invariant capture what matters operationally. The invariant reveals that \textbf{46\% of walking is unproductive on average}, confirming that inter-segment transition reduction is the dominant optimization target.
+\textbf{C3 (Three metrics).} Walk quality, time spread, and the productive-distance invariant capture what matters operationally. The invariant reveals that \textbf{66\% of walking is unproductive on average} (including the huddle-to-first-segment walk), confirming that transition reduction is the dominant optimization target.
 
 \textbf{C4 (Empirical evaluation).} Across 5 diverse neighborhoods at $N = 3, 5, 7, 10$ (220 test cases), no single algorithm dominates. The winning strategy depends on neighborhood geometry: DFS/2-opt on compact/grid (59--66\%), Voronoi+BT on elongated (59\%), all fail on sparse ($<$26\%).
 

@@ -393,6 +393,150 @@ for (let iter = 0; iter < 30; iter++) {
 }
 writePartition("random", bestRand);
 
+// 8. Voronoi+BT (balanced seeds + boundary transfer)
+function runVoronoiBT() {
+    const nodeCoords = new Map();
+    for (const s of segs) {
+        if (!nodeCoords.has(s.startNode)) nodeCoords.set(s.startNode, { lat: s.polyline[0][0], lon: s.polyline[0][1] });
+        if (!nodeCoords.has(s.endNode)) nodeCoords.set(s.endNode, { lat: s.polyline[s.polyline.length-1][0], lon: s.polyline[s.polyline.length-1][1] });
+    }
+    const nodeList = [...nodeCoords.keys()];
+    const totalAV = segs.reduce((s, seg) => s + (seg.addressCount || 0), 0);
+
+    function assignCells(seeds) {
+        const cells = Array.from({ length: N }, () => []);
+        for (let si = 0; si < segs.length; si++) {
+            const c = centroids[si]; let bestK = 0, bestD = Infinity;
+            for (let k = 0; k < N; k++) { const d = eucDist(c.lat, c.lon, seeds[k].lat, seeds[k].lon); if (d < bestD) { bestD = d; bestK = k; } }
+            const pl = segs[si].polyline;
+            if (pl.length >= 2) {
+                let sK = 0, eK = 0, sB = Infinity, eB = Infinity;
+                for (let k = 0; k < N; k++) {
+                    const ds = eucDist(pl[0][0], pl[0][1], seeds[k].lat, seeds[k].lon);
+                    const de = eucDist(pl[pl.length-1][0], pl[pl.length-1][1], seeds[k].lat, seeds[k].lon);
+                    if (ds < sB) { sB = ds; sK = k; } if (de < eB) { eB = de; eK = k; }
+                }
+                if (sK !== eK) bestK = sK;
+            }
+            cells[bestK].push(si);
+        }
+        return cells;
+    }
+    function cellImbalance(cells) {
+        const counts = cells.map(c => c.reduce((s, si) => s + (segs[si].addressCount || 0), 0));
+        const target = totalAV / N;
+        return counts.reduce((s, c) => s + Math.abs(c - target), 0);
+    }
+
+    // Lloyd's + greedy seed search
+    let bestSeeds = null, bestImb = Infinity;
+    for (let restart = 0; restart < 10; restart++) {
+        const sorted = [...segs].map((s, i) => ({ s, c: centroids[i] }))
+            .sort((a, b) => restart === 0 ? a.c.lat - b.c.lat : Math.random() - 0.5);
+        let seeds = Array.from({ length: N }, (_, i) => ({ ...sorted[Math.floor((i + 0.5) * sorted.length / N)].c }));
+        for (let iter = 0; iter < 20; iter++) {
+            const cells = assignCells(seeds); let converged = true;
+            for (let k = 0; k < N; k++) {
+                if (cells[k].length === 0) continue;
+                let tw = 0, latS = 0, lonS = 0;
+                for (const si of cells[k]) { const c = centroids[si]; const w = segs[si].addressCount || 1; latS += c.lat*w; lonS += c.lon*w; tw += w; }
+                const nl = latS/tw, no = lonS/tw;
+                if (Math.abs(nl - seeds[k].lat) > 1e-6 || Math.abs(no - seeds[k].lon) > 1e-6) converged = false;
+                seeds[k] = { lat: nl, lon: no };
+            }
+            if (converged) break;
+        }
+        for (let gi = 0; gi < 10; gi++) {
+            let improved = false;
+            for (let k = 0; k < N; k++) {
+                for (let c = 0; c < 50; c++) {
+                    const candCoord = nodeCoords.get(nodeList[Math.floor(Math.random() * nodeList.length)]);
+                    const testSeeds = seeds.map((s, i) => i === k ? candCoord : s);
+                    const imb = cellImbalance(assignCells(testSeeds));
+                    if (imb < bestImb) { bestImb = imb; bestSeeds = [...testSeeds]; seeds[k] = candCoord; improved = true; }
+                }
+            }
+            if (!improved) break;
+        }
+        const imb = cellImbalance(assignCells(seeds));
+        if (imb < bestImb || !bestSeeds) { bestImb = imb; bestSeeds = [...seeds]; }
+    }
+
+    // Boundary transfer
+    const cells = assignCells(bestSeeds);
+    const cellSets = cells.map(c => new Set(c));
+    const segToCell = new Map();
+    for (let k = 0; k < N; k++) for (const si of cellSets[k]) segToCell.set(si, k);
+
+    // Segment adjacency
+    const nodeToSegIdx = new Map();
+    for (let i = 0; i < segs.length; i++) {
+        for (const nid of [segs[i].startNode, segs[i].endNode]) {
+            if (!nodeToSegIdx.has(nid)) nodeToSegIdx.set(nid, []);
+            nodeToSegIdx.get(nid).push(i);
+        }
+    }
+    const segNeighbors = new Map();
+    for (const [nid, idxs] of nodeToSegIdx) {
+        for (let i = 0; i < idxs.length; i++) for (let j = i+1; j < idxs.length; j++) {
+            if (!segNeighbors.has(idxs[i])) segNeighbors.set(idxs[i], new Set());
+            if (!segNeighbors.has(idxs[j])) segNeighbors.set(idxs[j], new Set());
+            segNeighbors.get(idxs[i]).add(idxs[j]); segNeighbors.get(idxs[j]).add(idxs[i]);
+        }
+    }
+    function wouldDisconnect(cellSet, removeIdx) {
+        const remaining = new Set(cellSet); remaining.delete(removeIdx);
+        if (remaining.size <= 1) return remaining.size === 0;
+        const start = remaining.values().next().value;
+        const visited = new Set([start]); const queue = [start];
+        while (queue.length > 0) { const cur = queue.shift(); for (const nb of (segNeighbors.get(cur) || [])) { if (remaining.has(nb) && !visited.has(nb)) { visited.add(nb); queue.push(nb); } } }
+        return visited.size < remaining.size;
+    }
+    function cellTime(cellSet) {
+        const addrs = [...cellSet].reduce((s, idx) => s + (segs[idx].addressCount || 0), 0);
+        const dist = [...cellSet].reduce((s, idx) => s + (segs[idx].distance || 0), 0);
+        return dist / 83.33 + addrs * 5;
+    }
+
+    for (let iter = 0; iter < 200; iter++) {
+        const times = cellSets.map(set => cellTime(set));
+        const maxTime = Math.max(...times); const heavyIdx = times.indexOf(maxTime);
+        let bestTransfer = null, bestImprovement = 0;
+        for (const segIdx of cellSets[heavyIdx]) {
+            const neighbors = segNeighbors.get(segIdx) || new Set();
+            const adjacentCells = new Set();
+            for (const nb of neighbors) { const nc = segToCell.get(nb); if (nc !== undefined && nc !== heavyIdx) adjacentCells.add(nc); }
+            if (adjacentCells.size === 0) continue;
+            if (wouldDisconnect(cellSets[heavyIdx], segIdx)) continue;
+            for (const targetCell of adjacentCells) {
+                const newHeavy = new Set(cellSets[heavyIdx]); newHeavy.delete(segIdx);
+                const newTarget = new Set(cellSets[targetCell]); newTarget.add(segIdx);
+                const newMax = Math.max(cellTime(newHeavy), cellTime(newTarget), ...times.filter((_, i) => i !== heavyIdx && i !== targetCell));
+                const improvement = maxTime - newMax;
+                if (improvement > bestImprovement) { bestImprovement = improvement; bestTransfer = { segIdx, from: heavyIdx, to: targetCell }; }
+            }
+        }
+        if (!bestTransfer || bestImprovement < 0.5) break;
+        cellSets[bestTransfer.from].delete(bestTransfer.segIdx);
+        cellSets[bestTransfer.to].add(bestTransfer.segIdx);
+        segToCell.set(bestTransfer.segIdx, bestTransfer.to);
+    }
+
+    // Build NN chains within each cell
+    return cellSets.map(cellSet => {
+        const cellSegs = [...cellSet].map(idx => segs[idx]);
+        if (cellSegs.length === 0) return [];
+        let bestChain = null, bestCost = Infinity;
+        for (let si = 0; si < Math.min(cellSegs.length, 5); si++) {
+            const chain = chainNN(cellSegs, Math.floor(si * cellSegs.length / Math.min(cellSegs.length, 5)));
+            const cost = chain.reduce((s, e) => s + e.segCost + e.transitionCost, 0);
+            if (cost < bestCost) { bestCost = cost; bestChain = chain; }
+        }
+        return bestChain || [];
+    });
+}
+writePartition("voronoibt", runVoronoiBT());
+
 // Also write background addresses
 const bgPts = ["lon lat"];
 for (const a of fmAddrs) bgPts.push(`${a.lon} ${a.lat}`);
