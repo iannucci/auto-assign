@@ -201,14 +201,8 @@ Fig.~\ref{fig:neighborhoods} shows the road segments and address locations for e
     group style={group size=5 by 1, horizontal sep=0.5cm, ylabels at=edge left},
     width=0.22\textwidth,
     height=0.22\textwidth,
-    tick label style={font=\tiny},
-    x tick label style={rotate=45, anchor=east},
-    scaled x ticks=false, xticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
-    scaled y ticks=false, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=3},
-    label style={font=\tiny},
+    ticks=none,
     title style={font=\scriptsize\bfseries},
-    xlabel={},
-    ylabel={},
 ]
 \nextgroupplot[title={PAC (145a, 11s)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!40] table[x=lon,y=lat] {data/pac-addresses.dat};
@@ -294,7 +288,38 @@ Split segments by centroid along the longer geographic axis (latitude or longitu
 
 Assign segments to the nearest of $N$ seed points by Euclidean distance (consistent with straight-line Voronoi partition boundaries). Segments straddling a cell boundary (endpoints in different cells) are reassigned wholly to the closer cell.
 
-\textbf{Seed optimization.} Standard Lloyd's iteration~\cite{lloyd1982} minimizes within-cell variance, not address count balance --- it converges to unbalanced cells. We replace it with greedy hill-climbing: starting from Lloyd's result, try moving each seed to random road nodes (50 trials per seed, 10 restarts), keeping any move that reduces imbalance. For small neighborhoods ($\leq 41$ nodes, $N = 3$), we use exhaustive search over all $\binom{|V|}{N}$ seed combinations. Within each cell, segments are ordered by NN chain.
+\textbf{Seed optimization.} Standard Lloyd's iteration~\cite{lloyd1982} minimizes within-cell variance, not address count balance --- it converges to unbalanced cells (Fig.~\ref{fig:voronoi}, left). We replace it with greedy hill-climbing: starting from Lloyd's result, try moving each seed to random road nodes (50 trials per seed, 10 restarts), keeping any move that reduces imbalance. For small neighborhoods ($\leq 41$ nodes, $N = 3$), we use exhaustive search over all $\binom{|V|}{N}$ seed combinations (Fig.~\ref{fig:voronoi}, right). Within each cell, segments are ordered by NN chain.
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 1, horizontal sep=2.0cm, ylabels at=edge left},
+    width=0.46\textwidth,
+    height=0.38\textwidth,
+    ticks=none,
+    title style={font=\small\bfseries},
+]
+\nextgroupplot[title={Lloyd's Iteration (121/103/88)}]
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-unbal-cell0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-unbal-cell1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-unbal-cell2.dat};
+\addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/voronoi-fm-unbal-straight-lines.dat};
+\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-unbal-seeds.dat};
+
+\nextgroupplot[title={Balanced Seeds (104/102/106)}]
+\addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell2.dat};
+\addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/voronoi-fm-bal-straight-lines.dat};
+\addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-bal-seeds.dat};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Fairmeadow Voronoi ($N=3$). Left: Lloyd's iteration converges to unbalanced cells (121/103/88) because it minimizes variance, not balance. Right: balanced seed search achieves near-perfect balance (104/102/106) with 63\% walk quality. \textcolor{voronoiorange}{Orange} = Voronoi partition lines. Black diamonds = seeds. Same framework, different seed optimization --- seed placement is the critical factor.}
+\label{fig:voronoi}
+\end{figure*}
 
 \subsection{BFS from Huddle}
 
@@ -347,31 +372,57 @@ Shuffle segments, partition by address count, NN chain within each group. Run 30
 
 Table~\ref{tab:master} shows all algorithms on all neighborhoods at $N = 3$. The productive distance column confirms the invariant: within each neighborhood, it is constant (within 5\%) regardless of algorithm.
 
-\begin{table*}[htbp]
-\caption{All algorithms on 5 neighborhoods at $N = 3$. Prod = productive distance, Unprod = unproductive distance, WQ = walk quality, Spread = time spread. Productive distance is invariant; unproductive distance is the differentiator. Best WQ per neighborhood in bold.}
+\begin{table}[htbp]
+\caption{Walk quality (\%) by algorithm and neighborhood ($N=3$). Productive distance is invariant (shown once per neighborhood). Best per neighborhood in bold.}
 \label{tab:master}
 \begin{center}
-\begin{tabular}{l | r r r r | r r r r | r r r r | r r r r | r r r r}
+\begin{tabular}{l ccccc}
 \toprule
-& \multicolumn{4}{c|}{\textbf{PAC (145a)}} & \multicolumn{4}{c|}{\textbf{FM (307a)}} & \multicolumn{4}{c|}{\textbf{CC (489a)}} & \multicolumn{4}{c|}{\textbf{RP (584a)}} & \multicolumn{4}{c}{\textbf{SG (268a)}} \\
-\textbf{Algorithm} & Prod & Unpr & WQ & Spr & Prod & Unpr & WQ & Spr & Prod & Unpr & WQ & Spr & Prod & Unpr & WQ & Spr & Prod & Unpr & WQ & Spr \\
-& \multicolumn{4}{c|}{(km, km, \%, min)} & \multicolumn{4}{c|}{(km, km, \%, min)} & \multicolumn{4}{c|}{(km, km, \%, min)} & \multicolumn{4}{c|}{(km, km, \%, min)} & \multicolumn{4}{c}{(km, km, \%, min)} \\
+ & \textbf{PAC} & \textbf{FM} & \textbf{CC} & \textbf{RP} & \textbf{SG} \\
+\textbf{Algorithm} & 145a & 307a & 489a & 584a & 268a \\
 \midrule
-ChainNN  & .7 & .2 & \textbf{76} & 55 & 6.7 & 2.7 & 72 & 43 & 11.8 & 5.8 & 68 & 10 & 17.1 & 56 & 25 & 128 & 5.4 & 5.1 & 50 & 24 \\
-ChainRH  & .7 & .4 & 67 & 52 & 6.7 & 3.2 & 70 & 6 & 11.9 & 7.1 & 65 & 12 & 19.0 & 53 & \textbf{29} & 95 & 5.4 & 5.1 & 51 & 25 \\
-2-Opt    & .7 & .2 & \textbf{76} & 55 & 6.7 & 2.6 & \textbf{73} & 23 & 12.0 & 5.0 & \textbf{71} & 12 & 17.3 & 49 & 27 & 138 & 5.3 & 5.0 & 52 & 18 \\
-Bisect   & .7 & .8 & 47 & 167 & 6.7 & 3.1 & 70 & 39 & 11.8 & 5.8 & 67 & 32 & 17.1 & 54 & 26 & 330 & 5.4 & 5.5 & 47 & 20 \\
-Voronoi  & .7 & .8 & 48 & 35 & 6.6 & 3.7 & 64 & 94 & 11.8 & 6.0 & 67 & 26 & 17.4 & 57 & 24 & 441 & 5.4 & 3.4 & \textbf{74} & 109 \\
-BFS      & .7 & 1.1 & 37 & 255 & 6.7 & 4.2 & 63 & 364 & 11.8 & 7.7 & 61 & 96 & 17.1 & 67 & 20 & 628 & 5.4 & 12 & 31 & 739 \\
-DFS      & .7 & .6 & 60 & 51 & 6.7 & 3.3 & 68 & 32 & 11.8 & 6.3 & 66 & 173 & 17.0 & 54 & 26 & 391 & 5.4 & 10 & 32 & 60 \\
-BFS+SA   & .7 & 1.1 & 38 & 102 & 6.7 & 4.2 & 64 & 55 & 11.8 & 7.7 & 61 & 95 & 17.1 & 67 & 21 & 13 & 5.4 & 12 & 28 & 18 \\
-Random   & .7 & .4 & 72 & 43 & 6.7 & 7.9 & 46 & 24 & 11.8 & 16 & 43 & 9 & 17.5 & 94 & 16 & 27 & 5.4 & 7.0 & 39 & 47 \\
+\emph{Prod.\ (km)} & \emph{0.7} & \emph{6.7} & \emph{11.8} & \emph{17.1} & \emph{5.4} \\
 \midrule
-Oracle   & .7 & .4 & 67 & 52 & 6.7 & 3.2 & 70 & 6 & 11.8 & 5.8 & 68 & 10 & 19.0 & 53 & 29 & 95 & 5.3 & 5.0 & 52 & 18 \\
+ChainNN  & \textbf{76} & 72 & 68 & 25 & 50 \\
+ChainRH  & 67 & 70 & 65 & \textbf{29} & 51 \\
+2-Opt    & \textbf{76} & \textbf{73} & \textbf{71} & 27 & 52 \\
+Bisect   & 47 & 70 & 67 & 26 & 47 \\
+Voronoi  & 48 & 64 & 67 & 24 & \textbf{74} \\
+BFS      & 37 & 63 & 61 & 20 & 31 \\
+DFS      & 60 & 68 & 66 & 26 & 32 \\
+BFS+SA   & 38 & 64 & 61 & 21 & 28 \\
+Random   & 72 & 46 & 43 & 16 & 39 \\
+\midrule
+Oracle   & 67 & 70 & 68 & 29 & 52 \\
 \bottomrule
 \end{tabular}
 \end{center}
-\end{table*}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Time spread (minutes) by algorithm and neighborhood ($N=3$). Lower is better. Best per neighborhood in bold.}
+\label{tab:spread}
+\begin{center}
+\begin{tabular}{l ccccc}
+\toprule
+ & \textbf{PAC} & \textbf{FM} & \textbf{CC} & \textbf{RP} & \textbf{SG} \\
+\textbf{Algorithm} & 145a & 307a & 489a & 584a & 268a \\
+\midrule
+ChainNN  & 55 & 43 & \textbf{10} & 128 & 24 \\
+ChainRH  & 52 & \textbf{6} & 12 & \textbf{95} & 25 \\
+2-Opt    & 55 & 23 & 12 & 138 & \textbf{18} \\
+Bisect   & 167 & 39 & 32 & 330 & 20 \\
+Voronoi  & \textbf{35} & 94 & 26 & 441 & 109 \\
+BFS      & 255 & 364 & 96 & 628 & 739 \\
+DFS      & 51 & 32 & 173 & 391 & 60 \\
+BFS+SA   & 102 & 55 & 95 & 13 & \textbf{18} \\
+Random   & 43 & 24 & \textbf{9} & 27 & 47 \\
+\midrule
+Oracle   & 52 & \textbf{6} & \textbf{10} & \textbf{95} & \textbf{18} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
 
 \textbf{Key findings:}
 \begin{itemize}
