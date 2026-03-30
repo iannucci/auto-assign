@@ -170,7 +170,7 @@ The $\bar{g}/w$ ratio predicts the cost matrix outcome with 79\% accuracy. The r
 \subsubsection{Segments vs.\ Sub-Segments}
 \label{sec:seg-vs-subseg}
 
-Should the assignment algorithm operate on whole segments or split them into sub-segments? We use whole segments for three reasons. First, the $4 \times 4$ matrix already captures all traversal options --- splitting would add complexity without changing the cost. Second, whole-segment assignment is operationally unambiguous: an ESW owns an entire street between intersections, with no boundary disputes. Third, 69\% of address-bearing segments have 2 or more addresses (up to 135), and the cost matrix handles all of them in $O(n)$ time. The only case where splitting might help is a very long segment where an ESW could productively visit a portion, but this is rare: median segment length is 63\,m, and the assignment algorithm already balances address counts across ESWs.
+Should the assignment algorithm assign whole segments (both sides of the street) to one ESW, or could it assign each sub-segment (one side) independently? We use whole segments for two reasons. First, assigning opposite sides of the same street to different ESWs is operationally absurd --- two workers walking the same block simultaneously, one on each sidewalk. Second, the cost matrix already captures the optimal traversal of both sides in a single walk: the zigzag and U-turn strategies visit all addresses on both sub-segments, and the port choices determine how efficiently. Splitting sub-segments across ESWs would force each to make a separate out-and-back on their side, losing the efficiency of combined traversal.
 
 From this point forward, the \textbf{segment with its $4 \times 4$ cost matrix} is the atomic unit of assignment.
 
