@@ -31,7 +31,7 @@ bob@rail.com}}
 \maketitle
 
 \begin{abstract}
-During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. We study the problem of partitioning addresses across $N$ workers to minimize assessment completion time. We model the street network as road segments between intersections, each with a precomputed traversal cost matrix, and constrain all walking distances to follow streets. Three metrics capture what matters operationally: \emph{walk quality} (fraction of walking that visits addresses vs.\ transitions between segments), \emph{time spread} (difference between the first and last ESW to finish), and the \emph{productive-distance invariant} (the observation that productive walking is determined by the address set, not the algorithm --- only unproductive walking can be optimized). We evaluate nine algorithms --- nearest-neighbor chain, right-hand rule, 2-opt local search, recursive bisection, Voronoi with balanced seeds, BFS and DFS from fire station huddle points, simulated annealing, and an oracle --- across five Palo Alto neighborhoods chosen for maximum geometric diversity, at team sizes $N = 3, 5, 7, 10$. No single algorithm dominates: chain-based methods achieve the highest walk quality on compact neighborhoods (76\%), while Voronoi with balanced seeds wins on elongated layouts (74\%). All algorithms fail on sparse campuses ($<$30\% walk quality). The oracle reduces worst-case walking by 37\% vs.\ random assignment.
+During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. We study the problem of partitioning addresses across $N$ workers to minimize assessment completion time. We model the street network as road segments between intersections, each with a precomputed traversal cost matrix, and constrain all walking distances to follow streets. Three metrics capture what matters operationally: \emph{walk quality} (fraction of walking that visits addresses vs.\ transitions between segments), \emph{time spread} (difference between the first and last ESW to finish), and the \emph{productive-distance invariant} (the observation that productive walking is determined by the address set, not the algorithm --- only unproductive walking can be optimized). We evaluate eleven algorithms --- nearest-neighbor chain, right-hand rule, 2-opt local search, recursive bisection, Voronoi with balanced seeds, Voronoi with boundary transfer, BFS, DFS, simulated annealing, and an oracle --- across five Palo Alto neighborhoods chosen for maximum geometric diversity, at team sizes $N = 3, 5, 7, 10$. No single algorithm dominates: DFS and 2-opt achieve the highest walk quality on compact neighborhoods (66\%), while Voronoi with boundary transfer wins on elongated layouts (59\%). All algorithms fail on sparse campuses ($<$26\% walk quality). The oracle reduces worst-case walking by 25\% vs.\ random assignment.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -46,7 +46,7 @@ Post-disaster damage assessment requires Emergency Services Workers (ESWs) to ph
 
 We study the automatic assignment problem: given a set of addresses on a road network and $N$ workers, find a partition that minimizes the time until all assessments are complete. The problem combines elements of the Capacitated Vehicle Routing Problem (CVRP)~\cite{toth2014} and balanced graph partitioning~\cite{andreev2006}, but differs in that our ``vehicles'' are on foot, start from a shared staging area, and must walk on streets --- they cannot jump between non-adjacent addresses. The general problem is NP-hard~\cite{garey1979}, so we seek practical heuristics that produce good solutions in real-time.
 
-Through development and evaluation of nine algorithms, we discover three insights that are not obvious from the problem statement:
+Through development and evaluation of eleven algorithms, we discover three insights that are not obvious from the problem statement:
 
 \begin{enumerate}
 \item \textbf{Walk quality matters more than distance or time.} ESWs reject assignments with excessive purposeless walking regardless of what the time metric shows.
@@ -61,9 +61,9 @@ Through development and evaluation of nine algorithms, we discover three insight
 \item[\textbf{C2.}] A per-segment cost matrix that captures all traversal options as an emergent property of address geometry (Section~\ref{sec:costmatrix}).
 \item[\textbf{C3.}] Three walking metrics --- walk quality, time spread, and the productive-distance invariant --- that capture what matters operationally (Section~\ref{sec:metrics}).
 \item[\textbf{C4.}] Empirical evaluation across five diverse neighborhoods at $N = 3, 5, 7, 10$ showing the winning strategy depends on neighborhood geometry (Section~\ref{sec:results}).
-\item[\textbf{C5.}] An oracle algorithm that runs all strategies and selects the best, reducing worst-case walk by 37\% vs.\ random assignment, in under one second (Section~\ref{sec:oracle}).
+\item[\textbf{C5.}] An oracle algorithm that runs all strategies and selects the best, reducing worst-case walk by 25\% vs.\ random assignment, in under one second (Section~\ref{sec:oracle}).
 \item[\textbf{C6.}] A time-based reformulation using fire station huddle points showing that walking quality must be a hard constraint, not just a cost component (Section~\ref{sec:time-results}).
-\item[\textbf{C7.}] Voronoi partitioning with balanced seed search achieves competitive results (51\% walk quality, 99\,min spread), overturning the naive Lloyd's negative result (Section~\ref{sec:voronoi-results}).
+\item[\textbf{C7.}] Voronoi partitioning with balanced seeds and boundary transfer wins decisively on elongated neighborhoods (59\% walk quality on Southgate vs.\ 28\% for chain methods), overturning the naive Lloyd's negative result (Section~\ref{sec:voronoi-results}).
 \item[\textbf{C8.}] A constrained formulation revealing that walkable contiguity, time balance, and walking quality are in fundamental tension --- the resolution depends on operational context (Section~\ref{sec:constraint-results}).
 \end{enumerate}
 
@@ -645,7 +645,7 @@ Assign segments to the nearest of $N$ seed points by Euclidean distance (consist
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-bal-seeds.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow Voronoi ($N=3$). Left: Lloyd's iteration converges to unbalanced cells (121/103/88) because it minimizes variance, not balance. Right: balanced seed search achieves near-perfect balance (104/102/106) with 63\% walk quality. orange = Voronoi partition lines. Black diamonds = seeds. Same framework, different seed optimization --- seed placement is the critical factor.}
+\caption{Fairmeadow Voronoi ($N=3$). Left: Lloyd's iteration converges to unbalanced cells (121/103/88) because it minimizes variance, not balance. Right: balanced seed search achieves near-perfect balance (108/105/99) with 53\% walk quality. Orange = Voronoi partition lines. Black diamonds = seeds. Same framework, different seed optimization --- seed placement is the critical factor.}
 \label{fig:voronoi}
 \end{figure*}
 
@@ -841,7 +841,7 @@ The three terms serve distinct purposes:
 
 \subsection{Random Baseline}
 
-Shuffle segments, partition by address count, NN chain within each group. Run 30 trials, keep best. Quantifies the value of optimization: the oracle improves over random by 37\% on average.
+Shuffle segments, partition by address count, NN chain within each group. Run 30 trials, keep best. Quantifies the value of optimization: the oracle improves over random by 25\% on average.
 
 \begin{algorithm}[htbp]
 \caption{Random Baseline}
@@ -1148,7 +1148,7 @@ The overhead ratio $\rho$ has two sources: (1) unproductive walking (transitions
 \rho = \frac{W_{\max}}{W^*} = \frac{W_{\max}^{\text{prod}} + W_{\max}^{\text{unprod}}}{W^*}
 \end{equation}
 
-For Fairmeadow ($\rho = 1.60$): $W^* = 2{,}236$\,m, $W_{\max} = 3{,}571$\,m. The worst-case ESW has $\sim$2{,}400\,m productive and $\sim$1{,}171\,m unproductive. If transitions could be eliminated entirely, $\rho$ would drop to $2{,}400/2{,}236 = 1.07$ --- the remaining 7\% overhead is from productive imbalance (some ESWs get slightly longer segments). For Monroe Park ($\rho = 2.77$): eliminating transitions would give $\rho \approx 1.5$, meaning 65\% of the overhead is from transitions and 35\% from imbalance.
+For Fairmeadow ($\rho = 1.90$): $W^* = 2{,}187$\,m, $W_{\max} = 4{,}162$\,m (DFS, including huddle walk). The worst-case ESW has $\sim$2{,}400\,m productive and $\sim$1{,}762\,m unproductive (of which the huddle walk is a significant component). If all transitions including the huddle walk could be eliminated, $\rho$ would drop to $\sim$1.10 --- the remaining overhead is from productive imbalance (some ESWs get slightly longer segments).
 
 \textbf{Implication:} The path to reducing $\rho$ is primarily through smarter transition routing (e.g., solving a TSP on segment endpoints), not through better partitioning.
 
@@ -1159,7 +1159,7 @@ We also evaluate all algorithms under the time metric (Eq.~\ref{eq:finish-time})
 
 \textbf{Assessment time dominates.} At $t_{\text{assess}} = 5$\,min, assessment time is $\sim$8$\times$ walking time for typical neighborhoods. The time metric is therefore dominated by address count balance, which chain+slice handles naturally through its $\lceil A/N \rceil$ slicing.
 
-\textbf{BFS produces operationally unacceptable paths.} BFS+SA, despite producing reasonable time balance, generates significantly more total walking than DFS or chain+slice (11.0\,km vs.\ 10.2\,km on Fairmeadow). The BFS fan-out pattern interleaves ESW territories geographically, forcing extensive unproductive transitions. From an operational standpoint, ESWs walking past unvisited addresses to reach their assigned territory would find this unacceptable regardless of what the time metric says. This reveals that \textbf{walking quality} must be treated as a constraint, not just a component of the objective.
+\textbf{BFS produces operationally unacceptable paths.} While BFS's total walking distance is comparable to chain methods when the huddle walk is included (11.0\,km vs.\ 10.2\,km on Fairmeadow), the real problem is its catastrophic time spread (364\,min on Fairmeadow) and geographic interleaving. The round-robin fan-out pattern assigns addresses to ESWs in a ``pizza slice'' pattern that forces extensive backtracking. From an operational standpoint, ESWs walking past unvisited addresses to reach their assigned territory would find this unacceptable regardless of what the time metric shows. This reveals that \textbf{walking quality} must be treated as a constraint, not just a component of the objective.
 
 \textbf{DFS produces the best of both worlds} on compact neighborhoods: balanced addresses (105/102/105 on Fairmeadow), the highest walk quality (66\%), and the least total walking (10.2\,km). But it suffers from the ``dregs problem'' on irregular neighborhoods where the last ESW inherits scattered remnants.
 
