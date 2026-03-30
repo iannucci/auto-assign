@@ -840,7 +840,7 @@ Shuffle segments, partition by address count, NN chain within each group. Run 30
 \addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-random-esw2.dat};
 \end{axis}
 \end{tikzpicture}
-\caption{Random assignment on Fairmeadow, $N=3$ (105/108/99). Despite balanced counts (random shuffle + count slicing), the geographic interleaving is extreme --- segments of all three colors are scattered throughout. Walk quality: 46\%.}
+\caption{Random assignment on Fairmeadow, $N=3$ (105/108/99). Despite balanced counts (random shuffle + count slicing), the geographic interleaving is extreme --- segments of all three colors are scattered throughout. Walk quality: 43\%.}
 \end{figure}
 
 %% ==================================================================
@@ -854,7 +854,7 @@ Shuffle segments, partition by address count, NN chain within each group. Run 30
 
 \textbf{Parameters.} As specified in the general constraints (Section~\ref{sec:formulation}): $t_{\text{assess}} = 5$\,min/address, $v = 5$\,km/h, huddle at nearest intersection to serving fire station.
 
-\textbf{Test matrix.} 10 algorithms $\times$ 5 neighborhoods $\times$ $N \in \{3, 5, 7, 10\}$ = 200 test cases. Each evaluated with all three metrics. All algorithms use the same segment data, distance matrices, huddle points, and evaluation function. The walk from huddle to first segment is included in every algorithm's unproductive distance.
+\textbf{Test matrix.} 11 algorithms $\times$ 5 neighborhoods $\times$ $N \in \{3, 5, 7, 10\}$ = 220 test cases. Each evaluated with all three metrics. All algorithms use the same segment data, distance matrices, huddle points, and evaluation function. The walk from huddle to first segment is included in every algorithm's unproductive distance.
 
 \textbf{Haversine vs.\ road-network validation.} To validate the road-network model, we compare algorithm rankings under haversine distances vs.\ road-network distances. Under haversine, transition distances are straight-line. In our earlier haversine-based study across 41 neighborhoods, bisect dominated at $N = 5$ (21/41 wins) and NN chain at $N = 3$ (18/41). Under road-network distances, the ranking shifts: 2-opt and bisection share dominance, NN chain drops to 7\%. Haversine underestimates the cost of transitions that must navigate around blocks (Fig.~\ref{fig:diag-road} shows a 56\% underestimate), validating the constrained model.
 
@@ -878,17 +878,18 @@ Table~\ref{tab:master} shows walk quality for all algorithms on all neighborhood
 \midrule
 \emph{Prod.\ (km)} & \emph{0.7} & \emph{6.7} & \emph{11.8} & \emph{17.1} & \emph{5.4} \\
 \midrule
-ChainNN & \textbf{76} & 72 & 68 & 25 & 50 \\
-ChainRH & 67 & 70 & 65 & \textbf{29} & 51 \\
-2-Opt  & \textbf{76} & \textbf{73} & \textbf{71} & 27 & 52 \\
-Bisect  & 47 & 70 & 67 & 26 & 47 \\
-Voronoi & 48 & 64 & 67 & 24 & \textbf{74} \\
-BFS   & 37 & 63 & 61 & 20 & 31 \\
-DFS   & 60 & 68 & 66 & 26 & 32 \\
-BFS+SA  & 38 & 64 & 61 & 21 & 28 \\
-Random  & 72 & 46 & 43 & 16 & 39 \\
+ChainNN  & \textbf{59} & 61 & 62 & 23 & 28 \\
+ChainRH  & 56 & 58 & 61 & \textbf{26} & 27 \\
+2-Opt    & \textbf{59} & 60 & \textbf{66} & 25 & 28 \\
+Bisect   & 29 & 56 & 63 & 24 & 28 \\
+Voronoi  & 29 & 53 & 64 & 24 & \textbf{56} \\
+Vor+BT   & 29 & 57 & 61 & 24 & \textbf{59} \\
+BFS      & 35 & 62 & 60 & 20 & 24 \\
+DFS      & 53 & \textbf{66} & \textbf{65} & \textbf{26} & 24 \\
+BFS+SA   & 34 & 64 & 60 & 21 & 22 \\
+Random   & 25 & 43 & 43 & 15 & 24 \\
 \midrule
-Oracle  & 67 & 70 & 68 & 29 & 52 \\
+Oracle   & 56 & 58 & 62 & \textbf{26} & 28 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -903,17 +904,18 @@ Oracle  & 67 & 70 & 68 & 29 & 52 \\
  & \textbf{PAC} & \textbf{FM} & \textbf{CC} & \textbf{RP} & \textbf{SG} \\
 \textbf{Algorithm} & 145a & 307a & 489a & 584a & 268a \\
 \midrule
-ChainNN & 55 & 43 & \textbf{10} & 128 & 24 \\
-ChainRH & 52 & \textbf{6} & 12 & \textbf{95} & 25 \\
-2-Opt  & 55 & 23 & 12 & 138 & \textbf{18} \\
-Bisect  & 167 & 39 & 32 & 330 & 20 \\
-Voronoi & \textbf{35} & 94 & 26 & 441 & 109 \\
-BFS   & 255 & 364 & 96 & 628 & 739 \\
-DFS   & 51 & 32 & 173 & 391 & 60 \\
-BFS+SA  & 102 & 55 & 95 & 13 & \textbf{18} \\
-Random  & 43 & 24 & \textbf{9} & 27 & 47 \\
+ChainNN  & 55 & 43 & \textbf{10} & 128 & 24 \\
+ChainRH  & 52 & \textbf{6} & 12 & \textbf{95} & 25 \\
+2-Opt    & 55 & 23 & 12 & 138 & \textbf{18} \\
+Bisect   & 167 & 39 & 32 & 330 & 20 \\
+Voronoi  & \textbf{35} & 42 & 37 & 368 & 109 \\
+Vor+BT   & \textbf{35} & 49 & 32 & 471 & 108 \\
+BFS      & 255 & 364 & 96 & 628 & 739 \\
+DFS      & 51 & 32 & 173 & 391 & 60 \\
+BFS+SA   & 102 & 55 & 95 & \textbf{3} & 31 \\
+Random   & 54 & 7 & 11 & 105 & 45 \\
 \midrule
-Oracle  & 52 & \textbf{6} & \textbf{10} & \textbf{95} & \textbf{18} \\
+Oracle   & 52 & \textbf{6} & \textbf{10} & \textbf{95} & \textbf{18} \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -922,11 +924,11 @@ Oracle  & 52 & \textbf{6} & \textbf{10} & \textbf{95} & \textbf{18} \\
 \textbf{Key findings:}
 \begin{itemize}
 \item \textbf{Productive distance is constant} within each neighborhood ($\pm$5\%), confirming the invariant (Eq.~\ref{eq:invariant}).
-\item \textbf{2-opt achieves highest walk quality} on 3 of 5 neighborhoods (PAC: 76\%, FM: 73\%, CC: 71\%) by reducing unproductive transitions through local search.
-\item \textbf{Voronoi wins on Southgate} (74\%) by 22 points over the next best chain method (52\%). The elongated shape aligns naturally with Euclidean partitioning.
-\item \textbf{Research Park defeats all algorithms}: best is 29\% (ChainRH). At 70 addresses/km$^2$, most walking is unproductive regardless of strategy.
-\item \textbf{BFS is consistently worst}: 20--61\% walk quality. Round-robin fan-out interleaves territories.
-\item \textbf{Oracle improvement over random}: 37\% reduction in worst-case walk distance on average.
+\item \textbf{DFS and 2-opt achieve highest walk quality} on most neighborhoods (DFS: FM 66\%, CC 65\%; 2-opt: PAC 59\%, CC 66\%).
+\item \textbf{Voronoi+BT wins on Southgate} (59\%) by 31 points over chain methods (28\%). The elongated shape aligns naturally with Euclidean partitioning; boundary transfers further improve balance.
+\item \textbf{Research Park defeats all algorithms}: best is 26\% (ChainRH, DFS). At 70 addresses/km$^2$, most walking is unproductive regardless of strategy.
+\item \textbf{BFS is consistently worst}: 20--62\% walk quality. Round-robin fan-out interleaves territories.
+\item \textbf{Oracle improvement over random}: the oracle consistently selects the best chain method, achieving 28--62\% walk quality vs.\ 15--43\% for random.
 \end{itemize}
 
 \subsection{Scaling with Team Size}
@@ -940,10 +942,10 @@ Oracle  & 52 & \textbf{6} & \textbf{10} & \textbf{95} & \textbf{18} \\
 \textbf{Neighborhood} & $N{=}3$ & $N{=}5$ & $N{=}7$ & $N{=}10$ \\
 \midrule
 PAC & ChainRH & ChainRH & ChainRH & ChainRH \\
-FM & ChainRH & ChainRH & ChainNN & TwoOpt \\
-CC & ChainNN & ChainNN & ChainNN & TwoOpt \\
-RP & ChainRH & ChainRH & TwoOpt & TwoOpt \\
-SG & TwoOpt & TwoOpt & ChainRH & TwoOpt \\
+FM  & ChainRH & ChainRH & ChainNN & TwoOpt \\
+CC  & ChainNN & ChainNN & ChainNN & TwoOpt \\
+RP  & ChainRH & ChainRH & TwoOpt  & TwoOpt \\
+SG  & TwoOpt  & TwoOpt  & ChainRH & TwoOpt \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -963,22 +965,22 @@ Fig.~\ref{fig:wq-comparison} shows the productive-distance invariant visually: p
   bar width=4pt,
   xlabel={Algorithm},
   ylabel={Total Walk (km)},
-  symbolic x coords={NN, RH, 2opt, Bi, Vor, BFS, DFS, SA, Rnd},
+  symbolic x coords={NN, RH, 2opt, Bi, Vor, V+BT, BFS, DFS, SA, Rnd},
   xtick=data,
   x tick label style={font=\tiny, rotate=45, anchor=east},
-  ymin=0, ymax=16,
+  ymin=0, ymax=18,
   width=\columnwidth,
   height=5.5cm,
   legend style={at={(0.98,0.98)},anchor=north east,font=\tiny},
   title={Fairmeadow ($N=3$): Productive vs.\ Unproductive},
   title style={font=\small\bfseries},
 ]
-\addplot[fill=prodblue, draw=prodblue!80] coordinates {(NN,6.7) (RH,6.7) (2opt,6.7) (Bi,6.7) (Vor,6.6) (BFS,6.7) (DFS,6.7) (SA,6.7) (Rnd,6.7)};
-\addplot[fill=unprodred, draw=unprodred!80] coordinates {(NN,2.7) (RH,3.2) (2opt,2.6) (Bi,3.1) (Vor,3.7) (BFS,4.2) (DFS,3.3) (SA,4.2) (Rnd,7.9)};
+\addplot[fill=prodblue, draw=prodblue!80] coordinates {(NN,6.7) (RH,6.7) (2opt,6.7) (Bi,6.7) (Vor,6.6) (V+BT,6.6) (BFS,6.7) (DFS,6.7) (SA,6.7) (Rnd,6.8)};
+\addplot[fill=unprodred, draw=unprodred!80] coordinates {(NN,4.3) (RH,5.3) (2opt,4.5) (Bi,5.3) (Vor,5.9) (V+BT,5.2) (BFS,4.3) (DFS,3.5) (SA,4.3) (Rnd,9.2)};
 \legend{Productive, Unproductive}
 \end{axis}
 \end{tikzpicture}
-\caption{Fairmeadow ($N=3$): productive (blue, constant at 6.7\,km) vs.\ unproductive (red, varies 2.6--7.9\,km). The productive-distance invariant is confirmed: all algorithms visit the same segments. 2-opt achieves the lowest unproductive distance; Random the highest.}
+\caption{Fairmeadow ($N=3$): productive (blue, constant at 6.7\,km) vs.\ unproductive (red, varies 3.5--9.2\,km). The productive-distance invariant is confirmed: all algorithms visit the same segments. DFS achieves the lowest unproductive distance; Random the highest.}
 \label{fig:wq-comparison}
 \end{figure}
 
@@ -1001,19 +1003,19 @@ Fig.~\ref{fig:wq-comparison} shows the productive-distance invariant visually: p
   title={Walk Quality by Neighborhood ($N=3$)},
   title style={font=\small\bfseries},
 ]
-\addplot coordinates {(PAC,76) (FM,73) (CC,71) (RP,27) (SG,52)};
-\addplot coordinates {(PAC,48) (FM,64) (CC,67) (RP,24) (SG,74)};
-\addplot coordinates {(PAC,72) (FM,46) (CC,43) (RP,16) (SG,39)};
-\legend{2-Opt, Voronoi, Random}
+\addplot coordinates {(PAC,59) (FM,60) (CC,66) (RP,25) (SG,28)};
+\addplot coordinates {(PAC,29) (FM,57) (CC,61) (RP,24) (SG,59)};
+\addplot coordinates {(PAC,25) (FM,43) (CC,43) (RP,15) (SG,24)};
+\legend{2-Opt, Vor+BT, Random}
 \end{axis}
 \end{tikzpicture}
-\caption{Walk quality for the best chain method (2-opt), Voronoi, and Random baseline across 5 neighborhoods ($N=3$). 2-opt leads on 4/5 neighborhoods but Voronoi wins decisively on Southgate (74\% vs.\ 52\%). Random quantifies the cost of not optimizing (16--72\%).}
+\caption{Walk quality for 2-opt (best chain method), Voronoi+BT, and Random baseline across 5 neighborhoods ($N=3$). 2-opt leads on compact/grid neighborhoods but Voronoi+BT wins on Southgate (59\% vs.\ 28\%). Random quantifies the cost of not optimizing (15--43\%).}
 \label{fig:wq-heatmap}
 \end{figure}
 
 \subsection{Time Spread}
 
-Fig.~\ref{fig:spread} shows time spread for key algorithms at $N = 3$. BFS produces catastrophic spreads (255--739\,min) because its round-robin pattern creates wildly unbalanced address counts. Chain methods and Voronoi maintain spreads under 100\,min on most neighborhoods.
+Fig.~\ref{fig:spread} shows time spread for key algorithms at $N = 3$. BFS produces catastrophic spreads (255--739\,min) because its round-robin pattern creates wildly unbalanced address counts. Chain methods maintain spreads under 55\,min on most neighborhoods; Voronoi+BT has moderate spreads (32--471\,min) that vary with neighborhood geometry.
 
 \begin{figure}[htbp]
 \centering
@@ -1035,10 +1037,10 @@ Fig.~\ref{fig:spread} shows time spread for key algorithms at $N = 3$. BFS produ
   title style={font=\small\bfseries},
 ]
 \addplot coordinates {(PAC,55) (FM,23) (CC,12) (RP,138) (SG,18)};
-\addplot coordinates {(PAC,35) (FM,94) (CC,26) (RP,441) (SG,109)};
+\addplot coordinates {(PAC,35) (FM,49) (CC,32) (RP,471) (SG,108)};
 \addplot coordinates {(PAC,52) (FM,6) (CC,10) (RP,95) (SG,18)};
 \addplot coordinates {(PAC,255) (FM,364) (CC,96) (RP,628) (SG,739)};
-\legend{2-Opt, Voronoi, Oracle, BFS}
+\legend{2-Opt, Vor+BT, Oracle, BFS}
 \end{axis}
 \end{tikzpicture}
 \caption{Time spread (max -- min ESW finish time) at $N = 3$. BFS (gray) produces catastrophic spreads due to address-count imbalance. Oracle (green) selects the best chain method, achieving low spreads on all neighborhoods except Research Park (sparse campus where all methods struggle).}
@@ -1130,9 +1132,9 @@ We also evaluate all algorithms under the time metric (Eq.~\ref{eq:finish-time})
 
 \textbf{Assessment time dominates.} At $t_{\text{assess}} = 5$\,min, assessment time is $\sim$8$\times$ walking time for typical neighborhoods. The time metric is therefore dominated by address count balance, which chain+slice handles naturally through its $\lceil A/N \rceil$ slicing.
 
-\textbf{BFS produces operationally unacceptable paths.} BFS+SA, despite producing reasonable time balance, generates \emph{twice the total walking distance} of DFS or chain+slice (21.4\,km vs.\ 10.2--12.5\,km on Fairmeadow). The BFS fan-out pattern interleaves ESW territories geographically, forcing extensive unproductive transitions. From an operational standpoint, ESWs walking past unvisited addresses to reach their assigned territory would find this unacceptable regardless of what the time metric says. This reveals that \textbf{walking quality} must be treated as a constraint, not just a component of the objective.
+\textbf{BFS produces operationally unacceptable paths.} BFS+SA, despite producing reasonable time balance, generates significantly more total walking than DFS or chain+slice (11.0\,km vs.\ 10.2\,km on Fairmeadow). The BFS fan-out pattern interleaves ESW territories geographically, forcing extensive unproductive transitions. From an operational standpoint, ESWs walking past unvisited addresses to reach their assigned territory would find this unacceptable regardless of what the time metric says. This reveals that \textbf{walking quality} must be treated as a constraint, not just a component of the objective.
 
-\textbf{DFS produces the best of both worlds} on compact neighborhoods: the lowest max time (575\,min on Fairmeadow), balanced addresses (105/102/105), and the least total walking (10.2\,km). But it suffers from the ``dregs problem'' on irregular neighborhoods where the last ESW inherits scattered remnants.
+\textbf{DFS produces the best of both worlds} on compact neighborhoods: balanced addresses (105/102/105 on Fairmeadow), the highest walk quality (66\%), and the least total walking (10.2\,km). But it suffers from the ``dregs problem'' on irregular neighborhoods where the last ESW inherits scattered remnants.
 
 Fig.~\ref{fig:s2-trails-fm} shows the DFS assignment for Fairmeadow under the time metric.
 
@@ -1169,7 +1171,7 @@ Fig.~\ref{fig:s2-trails-fm} shows the DFS assignment for Fairmeadow under the ti
 \addplot[only marks, mark=diamond*, mark size=4pt, idealgreen] table[x=lon,y=lat] {data/fairmeadow-s2-huddle.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow under DFS ($N=3$, time metric). Green diamond = huddle point (fan-out from Fire Station~4). Green dashed = walk from huddle to first segment. Blue = productive. Red dashed = unproductive transitions. DFS produces well-balanced address counts (105/102/105) with 10.2\,km total walking --- half the walking of BFS+SA (21.4\,km).}
+\caption{Fairmeadow under DFS ($N=3$, time metric). Green diamond = huddle point (fan-out from Fire Station~4). Green dashed = walk from huddle to first segment. Blue = productive. Red dashed = unproductive transitions. DFS produces well-balanced address counts (105/102/105) with 10.2\,km total walking and the highest walk quality (66\%) of any algorithm on this neighborhood.}
 \label{fig:s2-trails-fm}
 \end{figure*}
 
@@ -1201,9 +1203,9 @@ Final result: ESW~1 = 124\,min (21 addrs), ESW~2 = 124\,min (21 addrs), ESW~3 = 
 \subsection{Voronoi Analysis}
 \label{sec:voronoi-results}
 
-Voronoi partitioning with balanced seeds achieves 51\% walk quality average (range 22--75\%) and 99\,min average spread. This crosses the 50\% quality threshold, meaning ESWs spend more time visiting addresses than transitioning. The comparison with naive Lloyd's iteration is dramatic: Lloyd's produces 41\% walk quality and 193\,min spread --- the same Voronoi framework with different seed optimization yields fundamentally different results. Seed placement matters far more than the assignment metric.
+Voronoi with balanced seeds achieves 29--64\% walk quality at $N = 3$; adding boundary transfers (Voronoi+BT) improves this to 29--61\% on most neighborhoods and 59\% on Southgate. The comparison with naive Lloyd's iteration remains dramatic: seed placement matters far more than the assignment metric.
 
-Regular grid neighborhoods achieve near-perfect balance: Fairmeadow 107/104/101 ($N = 3$, 12\,min spread). Irregular layouts (Research Park) still produce higher spreads because the Voronoi partition cannot follow the non-uniform address density.
+Voronoi+BT's advantage is most visible on Southgate (59\% vs.\ 28\% for chain methods) where the Euclidean partition aligns with the elongated shape. On grids (CC), boundary transfers achieve 24\,min spread at $N = 7$ --- the best of any algorithm. On tree-shaped networks (cul-de-sacs, sparse campus), transfers have little effect because removing any segment disconnects the cell.
 
 \subsection{Constraint Tension Analysis}
 \label{sec:constraint-results}
@@ -1235,11 +1237,11 @@ The infeasibility is structural. The median walking quality across all ESWs is o
 The five diverse neighborhoods partition the algorithm landscape:
 
 \begin{itemize}
-\item \textbf{Dense, compact (PAC):} Chain methods dominate (76\% WQ). All segments are adjacent; transitions are inherently short. Voronoi and Bisect struggle because any partition boundary creates unnecessary crossings in this small cluster.
-\item \textbf{Cul-de-sacs (FM):} 2-opt wins (73\%) by refining chain ordering to follow the radial topology. Voronoi is competitive at large $N$ (80\% at $N = 10$) as cells align with cul-de-sac clusters.
-\item \textbf{Regular grid (CC):} All methods perform similarly (61--71\% WQ). The grid aligns with both chain ordering and Voronoi boundaries. 2-opt's local search provides a small edge.
-\item \textbf{Sparse campus (RP):} Everything fails ($<$30\% WQ). The fundamental problem is not the algorithm but the data: 289 segments with only 584 addresses means 2.0 addresses per segment --- most walking is between segments with no addresses.
-\item \textbf{Elongated (SG):} Voronoi wins decisively (74\% vs.\ 52\% for 2-opt). The Euclidean partition naturally bisects the elongated shape. Chain methods snake through the length, producing interleaved partitions.
+\item \textbf{Dense, compact (PAC):} Chain methods dominate (59\% WQ). All segments are adjacent; transitions are inherently short. Voronoi and Bisect struggle because any partition boundary creates unnecessary crossings in this small cluster.
+\item \textbf{Cul-de-sacs (FM):} DFS wins (66\%) by building contiguous territories from the huddle. Voronoi+BT is competitive (57\%) with boundary transfers closing the gap.
+\item \textbf{Regular grid (CC):} 2-opt and DFS lead (66\%, 65\%). The grid aligns with both chain ordering and Voronoi boundaries; all methods perform within 60--66\%.
+\item \textbf{Sparse campus (RP):} Everything fails ($<$26\% WQ). The fundamental problem is not the algorithm but the data: 289 segments with only 584 addresses means 2.0 addresses per segment --- most walking is between segments with no addresses.
+\item \textbf{Elongated (SG):} Voronoi+BT wins decisively (59\% vs.\ 28\% for chain methods). The Euclidean partition naturally bisects the elongated shape; boundary transfers further improve balance. Chain methods snake through the length, producing interleaved partitions.
 \end{itemize}
 
 \subsection{Cross-Study Comparison}
@@ -1247,20 +1249,20 @@ The five diverse neighborhoods partition the algorithm landscape:
 Table~\ref{tab:comparison} compares the oracle and Voronoi on the 5 diverse neighborhoods. Productive walking is nearly identical --- the same addresses must be visited. The differentiator is \emph{unproductive walking}, which varies dramatically with neighborhood character.
 
 \begin{table*}[htbp]
-\caption{Cross-study comparison ($N=3$). Productive distance is constant; unproductive varies by method and neighborhood. $\Delta$Unprod = how much more unproductive walking Voronoi produces vs.\ the oracle (negative = Voronoi is better).}
+\caption{Cross-study comparison ($N=3$). Productive distance is constant; unproductive varies by method and neighborhood. $\Delta$Unprod = how much more unproductive walking Voronoi+BT produces vs.\ the oracle (negative = Voronoi+BT is better).}
 \label{tab:comparison}
 \begin{center}
 \begin{tabular}{l r l | r r r | r r r | r}
 \toprule
-& & & \multicolumn{3}{c|}{\textbf{Oracle}} & \multicolumn{3}{c|}{\textbf{Voronoi}} & \\
+& & & \multicolumn{3}{c|}{\textbf{Oracle}} & \multicolumn{3}{c|}{\textbf{Voronoi+BT}} & \\
 \textbf{Neighborhood} & \textbf{Addrs} & \textbf{Character} & Prod & Unprod & WQ & Prod & Unprod & WQ & $\Delta$Unprod \\
 & & & (km) & (km) & (\%) & (km) & (km) & (\%) & \\
 \midrule
-Palo Alto Central & 145 & Dense commercial  & 0.7 & 0.2 & 76 & 0.7 & 1.0 & 41 & +350\% \\
-Fairmeadow    & 307 & Cul-de-sacs    & 6.7 & 2.2 & 75 & 6.6 & 4.6 & 59 & +108\% \\
-Community Center & 489 & Regular grid    & 11.9& 5.1 & 70 & 11.8& 7.0 & 63 & +38\% \\
-Research Park   & 584 & Sparse campus   & 17.1& 49.8& 26 & 17.3& 54.6& 24 & +10\% \\
-Southgate     & 268 & Elongated     & 5.4 & 4.9 & 52 & 5.3 & 4.0 & 57 & \textbf{--19\%} \\
+Palo Alto Central & 145 & Dense commercial   & 0.7 & 0.9 & 56 & 0.7 & 1.7 & 29 & +89\% \\
+Fairmeadow        & 307 & Cul-de-sacs        & 6.7 & 5.3 & 58 & 6.6 & 5.2 & 57 & --2\%  \\
+Community Center  & 489 & Regular grid       & 11.8& 7.4 & 62 & 11.9& 7.8 & 61 & +5\%  \\
+Research Park     & 584 & Sparse campus      & 19.0& 58.2& 26 & 17.4& 59.8& 24 & +3\%  \\
+Southgate         & 268 & Elongated          & 5.3 & 13.2& 28 & 5.4 & 8.3 & 59 & \textbf{--37\%} \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -1268,10 +1270,10 @@ Southgate     & 268 & Elongated     & 5.4 & 4.9 & 52 & 5.3 & 4.0 & 57 & \textbf{
 
 \textbf{Key findings:}
 \begin{itemize}
-\item \textbf{Oracle dominates on compact, dense neighborhoods} (PAC, FM). Chain ordering keeps transitions short when segments are close together. Voronoi's geometric partition cuts through the dense cluster, creating 3.5$\times$ more unproductive walking on PAC.
-\item \textbf{The gap narrows on regular grids} (CC: +38\%). Voronoi boundaries align with the street grid, reducing fragmentation. Both methods achieve $>$60\% walk quality.
-\item \textbf{Both methods struggle on sparse layouts} (RP: 26\% vs.\ 24\%). When addresses are spread thinly over many segments, no partitioning can avoid long transitions. The 10\% gap is negligible.
-\item \textbf{Voronoi wins on elongated neighborhoods} (SG: --19\%). The Euclidean partition naturally bisects the elongated shape, while chain+slice must snake through it.
+\item \textbf{Oracle dominates on compact, dense neighborhoods} (PAC: 56\% vs.\ 29\%). Chain ordering keeps transitions short when segments are close together. Voronoi+BT's geometric partition cuts through the dense cluster, creating 89\% more unproductive walking on PAC.
+\item \textbf{The gap nearly vanishes on cul-de-sacs and grids} (FM: 58\% vs.\ 57\%; CC: 62\% vs.\ 61\%). Voronoi boundaries align well with these topologies; boundary transfers further close the gap.
+\item \textbf{Both methods struggle on sparse layouts} (RP: 26\% vs.\ 24\%). When addresses are spread thinly over many segments, no partitioning can avoid long transitions.
+\item \textbf{Voronoi+BT wins decisively on elongated neighborhoods} (SG: 59\% vs.\ 28\%, --37\% unproductive). The Euclidean partition naturally bisects the elongated shape, while chain+slice must snake through it.
 \end{itemize}
 
 Fig.~\ref{fig:comparison} shows the productive/unproductive breakdown visually.
@@ -1295,8 +1297,8 @@ Fig.~\ref{fig:comparison} shows the productive/unproductive breakdown visually.
   title={Oracle ($N=3$)},
   title style={font=\small\bfseries},
 ]
-\addplot[fill=prodblue, draw=prodblue!80] coordinates {(PAC,0.7) (FM,6.7) (CC,11.9) (RP,17.1) (SG,5.4)};
-\addplot[fill=unprodred, draw=unprodred!80] coordinates {(PAC,0.2) (FM,2.2) (CC,5.1) (RP,49.8) (SG,4.9)};
+\addplot[fill=prodblue, draw=prodblue!80] coordinates {(PAC,0.7) (FM,6.7) (CC,11.8) (RP,19.0) (SG,5.3)};
+\addplot[fill=unprodred, draw=unprodred!80] coordinates {(PAC,0.9) (FM,5.3) (CC,7.4) (RP,58.2) (SG,13.2)};
 \legend{Productive, Unproductive}
 \end{axis}
 \end{tikzpicture}
@@ -1315,15 +1317,15 @@ Fig.~\ref{fig:comparison} shows the productive/unproductive breakdown visually.
   height=5.5cm,
   legend style={at={(0.02,0.98)},anchor=north west,font=\small},
   enlarge x limits=0.15,
-  title={Voronoi ($N=3$)},
+  title={Voronoi+BT ($N=3$)},
   title style={font=\small\bfseries},
 ]
-\addplot[fill=prodblue, draw=prodblue!80] coordinates {(PAC,0.7) (FM,6.6) (CC,11.8) (RP,17.3) (SG,5.3)};
-\addplot[fill=unprodred, draw=unprodred!80] coordinates {(PAC,1.0) (FM,4.6) (CC,7.0) (RP,54.6) (SG,4.0)};
+\addplot[fill=prodblue, draw=prodblue!80] coordinates {(PAC,0.7) (FM,6.6) (CC,11.9) (RP,17.4) (SG,5.4)};
+\addplot[fill=unprodred, draw=unprodred!80] coordinates {(PAC,1.7) (FM,5.2) (CC,7.8) (RP,59.8) (SG,8.3)};
 \legend{Productive, Unproductive}
 \end{axis}
 \end{tikzpicture}
-\caption{Productive vs.\ unproductive walking for oracle (top) and Voronoi (bottom) on 5 neighborhoods at $N=3$. blue = productive, red = unproductive in both panels. Productive bars are nearly identical; unproductive bars tell the story. Note Research Park's extreme unproductive walking (both $>$70\% unproductive) vs.\ Palo Alto Central where the oracle achieves 76\% productive.}
+\caption{Productive vs.\ unproductive walking for oracle (top) and Voronoi+BT (bottom) on 5 neighborhoods at $N=3$. Blue = productive, red = unproductive in both panels. Productive bars are nearly identical; unproductive bars tell the story. Note Research Park's extreme unproductive walking (both $>$70\% unproductive) vs.\ Fairmeadow where both methods achieve $\sim$58\% productive.}
 \label{fig:comparison}
 \end{figure}
 
@@ -1387,13 +1389,13 @@ We presented a practical system for assigning addresses to emergency services wo
 
 \textbf{C3 (Three metrics).} Walk quality, time spread, and the productive-distance invariant capture what matters operationally. The invariant reveals that \textbf{46\% of walking is unproductive on average}, confirming that inter-segment transition reduction is the dominant optimization target. Road-following distances average 1.3--1.6$\times$ haversine (Fig.~\ref{fig:diag-road}), validating the constrained model.
 
-\textbf{C4 (Empirical evaluation).} Across 5 diverse neighborhoods at $N = 3, 5, 7, 10$ (200 test cases), no single algorithm dominates. The winning strategy depends on neighborhood geometry: 2-opt on compact/grid (76\%), Voronoi on elongated (74\%), all fail on sparse ($<$30\%).
+\textbf{C4 (Empirical evaluation).} Across 5 diverse neighborhoods at $N = 3, 5, 7, 10$ (220 test cases), no single algorithm dominates. The winning strategy depends on neighborhood geometry: DFS/2-opt on compact/grid (59--66\%), Voronoi+BT on elongated (59\%), all fail on sparse ($<$26\%).
 
 \textbf{C5 (Oracle algorithm).} Running all strategies completes in $<$1\,s for neighborhoods up to 289 segments, enabling real-time use during emergency operations.
 
 \textbf{C6 (Time-based analysis).} When assessment time dominates walking ($\sim$8$\times$), chain+slice still produces the best assignments because its contiguous geographic partitions naturally minimize unproductive walking. BFS produces twice the walking of DFS/chain+slice, revealing that walking quality must be a constraint.
 
-\textbf{C7 (Voronoi with balanced seeds).} Balanced seed search transforms Voronoi from a failure (41\% walk quality, 193\,min spread with Lloyd's) into a competitive approach (51\% walk quality, 99\,min spread). Seed placement matters far more than the assignment metric.
+\textbf{C7 (Voronoi with balanced seeds).} Balanced seed search transforms Voronoi from a failure (Lloyd's produces unbalanced cells) into a competitive approach. Adding boundary transfers (Voronoi+BT) wins decisively on elongated neighborhoods (59\% on Southgate vs.\ 28\% for chain methods). Seed placement matters far more than the assignment metric.
 
 \textbf{C8 (Constraint tension).} Walkable contiguity + time balance + walking quality $\geq$ 50\% is feasible in only 6\% of cases. The walk from the fire station to the neighborhood dominates walking quality (median 24\%). The resolution is operational: transport ESWs to the neighborhood.
 
