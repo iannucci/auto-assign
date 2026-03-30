@@ -686,9 +686,9 @@ Fig.~\ref{fig:hybrid} shows the boundary transfer process on Midtown, where the 
 \label{fig:hybrid}
 \end{figure*}
 
-\subsection{BFS from Huddle}
+\subsection{BFS (Breadth-First Search)}
 
-Starting from the huddle point (Section~\ref{sec:formulation}), assign segments round-robin: each round, for each ESW $k$, assign the unvisited segment minimizing marginal time increase:
+Assign segments round-robin: each round, for each ESW $k$, assign the unvisited segment minimizing marginal time increase:
 \begin{equation}
 \Delta T_k = \frac{d_{\text{road}}(\text{frontier}_k, \text{entry}_s) + C(\text{in}_s, \text{out}_s)}{v} + n_s \cdot t_{\text{assess}}
 \label{eq:marginal}
@@ -696,10 +696,10 @@ Starting from the huddle point (Section~\ref{sec:formulation}), assign segments 
 where $\text{frontier}_k$ is ESW $k$'s current exit port and $n_s$ is the segment's address count. Produces ``pizza slice'' partitions radiating from the huddle, but these interleave geographically, doubling unproductive walking vs.\ chain methods.
 
 \begin{algorithm}[htbp]
-\caption{BFS from Huddle}
+\caption{BFS}
 \begin{algorithmic}[1]
-\REQUIRE Segments $\mathcal{S}$, worker count $N$, huddle point $H$
-\STATE $\text{frontier}_k \leftarrow H$ for all $k = 1 \ldots N$
+\REQUIRE Segments $\mathcal{S}$, worker count $N$
+\STATE $\text{frontier}_k \leftarrow$ huddle point for all $k = 1 \ldots N$
 \WHILE{unassigned segments remain}
     \FOR{$k = 1$ to $N$}
         \STATE $s^* \leftarrow \arg\min_s \Delta T_k(s)$ \COMMENT{Eq.~\ref{eq:marginal}}
@@ -722,17 +722,17 @@ where $\text{frontier}_k$ is ESW $k$'s current exit port and $n_s$ is the segmen
 \caption{BFS on Fairmeadow, $N=3$ (141/103/68). Round-robin assignment from the huddle interleaves territories. ESW~1 (blue) grabs 141 addresses while ESW~3 (green) gets only 68 --- the ``pizza slice'' pattern creates severe count imbalance.}
 \end{figure}
 
-\subsection{DFS from Huddle}
+\subsection{DFS (Depth-First Search)}
 
-Build one ESW's assignment at a time. Starting from the huddle point, compute a target finish time $T^* = (\text{total walk time} + A \cdot t_{\text{assess}}) / N$. For ESW 1, greedily add nearest segments until $T_1 \approx T^*$. Repeat for ESW 2 from the huddle with remaining segments. The last ESW takes all remaining segments. Suffers from the ``dregs problem'': the last ESW inherits scattered remnants, producing time spreads of 100--500\,min.
+Build one ESW's assignment at a time. Compute a target finish time $T^* = (\text{total walk time} + A \cdot t_{\text{assess}}) / N$. For ESW 1, greedily add nearest segments until $T_1 \approx T^*$. Repeat for ESW 2 from the huddle with remaining segments. The last ESW takes all remaining segments. Suffers from the ``dregs problem'': the last ESW inherits scattered remnants, producing time spreads of 100--500\,min.
 
 \begin{algorithm}[htbp]
-\caption{DFS from Huddle}
+\caption{DFS}
 \begin{algorithmic}[1]
-\REQUIRE Segments $\mathcal{S}$, worker count $N$, huddle $H$
+\REQUIRE Segments $\mathcal{S}$, worker count $N$
 \STATE $T^* \leftarrow (\text{total walk} + A \cdot t_{\text{assess}}) / N$
 \FOR{$k = 1$ to $N - 1$}
-    \STATE $\text{frontier} \leftarrow H$; $T_k \leftarrow 0$
+    \STATE $\text{frontier} \leftarrow$ huddle point; $T_k \leftarrow 0$
     \WHILE{$T_k < T^*$ and unassigned segments remain}
         \STATE $s^* \leftarrow$ nearest unassigned segment to frontier
         \STATE Assign $s^*$ to ESW $k$; update frontier and $T_k$
@@ -854,7 +854,7 @@ Shuffle segments, partition by address count, NN chain within each group. Run 30
 
 \textbf{Parameters.} As specified in the general constraints (Section~\ref{sec:formulation}): $t_{\text{assess}} = 5$\,min/address, $v = 5$\,km/h, huddle at nearest intersection to serving fire station.
 
-\textbf{Test matrix.} 10 algorithms $\times$ 5 neighborhoods $\times$ $N \in \{3, 5, 7, 10\}$ = 200 test cases. Each evaluated with all three metrics. All algorithms use the same segment data, distance matrices, huddle points, and evaluation function. The walk from huddle to first segment is included in every algorithm's unproductive distance --- even for algorithms (e.g., chain+slice) that do not explicitly model the starting location during construction.
+\textbf{Test matrix.} 10 algorithms $\times$ 5 neighborhoods $\times$ $N \in \{3, 5, 7, 10\}$ = 200 test cases. Each evaluated with all three metrics. All algorithms use the same segment data, distance matrices, huddle points, and evaluation function. The walk from huddle to first segment is included in every algorithm's unproductive distance.
 
 \textbf{Haversine vs.\ road-network validation.} To validate the road-network model, we compare algorithm rankings under haversine distances vs.\ road-network distances. Under haversine, transition distances are straight-line. In our earlier haversine-based study across 41 neighborhoods, bisect dominated at $N = 5$ (21/41 wins) and NN chain at $N = 3$ (18/41). Under road-network distances, the ranking shifts: 2-opt and bisection share dominance, NN chain drops to 7\%. Haversine underestimates the cost of transitions that must navigate around blocks (Fig.~\ref{fig:diag-road} shows a 56\% underestimate), validating the constrained model.
 
@@ -1123,7 +1123,7 @@ For Fairmeadow ($\rho = 1.60$): $W^* = 2{,}236$\,m, $W_{\max} = 3{,}571$\,m. The
 
 \textbf{Implication:} The path to reducing $\rho$ is primarily through smarter transition routing (e.g., solving a TSP on segment endpoints), not through better partitioning.
 
-\subsection{Time-Based Analysis from Huddle Points}
+\subsection{Time-Based Analysis}
 \label{sec:time-results}
 
 We also evaluate all algorithms under the time metric (Eq.~\ref{eq:finish-time}), with all workers starting from shared huddle points. The key findings:
