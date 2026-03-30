@@ -139,31 +139,33 @@ where $t_n$ is the fractional position of the farthest address.
 
 \subsubsection{Why Not Solve TSP per Segment?}
 
-The within-segment problem --- visiting $n$ addresses on two sides of a street --- is a special case of the TSP. Solving it exactly on general points would be intractable for our largest segment (135 addresses: $135!$ permutations). However, the 1D structure of a street reduces the problem to a choice between two monotonic strategies:
+The within-segment problem --- visiting $n$ addresses on two sides of a street --- is a special case of the TSP. Solving it exactly on general points would be intractable for our largest segment (135 addresses: $135!$ permutations). However, the 1D structure of a street reduces the problem to a choice between two monotonic strategies --- neither requires backtracking within a pass:
 
-\textbf{Through-traversal (zigzag):} The ESW makes a single pass from one end to the other, crossing the street whenever an opposite-side address appears. This works well when same-side addresses are spread out ($\bar{g} > w$): crossing the street (cost $w$) is cheaper than skipping the address, because there is no second pass to pick it up.
+\textbf{Through-traversal (zigzag):} The ESW makes a single pass from one end to the other, crossing the street at each run boundary. Cost: $D + (r{-}1) \cdot w$ (segment length plus one crossing per run boundary).
 
-\textbf{Out-and-back (U-turn):} The ESW sweeps one side on the way out and the other side on the way back. This works well when same-side addresses are densely packed ($\bar{g} < w$): the ESW visits each side in a single continuous sweep with no crossings, paying only the cost of walking the segment twice.
+\textbf{Out-and-back (U-turn):} The ESW sweeps one side on the way out and the other side on the way back. Cost: $\approx 2 \cdot t_n \cdot D$ (twice the distance to the farthest address, no crossings).
 
-Both strategies are monotonic --- the ESW always progresses forward (or backward on the return leg), never backtracking within a pass. The cost of each strategy depends only on which side the ESW starts and finishes --- precisely the four ports.
+The trade-off is direct: through-traversal walks the segment once but pays $(r{-}1) \cdot w$ in crossings; out-and-back avoids crossings but pays $\approx 2 \cdot t_n \cdot D$ to walk the segment twice. Through-traversal wins when:
+\begin{equation}
+(r{-}1) \cdot w < (2 t_n - 1) \cdot D
+\label{eq:strategy}
+\end{equation}
 
-The cost matrix $\mathbf{C}$ is a $4 \times 4$ matrix encoding the minimum walking distance for every (entry port, exit port) combination. It evaluates both strategies for all 16 port pairings and records the cheaper result. The matrix is precomputed in $O(n)$ time from the sorted address sequence --- even for the 135-address worst case, this is instantaneous.
+The number of runs $r$ is directly related to the mean same-side inter-address gap $\bar{g}$: when $\bar{g} < w$, addresses alternate sides frequently, producing many runs and a large crossing penalty $(r{-}1) \cdot w$ that eventually exceeds the backtrack cost. When $\bar{g} > w$, there are few runs and the crossing penalty is small.
 
-\subsubsection{When Does Each Strategy Win?}
+The cost of each strategy depends only on which side the ESW starts and finishes --- precisely the four ports. The cost matrix $\mathbf{C}$ is a $4 \times 4$ matrix encoding the minimum walking distance for every (entry port, exit port) combination. It evaluates both strategies for all 16 port pairings and records the cheaper result. The matrix is precomputed in $O(n)$ time from the sorted address sequence --- even for the 135-address worst case, this is instantaneous.
+
+\subsubsection{Empirical Strategy Selection}
 \label{sec:strategy-choice}
 
-The governing geometric condition is the \emph{mean same-side inter-address gap} $\bar{g}$ relative to the street width $w$.
-
-When $\bar{g} > w$, consecutive addresses on the same side are farther apart than the street is wide. The ESW might as well cross the street each time an address appears on the opposite side --- \textbf{zigzag} (through-traversal) dominates. When $\bar{g} < w$, addresses on each side are packed tighter than a street crossing would cost. It is cheaper to sweep one side, cross once, and sweep the other --- \textbf{U-turn} (out-and-back) dominates.
-
-In our dataset of 3,222 segments with addresses on both sides:
+In our dataset of 3,222 segments with addresses on both sides, $\bar{g}/w$ cleanly separates the two outcomes:
 
 \begin{itemize}
-\item \textbf{88\% prefer zigzag} (2,823 segments). Median $\bar{g}/w = 1.9$: same-side addresses are nearly two street-widths apart.
-\item \textbf{12\% prefer U-turn} (399 segments). Median $\bar{g}/w = 0.5$: same-side addresses are packed at half the street width.
+\item \textbf{88\% prefer through-traversal} (2,823 segments). Median $\bar{g}/w = 1.9$: same-side addresses are nearly two street-widths apart, producing few runs and a small crossing penalty.
+\item \textbf{12\% prefer out-and-back} (399 segments). Median $\bar{g}/w = 0.5$: same-side addresses are packed at half the street width, producing many runs whose accumulated crossing cost exceeds the price of walking the segment twice.
 \end{itemize}
 
-The cost matrix computes the exact optimum for every port combination, but the $\bar{g}/w$ ratio predicts the outcome with 79\% accuracy, confirming that same-side density relative to street width is the governing geometric factor.
+The $\bar{g}/w$ ratio predicts the cost matrix outcome with 79\% accuracy. The remaining 21\% are boundary cases where the exact address positions and port choices matter --- the cost matrix handles these correctly.
 
 \subsubsection{Segments vs.\ Sub-Segments}
 
