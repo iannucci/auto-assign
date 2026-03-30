@@ -139,13 +139,19 @@ where $t_n$ is the fractional position of the farthest address.
 
 \subsubsection{Why Not Solve TSP per Segment?}
 
-The within-segment problem --- visiting $n$ addresses on two sides of a street --- is a special case of the TSP. Solving it exactly on general points would be intractable for our largest segment (135 addresses: $135!$ permutations). However, the 1D structure of a street reduces the problem dramatically. Addresses lie along a line; the only choice at each step is whether to cross the street to visit an opposite-side address or continue on the same side past it. Since the street width ($w \approx 10$\,m) is less than the typical same-side inter-address gap ($\bar{g} \approx 15$--$30$\,m), crossing to visit an opposite-side address costs less than continuing past it and returning later. The optimal walk is therefore monotonic --- the ESW always progresses forward along the segment, crossing the street as needed. The cost depends only on which side the ESW starts and finishes --- precisely the four ports.
+The within-segment problem --- visiting $n$ addresses on two sides of a street --- is a special case of the TSP. Solving it exactly on general points would be intractable for our largest segment (135 addresses: $135!$ permutations). However, the 1D structure of a street reduces the problem to a choice between two monotonic strategies:
 
-The cost matrix $\mathbf{C}$ is a $4 \times 4$ matrix encoding the minimum walking distance for every (entry port, exit port) combination. It is precomputed in $O(n)$ time from the sorted address sequence --- even for the 135-address worst case, this is instantaneous.
+\textbf{Through-traversal (zigzag):} The ESW makes a single pass from one end to the other, crossing the street whenever an opposite-side address appears. This works well when same-side addresses are spread out ($\bar{g} > w$): crossing the street (cost $w$) is cheaper than skipping the address, because there is no second pass to pick it up.
 
-\subsubsection{Zigzag vs.\ U-Turn}
+\textbf{Out-and-back (U-turn):} The ESW sweeps one side on the way out and the other side on the way back. This works well when same-side addresses are densely packed ($\bar{g} < w$): the ESW visits each side in a single continuous sweep with no crossings, paying only the cost of walking the segment twice.
 
-Which strategy does the cost matrix select? The governing geometric condition is the \emph{mean same-side inter-address gap} $\bar{g}$ relative to the street width $w$.
+Both strategies are monotonic --- the ESW always progresses forward (or backward on the return leg), never backtracking within a pass. The cost of each strategy depends only on which side the ESW starts and finishes --- precisely the four ports.
+
+The cost matrix $\mathbf{C}$ is a $4 \times 4$ matrix encoding the minimum walking distance for every (entry port, exit port) combination. It evaluates both strategies for all 16 port pairings and records the cheaper result. The matrix is precomputed in $O(n)$ time from the sorted address sequence --- even for the 135-address worst case, this is instantaneous.
+
+\subsubsection{When Does Each Strategy Win?}
+
+The governing geometric condition is the \emph{mean same-side inter-address gap} $\bar{g}$ relative to the street width $w$.
 
 When $\bar{g} > w$, consecutive addresses on the same side are farther apart than the street is wide. The ESW might as well cross the street each time an address appears on the opposite side --- \textbf{zigzag} (through-traversal) dominates. When $\bar{g} < w$, addresses on each side are packed tighter than a street crossing would cost. It is cheaper to sweep one side, cross once, and sweep the other --- \textbf{U-turn} (out-and-back) dominates.
 
