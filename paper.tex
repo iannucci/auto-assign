@@ -268,6 +268,19 @@ Build a single-worker walk order using nearest-neighbor on ports: from the curre
 \end{algorithmic}
 \end{algorithm}
 
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.7\columnwidth, height=0.55\columnwidth, ticks=none, title={Chain+Slice on Fairmeadow (106/107/99)}, title style={font=\scriptsize\bfseries}]
+\addplot[only marks, mark=*, mark size=0.2pt, gray!30] table[x=lon,y=lat] {data/alg-fm-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-chainnn-esw0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-chainnn-esw1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-chainnn-esw2.dat};
+\end{axis}
+\end{tikzpicture}
+\caption{Chain+Slice (NN) on Fairmeadow, $N=3$. Three ESWs' segments are colored \textcolor{prodblue}{blue}, \textcolor{unprodred}{red}, \textcolor{idealgreen!70!black}{green}. The chain follows a nearest-neighbor path; cut points at 106/107/99 addresses produce geographically interleaved partitions.}
+\end{figure}
+
 \subsection{Right-Hand Rule Chain}
 
 Variant of Chain+Slice that adds a clockwise turn-angle bias when selecting the next segment:
@@ -276,13 +289,52 @@ Variant of Chain+Slice that adds a clockwise turn-angle bias when selecting the 
 \end{equation}
 where $\theta_{\text{cw}} \in [0^\circ, 360^\circ)$ is the clockwise turn angle from the current heading. The 0.5 weight penalizes U-turns ($180^\circ = 90$\,m equivalent), producing a spiral traversal pattern that covers contiguous areas.
 
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.7\columnwidth, height=0.55\columnwidth, ticks=none, title={Right-Hand Rule on Fairmeadow (116/117/79)}, title style={font=\scriptsize\bfseries}]
+\addplot[only marks, mark=*, mark size=0.2pt, gray!30] table[x=lon,y=lat] {data/alg-fm-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-chainrh-esw0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-chainrh-esw1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-chainrh-esw2.dat};
+\end{axis}
+\end{tikzpicture}
+\caption{Right-Hand Rule on Fairmeadow, $N=3$ (116/117/79). The spiral pattern produces more geographically contiguous partitions than NN, but the third ESW (green) gets fewer addresses because the spiral exhausts the interior first.}
+\end{figure}
+
 \subsection{2-Opt Local Search}
 
 Starting from the best NN chain, iteratively reverse sub-chains. For each pair $(i, j)$, reverse chain$[i..j]$ if the reversal reduces total walk distance. Each reversed segment swaps its entry/exit ports (cost re-read from the transposed matrix entry). Iterate until no improving swap exists (capped at 200 passes). Complexity: $O(M^2)$ per pass, $O(M^3)$ total. On our data, 2-opt improves over NN by 3\% on average, up to 41\% on large neighborhoods.
 
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.7\columnwidth, height=0.55\columnwidth, ticks=none, title={2-Opt on Fairmeadow (107/104/101)}, title style={font=\scriptsize\bfseries}]
+\addplot[only marks, mark=*, mark size=0.2pt, gray!30] table[x=lon,y=lat] {data/alg-fm-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-twoopt-esw0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-twoopt-esw1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-twoopt-esw2.dat};
+\end{axis}
+\end{tikzpicture}
+\caption{2-Opt on Fairmeadow, $N=3$ (107/104/101). Local search ``uncrosses'' the NN chain's transitions, producing the most balanced partition (73\% walk quality) with visibly more contiguous regions than raw Chain+Slice.}
+\end{figure}
+
 \subsection{Recursive Bisection}
 
 Split segments by centroid along the longer geographic axis (latitude or longitude) at the address-count midpoint. Recurse until $N$ groups remain. Within each group, build an NN chain to order segments. Produces compact rectangular regions with good geographic contiguity, but axis-aligned cuts may not follow street patterns.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.7\columnwidth, height=0.55\columnwidth, ticks=none, title={Bisection on Fairmeadow (109/102/101)}, title style={font=\scriptsize\bfseries}]
+\addplot[only marks, mark=*, mark size=0.2pt, gray!30] table[x=lon,y=lat] {data/alg-fm-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-bisect-esw0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-bisect-esw1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-bisect-esw2.dat};
+\end{axis}
+\end{tikzpicture}
+\caption{Recursive Bisection on Fairmeadow, $N=3$ (109/102/101). Axis-aligned cuts produce compact rectangular regions. Each cell is geographically contiguous by construction, but the straight cut lines may not follow street patterns.}
+\end{figure}
 
 \subsection{Voronoi with Balanced Seeds}
 
@@ -325,9 +377,35 @@ Assign segments to the nearest of $N$ seed points by Euclidean distance (consist
 
 Starting from the huddle point (Section~\ref{sec:formulation}), assign segments round-robin: each round, for each ESW $k$, assign the unvisited segment minimizing marginal time increase $\Delta T_k = (d_{\text{road}} + C_s)/v + n_s \cdot t_{\text{assess}}$. Produces ``pizza slice'' partitions radiating from the huddle, but these interleave geographically, doubling unproductive walking vs.\ chain methods.
 
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.7\columnwidth, height=0.55\columnwidth, ticks=none, title={BFS on Fairmeadow (141/103/68)}, title style={font=\scriptsize\bfseries}]
+\addplot[only marks, mark=*, mark size=0.2pt, gray!30] table[x=lon,y=lat] {data/alg-fm-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-bfs-esw0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-bfs-esw1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-bfs-esw2.dat};
+\end{axis}
+\end{tikzpicture}
+\caption{BFS on Fairmeadow, $N=3$ (141/103/68). Round-robin assignment from the huddle interleaves territories. ESW~1 (blue) grabs 141 addresses while ESW~3 (green) gets only 68 --- the ``pizza slice'' pattern creates severe count imbalance.}
+\end{figure}
+
 \subsection{DFS from Huddle}
 
 Build one ESW's assignment at a time. Starting from the huddle point, greedily add nearest segments until estimated time reaches the target $T^* = (\sum_k T_k) / N$ (Eq.~\ref{eq:finish-time}). Move to next ESW. The last ESW takes all remaining segments. Suffers from the ``dregs problem'': the last ESW inherits scattered remnants, producing time spreads of 100--500\,min.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.7\columnwidth, height=0.55\columnwidth, ticks=none, title={DFS on Fairmeadow (105/102/105)}, title style={font=\scriptsize\bfseries}]
+\addplot[only marks, mark=*, mark size=0.2pt, gray!30] table[x=lon,y=lat] {data/alg-fm-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-dfs-esw0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-dfs-esw1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-dfs-esw2.dat};
+\end{axis}
+\end{tikzpicture}
+\caption{DFS on Fairmeadow, $N=3$ (105/102/105). Sequential assignment produces well-balanced counts on this neighborhood, but the last ESW (green) may inherit scattered remnants on other neighborhoods (the ``dregs problem'').}
+\end{figure}
 
 \subsection{SA Post-Processing}
 
@@ -349,6 +427,19 @@ Starting from BFS's result, apply simulated annealing~\cite{kirkpatrick1983}: tr
 \subsection{Random Baseline}
 
 Shuffle segments, partition by address count, NN chain within each group. Run 30 trials, keep best. Quantifies the value of optimization.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.7\columnwidth, height=0.55\columnwidth, ticks=none, title={Random on Fairmeadow (105/108/99)}, title style={font=\scriptsize\bfseries}]
+\addplot[only marks, mark=*, mark size=0.2pt, gray!30] table[x=lon,y=lat] {data/alg-fm-addrs.dat};
+\addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-random-esw0.dat};
+\addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-random-esw1.dat};
+\addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-random-esw2.dat};
+\end{axis}
+\end{tikzpicture}
+\caption{Random assignment on Fairmeadow, $N=3$ (105/108/99). Despite balanced counts (random shuffle + count slicing), the geographic interleaving is extreme --- segments of all three colors are scattered throughout. Walk quality: 46\%.}
+\end{figure}
 
 %% ==================================================================
 \section{Simulation Methodology}
