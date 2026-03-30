@@ -20,7 +20,7 @@
 // Neighborhoods (5 diverse):
 //   Palo Alto Central, Fairmeadow, Community Center, Research Park, Southgate
 //
-// N values: 3, 5
+// N values: 3, 5, 7, 10
 
 const fs = require("fs");
 const path = require("path");
@@ -745,21 +745,17 @@ for (const hood of NEIGHBORHOODS) {
             const parts = alg.run();
             const elapsed = Date.now() - t1;
 
-            const evNoHuddle = evaluate(parts, null);
-            const evHuddle = evaluate(parts, huddleNode);
+            const ev = evaluate(parts, huddleNode);
 
             results[alg.name] = {
-                // Without huddle (Study I style)
-                walkQuality: evNoHuddle.avgWalkQuality,
-                minWalkQuality: evNoHuddle.minWalkQuality,
-                totalProd: evNoHuddle.totalProd,
-                totalUnprod: evNoHuddle.totalUnprod,
-                maxWalk: Math.max(...evNoHuddle.perEsw.map(e => e.walkDist)),
-                // With huddle (Study II style)
-                maxTime: evHuddle.maxTime,
-                timeSpread: evHuddle.timeSpread,
-                // Common
-                addrCounts: evNoHuddle.addrCounts,
+                walkQuality: ev.avgWalkQuality,
+                minWalkQuality: ev.minWalkQuality,
+                totalProd: ev.totalProd,
+                totalUnprod: ev.totalUnprod,
+                maxWalk: Math.max(...ev.perEsw.map(e => e.walkDist)),
+                maxTime: ev.maxTime,
+                timeSpread: ev.timeSpread,
+                addrCounts: ev.addrCounts,
                 elapsed
             };
 
@@ -769,16 +765,15 @@ for (const hood of NEIGHBORHOODS) {
 
         // Oracle
         const oracle = runOracle(segs, n);
-        const oracleEv = evaluate(oracle.parts, null);
-        const oracleEvH = evaluate(oracle.parts, huddleNode);
+        const oracleEv = evaluate(oracle.parts, huddleNode);
         results.Oracle = {
             walkQuality: oracleEv.avgWalkQuality,
             minWalkQuality: oracleEv.minWalkQuality,
             totalProd: oracleEv.totalProd,
             totalUnprod: oracleEv.totalUnprod,
             maxWalk: Math.max(...oracleEv.perEsw.map(e => e.walkDist)),
-            maxTime: oracleEvH.maxTime,
-            timeSpread: oracleEvH.timeSpread,
+            maxTime: oracleEv.maxTime,
+            timeSpread: oracleEv.timeSpread,
             addrCounts: oracleEv.addrCounts,
             winner: oracle.winner
         };
