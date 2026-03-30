@@ -68,41 +68,20 @@ function cellImbalance(cells) {
     return counts.reduce((s, c) => s + Math.abs(c - target), 0);
 }
 
-// Lloyd's + greedy seed search (same as unified simulation)
+// Exhaustive search: Fairmeadow has few enough nodes for C(n,3)
+console.log("Exhaustive search over", nodeList.length, "nodes, C(" + nodeList.length + ",3) =", nodeList.length*(nodeList.length-1)*(nodeList.length-2)/6, "combinations");
 let bestSeeds = null, bestImb = Infinity;
-for (let restart = 0; restart < 10; restart++) {
-    const sorted = [...segs].map((s, i) => ({ s, c: centroids[i] }))
-        .sort((a, b) => restart === 0 ? a.c.lat - b.c.lat : Math.random() - 0.5);
-    let seeds = Array.from({ length: N }, (_, i) => ({ ...sorted[Math.floor((i + 0.5) * sorted.length / N)].c }));
-
-    for (let iter = 0; iter < 20; iter++) {
-        const cells = assignCells(seeds); let converged = true;
-        for (let k = 0; k < N; k++) {
-            if (cells[k].length === 0) continue;
-            let tw = 0, latS = 0, lonS = 0;
-            for (const si of cells[k]) { const c = centroids[si]; const w = segs[si].addressCount || 1; latS += c.lat*w; lonS += c.lon*w; tw += w; }
-            const nl = latS/tw, no = lonS/tw;
-            if (Math.abs(nl - seeds[k].lat) > 1e-6 || Math.abs(no - seeds[k].lon) > 1e-6) converged = false;
-            seeds[k] = { lat: nl, lon: no };
+for (let i = 0; i < nodeList.length; i++) {
+    for (let j = i + 1; j < nodeList.length; j++) {
+        for (let k = j + 1; k < nodeList.length; k++) {
+            const seeds = [nodeCoords.get(nodeList[i]), nodeCoords.get(nodeList[j]), nodeCoords.get(nodeList[k])];
+            const cells = assignCells(seeds);
+            const imb = cellImbalance(cells);
+            if (imb < bestImb) { bestImb = imb; bestSeeds = [...seeds]; }
         }
-        if (converged) break;
     }
-
-    for (let gi = 0; gi < 10; gi++) {
-        let improved = false;
-        for (let k = 0; k < N; k++) {
-            for (let c = 0; c < 50; c++) {
-                const candCoord = nodeCoords.get(nodeList[Math.floor(Math.random() * nodeList.length)]);
-                const testSeeds = seeds.map((s, i) => i === k ? candCoord : s);
-                const imb = cellImbalance(assignCells(testSeeds));
-                if (imb < bestImb) { bestImb = imb; bestSeeds = [...testSeeds]; seeds[k] = candCoord; improved = true; }
-            }
-        }
-        if (!improved) break;
-    }
-    const imb = cellImbalance(assignCells(seeds));
-    if (imb < bestImb || !bestSeeds) { bestImb = imb; bestSeeds = [...seeds]; }
 }
+console.log("Best imbalance:", bestImb);
 
 const cells = assignCells(bestSeeds);
 const addrCounts = cells.map(c => c.reduce((s, si) => s + (segs[si].addressCount || 0), 0));
@@ -125,16 +104,21 @@ for (const s of bestSeeds) seedPts.push(`${s.lon} ${s.lat}`);
 fs.writeFileSync(path.join(dataDir, "voronoi-fm-bal-seeds.dat"), seedPts.join("\n") + "\n");
 
 // Write straight partition lines (perpendicular bisectors extended)
+// The perpendicular bisector of seeds i,j passes through their midpoint
+// and is perpendicular to the line connecting them.
+// Direction: rotate (dLat, dLon) by 90 degrees → (-dLon, dLat)
 const linePts = ["lon lat"];
 for (let i = 0; i < N; i++) {
     for (let j = i + 1; j < N; j++) {
         const s1 = bestSeeds[i], s2 = bestSeeds[j];
         const midLat = (s1.lat + s2.lat) / 2, midLon = (s1.lon + s2.lon) / 2;
         const dLat = s2.lat - s1.lat, dLon = s2.lon - s1.lon;
-        // Perpendicular direction (rotated 90 degrees)
-        const ext = 0.02; // extend far enough for pgfplots to clip
-        linePts.push(`${midLon - dLat * ext / Math.sqrt(dLat*dLat + dLon*dLon) * (dLon >= 0 ? 1 : -1)} ${midLat + dLon * ext / Math.sqrt(dLat*dLat + dLon*dLon) * (dLon >= 0 ? 1 : -1)}`);
-        linePts.push(`${midLon + dLat * ext / Math.sqrt(dLat*dLat + dLon*dLon) * (dLon >= 0 ? 1 : -1)} ${midLat - dLon * ext / Math.sqrt(dLat*dLat + dLon*dLon) * (dLon >= 0 ? 1 : -1)}`);
+        const len = Math.sqrt(dLat * dLat + dLon * dLon);
+        // Perpendicular unit vector: (-dLon, dLat) / len
+        const perpLat = -dLon / len, perpLon = dLat / len;
+        const ext = 0.015; // extend far enough for pgfplots to clip
+        linePts.push(`${midLon + perpLon * ext} ${midLat + perpLat * ext}`);
+        linePts.push(`${midLon - perpLon * ext} ${midLat - perpLat * ext}`);
         linePts.push("");
     }
 }

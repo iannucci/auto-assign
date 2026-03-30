@@ -647,7 +647,7 @@ Assign segments to the nearest of $N$ seed points by Euclidean distance (consist
 \addplot[voronoiorange, very thick] table[x=lon,y=lat] {data/voronoi-fm-unbal-straight-lines.dat};
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-unbal-seeds.dat};
 
-\nextgroupplot[title={Balanced Seeds (98/104/110)}]
+\nextgroupplot[title={Balanced Seeds (107/104/101)}]
 \addplot[only marks, mark=*, mark size=0.3pt, gray!30] table[x=lon,y=lat] {data/fairmeadow-all-addrs.dat};
 \addplot[prodblue, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell0.dat};
 \addplot[unprodred, thick, opacity=0.7] table[x=lon,y=lat] {data/voronoi-fm-bal-cell1.dat};
@@ -656,7 +656,7 @@ Assign segments to the nearest of $N$ seed points by Euclidean distance (consist
 \addplot[only marks, mark=diamond*, mark size=3pt, black] table[x=lon,y=lat] {data/voronoi-fm-bal-seeds.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow Voronoi ($N=3$). Left: Lloyd's iteration converges to unbalanced cells (121/103/88) because it minimizes variance, not balance. Right: balanced seed search achieves near-perfect balance (98/104/110) with 53\% walk quality. Orange = Voronoi partition lines. Black diamonds = seeds. Same framework, different seed optimization --- seed placement is the critical factor.}
+\caption{Fairmeadow Voronoi ($N=3$). Left: Lloyd's iteration converges to unbalanced cells (121/103/88) because it minimizes variance, not balance. Right: exhaustive seed search achieves near-perfect balance (107/104/101) with 53\% walk quality. Orange = Voronoi partition lines. Black diamonds = seeds. Same framework, different seed optimization --- seed placement is the critical factor.}
 \label{fig:voronoi}
 \end{figure*}
 
