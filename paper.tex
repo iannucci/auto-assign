@@ -836,7 +836,7 @@ Fig.~\ref{fig:wq-comparison} shows the productive-distance invariant visually: p
     title style={font=\small\bfseries},
 ]
 \addplot[fill=prodblue, draw=prodblue!80] coordinates {(NN,6.7) (RH,6.7) (2opt,6.7) (Bi,6.7) (Vor,6.6) (BFS,6.7) (DFS,6.7) (SA,6.7) (Rnd,6.7)};
-\addplot[fill=unprodred!50, draw=unprodred!70] coordinates {(NN,2.7) (RH,3.2) (2opt,2.6) (Bi,3.1) (Vor,3.7) (BFS,4.2) (DFS,3.3) (SA,4.2) (Rnd,7.9)};
+\addplot[fill=unprodred, draw=unprodred!80] coordinates {(NN,2.7) (RH,3.2) (2opt,2.6) (Bi,3.1) (Vor,3.7) (BFS,4.2) (DFS,3.3) (SA,4.2) (Rnd,7.9)};
 \legend{\textcolor{prodblue}{Productive}, \textcolor{unprodred}{Unproductive}}
 \end{axis}
 \end{tikzpicture}
@@ -1158,7 +1158,7 @@ Fig.~\ref{fig:comparison} shows the productive/unproductive breakdown visually.
     title style={font=\small\bfseries},
 ]
 \addplot[fill=prodblue, draw=prodblue!80] coordinates {(PAC,0.7) (FM,6.7) (CC,11.9) (RP,17.1) (SG,5.4)};
-\addplot[fill=unprodred!50, draw=unprodred!70] coordinates {(PAC,0.2) (FM,2.2) (CC,5.1) (RP,49.8) (SG,4.9)};
+\addplot[fill=unprodred, draw=unprodred!80] coordinates {(PAC,0.2) (FM,2.2) (CC,5.1) (RP,49.8) (SG,4.9)};
 \legend{Productive, Unproductive}
 \end{axis}
 \end{tikzpicture}
@@ -1180,12 +1180,12 @@ Fig.~\ref{fig:comparison} shows the productive/unproductive breakdown visually.
     title={Voronoi ($N=3$)},
     title style={font=\small\bfseries},
 ]
-\addplot[fill=voronoiorange, draw=voronoiorange!80] coordinates {(PAC,0.7) (FM,6.6) (CC,11.8) (RP,17.3) (SG,5.3)};
-\addplot[fill=unprodred!50, draw=unprodred!70] coordinates {(PAC,1.0) (FM,4.6) (CC,7.0) (RP,54.6) (SG,4.0)};
+\addplot[fill=prodblue, draw=prodblue!80] coordinates {(PAC,0.7) (FM,6.6) (CC,11.8) (RP,17.3) (SG,5.3)};
+\addplot[fill=unprodred, draw=unprodred!80] coordinates {(PAC,1.0) (FM,4.6) (CC,7.0) (RP,54.6) (SG,4.0)};
 \legend{Productive, Unproductive}
 \end{axis}
 \end{tikzpicture}
-\caption{Productive vs.\ unproductive walking for oracle (top, \textcolor{prodblue}{blue} productive) and Voronoi (bottom, \textcolor{voronoiorange}{orange} productive) on 5 neighborhoods at $N=3$. \textcolor{unprodred!50}{Red} = unproductive in both. Productive bars are nearly identical; unproductive bars tell the story. Note Research Park's extreme unproductive walking (both $>$70\% unproductive) vs.\ Palo Alto Central where the oracle achieves 76\% productive.}
+\caption{Productive vs.\ unproductive walking for oracle (top) and Voronoi (bottom) on 5 neighborhoods at $N=3$. \textcolor{prodblue}{Blue} = productive, \textcolor{unprodred}{red} = unproductive in both panels. Productive bars are nearly identical; unproductive bars tell the story. Note Research Park's extreme unproductive walking (both $>$70\% unproductive) vs.\ Palo Alto Central where the oracle achieves 76\% productive.}
 \label{fig:comparison}
 \end{figure}
 
