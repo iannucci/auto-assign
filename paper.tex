@@ -172,11 +172,13 @@ The $\bar{g}/w$ ratio predicts the cost matrix outcome with 79\% accuracy. The r
 
 Should the assignment algorithm assign whole segments (both sides of the street) to one ESW, or could it assign each sub-segment (one side) independently?
 
-Sub-segment assignment is the stronger formulation. If ESW~1's route passes through a segment from $S$ to $E$ and ESW~2's route passes through the same segment from $E$ to $S$, assigning one sub-segment to each is a productive use of both workers' walking --- each visits addresses on their side while traversing the segment in opposite directions. This is a legitimate optimization that whole-segment assignment cannot express.
+Sub-segment assignment is the stronger formulation in general. If ESW~1's route passes through a segment from $S$ to $E$ and ESW~2's route passes through the same segment from $E$ to $S$, assigning one sub-segment to each is a productive use of both workers' walking --- each visits addresses on their side while traversing the segment in opposite directions.
 
-However, sub-segment assignment doubles the number of assignable units (from $M$ to $\leq 2M$; cul-de-sacs contribute only one sub-segment since both sides must be traversed together). It also requires a different cost representation: each sub-segment has a $2 \times 2$ cost matrix (two ports per end, one side only), and the combined cost when two ESWs share a segment depends on both their port choices.
+However, sub-segment decomposition only helps when the whole-segment cost matrix would have selected out-and-back (U-turn) --- that is, when $(r{-}1) \cdot w \geq D$ (Eq.~\ref{eq:strategy}). In that case, a single ESW already walks $\sim$2D to visit both sides; splitting into sub-segments lets two ESWs share this cost at $\sim$D each. When zigzag is optimal ($(r{-}1) \cdot w < D$), one ESW walks $D + (r{-}1)w < 2D$ --- strictly less than two ESWs walking $D$ each. Decomposition would \emph{increase} total walking.
 
-In this paper we use \textbf{whole segments} as the atomic unit. The $4 \times 4$ cost matrix captures both sides in a single traversal, and the algorithms produce geographically contiguous assignments where two ESWs rarely share a segment. Sub-segment assignment is a valid refinement that we identify as future work.
+In our dataset, $(r{-}1) \cdot w < D$ for \emph{every} both-side through-segment across all five neighborhoods. Zigzag universally wins: residential street geometry (median segment length 63\,m, typical $r = 3$--$5$, $w = 10$\,m) never produces enough crossings to exceed the segment length. Cul-de-sacs cannot be decomposed regardless (both sides must be traversed together).
+
+We therefore use \textbf{whole segments with $4 \times 4$ cost matrices} as the atomic unit. Sub-segment assignment remains a valid optimization for street geometries with denser address alternation ($\bar{g} < w$), but it does not arise in the Palo Alto data.
 
 \subsubsection{Worked Example}
 \label{sec:example}
