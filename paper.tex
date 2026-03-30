@@ -30,6 +30,10 @@ Palo Alto, CA 94306\\
 bob@rail.com}}
 
 \maketitle
+\thispagestyle{plain}
+\renewcommand{\thefootnote}{}
+\footnotetext{Copyright \copyright\ 2026 by Bob Iannucci. All rights reserved worldwide.}
+\renewcommand{\thefootnote}{\arabic{footnote}}
 
 \begin{abstract}
 During disaster response, Emergency Services Workers (ESWs) must visit assigned addresses to assess damage. We study the problem of partitioning addresses across $N$ workers to minimize assessment completion time. We model the street network as road segments between intersections, each with a precomputed traversal cost matrix, and constrain all walking distances to follow streets. Three metrics capture what matters operationally: \emph{walk quality} (fraction of walking that visits addresses vs.\ transitions between segments), \emph{time spread} (difference between the first and last ESW to finish), and the \emph{productive-distance invariant} (the observation that productive walking is determined by the address set, not the algorithm --- only unproductive walking can be optimized). We evaluate eleven algorithms --- nearest-neighbor chain, right-hand rule, 2-opt local search, recursive bisection, Voronoi with balanced seeds, Voronoi with boundary transfer, BFS, DFS, simulated annealing, and an oracle --- across five Palo Alto neighborhoods chosen for maximum geometric diversity, at team sizes $N = 3, 5, 7, 10$. No single algorithm dominates: DFS and 2-opt achieve the highest walk quality on compact neighborhoods (66\%), while Voronoi with boundary transfer wins on elongated layouts (59\%). All algorithms fail on sparse campuses ($<$26\% walk quality). The oracle reduces worst-case walking by 25\% vs.\ random assignment.
