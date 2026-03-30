@@ -196,12 +196,18 @@ Fig.~\ref{fig:diag-subseg} shows a real segment (Starr King Circle, Fairmeadow) 
 
 \subsubsection{Zigzag vs.\ U-Turn}
 
-The matrix automatically selects between zigzag (through-traversal with crossings) and U-turn (one side out, cross, other side back). In our dataset of 3,663 segments with addresses on both sides:
+The matrix automatically selects between zigzag (through-traversal with crossings) and U-turn (one side out, cross, other side back). The geometric condition governing this choice is the \emph{mean same-side inter-address gap} $\bar{g}$ relative to the street width $w$.
+
+When $\bar{g} > w$, consecutive addresses on the same side are farther apart than the street is wide. The ESW might as well cross the street each time an address appears on the opposite side --- zigzag dominates. When $\bar{g} < w$, addresses on each side are packed tighter than a street crossing would cost. It is cheaper to sweep one side, cross once, and sweep the other --- U-turn dominates.
+
+In our dataset of 3,222 segments with addresses on both sides:
 
 \begin{itemize}
-\item \textbf{97\% prefer zigzag} (3,549 segments). These have average length 103\,m, average 5.4 runs, and 8.3 addresses. The crossings ($\sim$4 $\times$ 10\,m $= 40$\,m) are much less than the backtrack penalty ($\sim$2 $\times$ 103\,m $= 206$\,m).
-\item \textbf{3\% prefer U-turn} (114 segments). These are shorter (average 75\,m), denser (average 19.1 addresses), with more runs (average 11.1). The crossing cost ($\sim$10 $\times$ 10\,m $= 100$\,m) exceeds the short backtrack ($\sim$2 $\times$ 75\,m $= 150$\,m), tipping the balance.
+\item \textbf{88\% prefer zigzag} (2,823 segments). Median $\bar{g}/w = 1.9$: same-side addresses are nearly two street-widths apart, so crossing at each run boundary adds less distance than backtracking would.
+\item \textbf{12\% prefer U-turn} (399 segments). Median $\bar{g}/w = 0.5$: same-side addresses are packed at half the street width, so sweeping each side sequentially avoids the accumulated crossing penalty.
 \end{itemize}
+
+The cost matrix computes the exact optimum for every (entry, exit) port combination, but the $\bar{g}/w$ ratio predicts the outcome with 79\% accuracy, confirming that same-side density relative to street width is the governing geometric factor.
 
 Fig.~\ref{fig:uturn-path} illustrates the extreme case where U-turn saves 81\%.
 
