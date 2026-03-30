@@ -278,34 +278,6 @@ where $v = 5$\,km/h is walking speed and $|P_k|$ is the address count. Assessmen
 
 Segments are extracted from OpenStreetMap via \texttt{osm2pgsql} (Geofabrik California PBF, 1.3\,GB) filtered to the Palo Alto bounding box ($37.35$--$37.48^\circ$N, $122.05$--$122.20^\circ$W). From 35,912 OSM road ways and 146,957 nodes, we identify 54,854 intersections and build 64,482 segments. Of these, 7,430 have at least one snapped address. Road-network shortest paths are precomputed by Dijkstra within each neighborhood (2--14\,s depending on size). Huddle points use 6 Palo Alto Fire Department stations, assigned to neighborhoods by centroid proximity.
 
-\subsubsection{Road-Following Transitions}
-
-Inter-segment transitions --- the \emph{unproductive} component of Eq.~\ref{eq:walk} --- are computed as shortest paths on the road network graph, not as straight-line distances. Fig.~\ref{fig:diag-road} illustrates a transition between two non-adjacent segments in Fairmeadow. The ESW exits Roosevelt Circle and must reach East Meadow Drive; the road-following path traverses 5 road edges through 4 intersections, covering 540\,m. The straight-line (haversine) distance is only 346\,m --- a 56\% underestimate. This difference is typical: road-network distances average 1.3--1.6$\times$ haversine in our data, with the ratio increasing for paths that must navigate around blocks or cul-de-sacs.
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-  width=\columnwidth,
-  height=0.65\columnwidth,
-  ticks=none,
-  label style={font=\small},
-  title style={font=\small\bfseries},
-  title={Road-Following vs.\ Straight-Line Transition},
-  legend style={at={(0.02,0.02)},anchor=south west,font=\small},
-]
-\addplot[prodblue, very thick, opacity=0.8] table[x=lon,y=lat] {data/diag2b-segA.dat};
-\addplot[prodblue, very thick, opacity=0.8] table[x=lon,y=lat] {data/diag2b-segB.dat};
-\addplot[unprodred, thick] table[x=lon,y=lat] {data/diag2b-road-path.dat};
-\addplot[gray, dashed, thick] table[x=lon,y=lat] {data/diag2b-straight.dat};
-\addplot[only marks, mark=*, mark size=1pt, prodblue] table[x=lon,y=lat] {data/diag2-segA-addrs.dat};
-\addplot[only marks, mark=*, mark size=1pt, prodblue] table[x=lon,y=lat] {data/diag2-segB-addrs.dat};
-\legend{Segments (productive), , Road path (540\,m), Straight line (346\,m)}
-\end{axis}
-\end{tikzpicture}
-\caption{Transition from Roosevelt Circle to East Meadow Drive (Fairmeadow). Blue = the two address-bearing segments. Red = actual road-following path (540\,m through 4 intersections). Gray dashed = straight-line distance (346\,m). The road path is 56\% longer because the ESW must navigate around a cul-de-sac. Using haversine distances would undercount this transition by 194\,m, biasing the algorithm toward scattered partitions that incur many such detours.}
-\label{fig:diag-road}
-\end{figure}
 
 %% ==================================================================
 \section{Three Metrics}
@@ -882,13 +854,11 @@ Shuffle segments, partition by address count, NN chain within each group. Run 30
 
 \textbf{Data pipeline.} OpenStreetMap data is imported via \texttt{osm2pgsql} from a Geofabrik California PBF (1.3\,GB), filtered to the Palo Alto bounding box. Road segments are split at intersection nodes. Municipal addresses are snapped to segments by perpendicular projection. Cost matrices are precomputed from address positions and street widths (estimated from OSM road class).
 
-\textbf{Distance computation.} Dijkstra shortest paths are precomputed between all intersection nodes within each neighborhood (2--31\,s depending on size). All inter-segment distances use road-network paths, not haversine.
+\textbf{Distance computation.} Dijkstra shortest paths are precomputed between all intersection nodes within each neighborhood (2--31\,s depending on size). All distances --- inter-segment transitions, huddle-to-first-segment walks, and algorithm evaluations --- use actual walkable road-network paths.
 
 \textbf{Parameters.} As specified in the general constraints (Section~\ref{sec:formulation}): $t_{\text{assess}} = 5$\,min/address, $v = 5$\,km/h, huddle at nearest intersection to serving fire station.
 
 \textbf{Test matrix.} 11 algorithms $\times$ 5 neighborhoods $\times$ $N \in \{3, 5, 7, 10\}$ = 220 test cases. Each evaluated with all three metrics. All algorithms use the same segment data, distance matrices, huddle points, and evaluation function. The walk from huddle to first segment is included in every algorithm's unproductive distance.
-
-\textbf{Haversine vs.\ road-network validation.} To validate the road-network model, we compare algorithm rankings under haversine distances vs.\ road-network distances. Under haversine, transition distances are straight-line. In our earlier haversine-based study across 41 neighborhoods, bisect dominated at $N = 5$ (21/41 wins) and NN chain at $N = 3$ (18/41). Under road-network distances, the ranking shifts: 2-opt and bisection share dominance, NN chain drops to 7\%. Haversine underestimates the cost of transitions that must navigate around blocks (Fig.~\ref{fig:diag-road} shows a 56\% underestimate), validating the constrained model.
 
 %% ==================================================================
 \section{Results}
@@ -1413,11 +1383,11 @@ Recursive bisection~\cite{berger1987, karypis1998} is standard for balanced spat
 
 We presented a practical system for assigning addresses to emergency services workers that minimizes worst-case walking distance using road-network-constrained routing. We summarize the evidence for each contribution:
 
-\textbf{C1 (Segment model).} Decomposing the OSM road network into 64,482 segments with geometric address snapping (41,854 addresses, median snap distance 22.9\,m, 99\% within 50\,m) provides a physically accurate model of how ESWs walk. The diagnostic figures (Figs.~\ref{fig:diag-subseg}--\ref{fig:diag-road}) verify geometric correctness.
+\textbf{C1 (Segment model).} Decomposing the OSM road network into 64,482 segments with geometric address snapping (41,854 addresses, median snap distance 22.9\,m, 99\% within 50\,m) provides a physically accurate model of how ESWs walk. Fig.~\ref{fig:diag-subseg} verifies geometric correctness of the side-of-street classification.
 
 \textbf{C2 (Cost matrix).} The $4 \times 4$ matrix captures zigzag, U-turn, through-walk, and out-and-back in a unified formulation. 97\% of segments favor zigzag; the 3\% favoring U-turn are identified automatically. Port choice produces 74\% cost variation on a single segment (Section~\ref{sec:example}), justifying the matrix.
 
-\textbf{C3 (Three metrics).} Walk quality, time spread, and the productive-distance invariant capture what matters operationally. The invariant reveals that \textbf{46\% of walking is unproductive on average}, confirming that inter-segment transition reduction is the dominant optimization target. Road-following distances average 1.3--1.6$\times$ haversine (Fig.~\ref{fig:diag-road}), validating the constrained model.
+\textbf{C3 (Three metrics).} Walk quality, time spread, and the productive-distance invariant capture what matters operationally. The invariant reveals that \textbf{46\% of walking is unproductive on average}, confirming that inter-segment transition reduction is the dominant optimization target.
 
 \textbf{C4 (Empirical evaluation).} Across 5 diverse neighborhoods at $N = 3, 5, 7, 10$ (220 test cases), no single algorithm dominates. The winning strategy depends on neighborhood geometry: DFS/2-opt on compact/grid (59--66\%), Voronoi+BT on elongated (59\%), all fail on sparse ($<$26\%).
 
