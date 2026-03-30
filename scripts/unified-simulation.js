@@ -10,6 +10,7 @@
 //   6. BFS from Huddle — round-robin assignment from fire station fan-out
 //   7. DFS from Huddle — sequential assignment from fire station fan-out
 //   8. SA Post-Processing — boundary transfers on BFS result
+//   5b. Voronoi + Boundary Transfer — balanced seeds + contiguity-preserving transfers
 //   9. Oracle — best of algorithms 1-5 by scoring function
 //
 // Metrics (computed for every algorithm × neighborhood × N):
@@ -487,7 +488,121 @@ function runVoronoi(segs, n) {
 }
 
 // ============================================================
-// Algorithm 6: BFS from Huddle
+// Algorithm 5b: Voronoi + Boundary Transfer
+// ============================================================
+function runVoronoiBT(segs, n, huddleNode) {
+    // Start from Voronoi balanced-seeds result
+    const voronoiParts = runVoronoi(segs, n);
+
+    // Build segment adjacency from shared intersection nodes
+    const segIdToIdx = new Map();
+    for (let i = 0; i < segs.length; i++) segIdToIdx.set(segs[i].id, i);
+    const nodeToSegIdx = new Map();
+    for (let i = 0; i < segs.length; i++) {
+        for (const nid of [segs[i].startNode, segs[i].endNode]) {
+            if (!nodeToSegIdx.has(nid)) nodeToSegIdx.set(nid, []);
+            nodeToSegIdx.get(nid).push(i);
+        }
+    }
+    const segNeighbors = new Map();
+    for (const [nid, idxs] of nodeToSegIdx) {
+        for (let i = 0; i < idxs.length; i++) {
+            for (let j = i + 1; j < idxs.length; j++) {
+                if (!segNeighbors.has(idxs[i])) segNeighbors.set(idxs[i], new Set());
+                if (!segNeighbors.has(idxs[j])) segNeighbors.set(idxs[j], new Set());
+                segNeighbors.get(idxs[i]).add(idxs[j]);
+                segNeighbors.get(idxs[j]).add(idxs[i]);
+            }
+        }
+    }
+
+    // Track which cell each segment belongs to (by segment index)
+    const segToCell = new Map();
+    const cellSets = voronoiParts.map((part, k) => {
+        const idxs = new Set();
+        for (const entry of part) {
+            const idx = segIdToIdx.get(entry.segId);
+            if (idx !== undefined) { idxs.add(idx); segToCell.set(idx, k); }
+        }
+        return idxs;
+    });
+
+    function wouldDisconnect(cellSet, removeIdx) {
+        const remaining = new Set(cellSet);
+        remaining.delete(removeIdx);
+        if (remaining.size <= 1) return remaining.size === 0;
+        const start = remaining.values().next().value;
+        const visited = new Set([start]);
+        const queue = [start];
+        while (queue.length > 0) {
+            const cur = queue.shift();
+            for (const nb of (segNeighbors.get(cur) || [])) {
+                if (remaining.has(nb) && !visited.has(nb)) { visited.add(nb); queue.push(nb); }
+            }
+        }
+        return visited.size < remaining.size;
+    }
+
+    function cellTime(cellSet) {
+        const addrs = [...cellSet].reduce((s, idx) => s + (segs[idx].addressCount || 0), 0);
+        const dist = [...cellSet].reduce((s, idx) => s + (segs[idx].distance || 0), 0);
+        return dist / SPEED + addrs * T_ASSESS;
+    }
+
+    // Boundary transfer: move segments from heaviest to lightest cell
+    for (let iter = 0; iter < 200; iter++) {
+        const times = cellSets.map(set => cellTime(set));
+        const maxTime = Math.max(...times);
+        const heavyIdx = times.indexOf(maxTime);
+        let bestTransfer = null, bestImprovement = 0;
+
+        for (const segIdx of cellSets[heavyIdx]) {
+            const neighbors = segNeighbors.get(segIdx) || new Set();
+            const adjacentCells = new Set();
+            for (const nb of neighbors) {
+                const nc = segToCell.get(nb);
+                if (nc !== undefined && nc !== heavyIdx) adjacentCells.add(nc);
+            }
+            if (adjacentCells.size === 0) continue;
+            if (wouldDisconnect(cellSets[heavyIdx], segIdx)) continue;
+
+            for (const targetCell of adjacentCells) {
+                const newHeavy = new Set(cellSets[heavyIdx]); newHeavy.delete(segIdx);
+                const newTarget = new Set(cellSets[targetCell]); newTarget.add(segIdx);
+                const newMax = Math.max(cellTime(newHeavy), cellTime(newTarget),
+                    ...times.filter((_, i) => i !== heavyIdx && i !== targetCell));
+                const improvement = maxTime - newMax;
+                if (improvement > bestImprovement) {
+                    bestImprovement = improvement;
+                    bestTransfer = { segIdx, from: heavyIdx, to: targetCell };
+                }
+            }
+        }
+
+        if (!bestTransfer || bestImprovement < 0.5) break;
+        cellSets[bestTransfer.from].delete(bestTransfer.segIdx);
+        cellSets[bestTransfer.to].add(bestTransfer.segIdx);
+        segToCell.set(bestTransfer.segIdx, bestTransfer.to);
+    }
+
+    // Build NN chains within each resulting cell
+    const parts = cellSets.map(cellSet => {
+        const cellSegs = [...cellSet].map(idx => segs[idx]);
+        if (cellSegs.length === 0) return [];
+        const maxStarts = Math.min(cellSegs.length, 5);
+        let bestChain = null, bestCost = Infinity;
+        for (let si = 0; si < maxStarts; si++) {
+            const chain = chainNN(cellSegs, Math.floor(si * cellSegs.length / maxStarts));
+            const cost = chain.reduce((s, e) => s + e.segCost + e.transitionCost, 0);
+            if (cost < bestCost) { bestCost = cost; bestChain = chain; }
+        }
+        return bestChain || [];
+    });
+    return parts;
+}
+
+// ============================================================
+// Algorithm 6: BFS
 // ============================================================
 function runBFS(segs, n, huddleNode) {
     const assignments = Array.from({ length: n }, () => []);
@@ -733,6 +848,7 @@ for (const hood of NEIGHBORHOODS) {
             { name: "TwoOpt", run: () => runTwoOpt(segs, n) },
             { name: "Bisect", run: () => runBisect(segs, n) },
             { name: "Voronoi", run: () => runVoronoi(segs, n) },
+            { name: "Voronoi+BT", run: () => runVoronoiBT(segs, n, huddleNode) },
             { name: "BFS", run: () => runBFS(segs, n, huddleNode) },
             { name: "DFS", run: () => runDFS(segs, n, huddleNode) },
             { name: "BFS+SA", run: () => runBFSplusSA(segs, n, huddleNode) },

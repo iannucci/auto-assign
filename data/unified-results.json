@@ -48,7 +48,7 @@
           67,
           57
         ],
-        "elapsed": 1
+        "elapsed": 2
       },
       "Bisect": {
         "walkQuality": 0.29090660128800844,
@@ -63,9 +63,24 @@
           69,
           45
         ],
-        "elapsed": 0
+        "elapsed": 1
       },
       "Voronoi": {
+        "walkQuality": 0.28855646652456374,
+        "minWalkQuality": 0.24603677869372226,
+        "totalProd": 674.7,
+        "totalUnprod": 1709.6999999999998,
+        "maxWalk": 1076.6999999999998,
+        "maxTime": 352.5699027961118,
+        "timeSpread": 34.648985959438335,
+        "addrCounts": [
+          63,
+          69,
+          61
+        ],
+        "elapsed": 12
+      },
+      "Voronoi+BT": {
         "walkQuality": 0.28855646652456374,
         "minWalkQuality": 0.24603677869372226,
         "totalProd": 674.7,
@@ -126,17 +141,17 @@
         "elapsed": 6
       },
       "Random": {
-        "walkQuality": 0.3140732760971663,
-        "minWalkQuality": 0.19569903346572165,
-        "totalProd": 691.0969600000001,
-        "totalUnprod": 1783.1,
-        "maxWalk": 1246.7969600000001,
-        "maxTime": 344.96216200648024,
-        "timeSpread": 37.982682827313056,
+        "walkQuality": 0.25173837227299595,
+        "minWalkQuality": 0.22128158374576715,
+        "totalProd": 692.7,
+        "totalUnprod": 2036.4999999999998,
+        "maxWalk": 1078,
+        "maxTime": 354.21396855874235,
+        "timeSpread": 53.612744509780384,
         "addrCounts": [
-          67,
           66,
-          60
+          69,
+          58
         ],
         "elapsed": 1
       },
@@ -178,7 +193,7 @@
           45,
           0
         ],
-        "elapsed": 1
+        "elapsed": 0
       },
       "ChainRH": {
         "walkQuality": 0.3235824046265828,
@@ -246,7 +261,24 @@
           37,
           29
         ],
-        "elapsed": 19
+        "elapsed": 16
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.4469311252370238,
+        "minWalkQuality": 0.21793400286944048,
+        "totalProd": 738.1999999999999,
+        "totalUnprod": 1413.6,
+        "maxWalk": 697,
+        "maxTime": 243.53774150966038,
+        "timeSpread": 90.17340693627744,
+        "addrCounts": [
+          37,
+          41,
+          48,
+          38,
+          29
+        ],
+        "elapsed": 16
       },
       "BFS": {
         "walkQuality": 0.23192091080380844,
@@ -297,24 +329,24 @@
           48,
           44
         ],
-        "elapsed": 8
+        "elapsed": 20
       },
       "Random": {
-        "walkQuality": 0.20055259494481542,
-        "minWalkQuality": 0.0755454249430153,
-        "totalProd": 686.7,
-        "totalUnprod": 2633.9,
-        "maxWalk": 1058,
-        "maxTime": 262.6965078603144,
-        "timeSpread": 21.485659426377026,
+        "walkQuality": 0.33987575607380066,
+        "minWalkQuality": 0.14643555450716905,
+        "totalProd": 685.0969600000001,
+        "totalUnprod": 1823.3,
+        "maxWalk": 1009.2969599999999,
+        "maxTime": 257.5357014280571,
+        "timeSpread": 18.762750510020396,
         "addrCounts": [
-          47,
-          50,
+          51,
+          49,
           46,
-          50,
+          47,
           0
         ],
-        "elapsed": 1
+        "elapsed": 0
       },
       "Oracle": {
         "walkQuality": 0.3235824046265828,
@@ -358,7 +390,7 @@
           0,
           0
         ],
-        "elapsed": 0
+        "elapsed": 1
       },
       "ChainRH": {
         "walkQuality": 0.26694978187790686,
@@ -377,7 +409,7 @@
           25,
           0
         ],
-        "elapsed": 1
+        "elapsed": 0
       },
       "TwoOpt": {
         "walkQuality": 0.3550066205406946,
@@ -396,7 +428,7 @@
           0,
           0
         ],
-        "elapsed": 0
+        "elapsed": 1
       },
       "Bisect": {
         "walkQuality": 0.34992852117487494,
@@ -434,7 +466,26 @@
           34,
           25
         ],
-        "elapsed": 36
+        "elapsed": 22
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.3679759757834767,
+        "minWalkQuality": 0.1308612440191388,
+        "totalProd": 726.2,
+        "totalUnprod": 1828.8000000000002,
+        "maxWalk": 697,
+        "maxTime": 176.72926917076683,
+        "timeSpread": 94.74798991959678,
+        "addrCounts": [
+          25,
+          35,
+          29,
+          16,
+          29,
+          34,
+          25
+        ],
+        "elapsed": 21
       },
       "BFS": {
         "walkQuality": 0.20137350623725894,
@@ -472,7 +523,7 @@
           12,
           45
         ],
-        "elapsed": 0
+        "elapsed": 1
       },
       "BFS+SA": {
         "walkQuality": 0.2795967622339331,
@@ -494,23 +545,23 @@
         "elapsed": 4
       },
       "Random": {
-        "walkQuality": 0.25887074633708207,
-        "minWalkQuality": 0.17549117549117546,
-        "totalProd": 750.2,
-        "totalUnprod": 2299.6,
-        "maxWalk": 900.9000000000001,
-        "maxTime": 189.309372374895,
-        "timeSpread": 38.49813992559703,
+        "walkQuality": 0.35375837872825217,
+        "minWalkQuality": 0.14018797418185938,
+        "totalProd": 692.7,
+        "totalUnprod": 1931.2,
+        "maxWalk": 883.0999999999999,
+        "maxTime": 229.4083763350534,
+        "timeSpread": 57.615504620184794,
         "addrCounts": [
-          28,
-          37,
-          32,
-          29,
+          38,
+          44,
+          42,
+          34,
           35,
-          32,
+          0,
           0
         ],
-        "elapsed": 1
+        "elapsed": 0
       },
       "Oracle": {
         "walkQuality": 0.26694978187790686,
@@ -559,7 +610,7 @@
           0,
           0
         ],
-        "elapsed": 1
+        "elapsed": 0
       },
       "ChainRH": {
         "walkQuality": 0.24816980788728848,
@@ -581,7 +632,7 @@
           0,
           0
         ],
-        "elapsed": 0
+        "elapsed": 1
       },
       "TwoOpt": {
         "walkQuality": 0.3638905098312885,
@@ -603,7 +654,7 @@
           0,
           0
         ],
-        "elapsed": 1
+        "elapsed": 0
       },
       "Bisect": {
         "walkQuality": 0.3668157642685503,
@@ -645,7 +696,29 @@
           25,
           20
         ],
-        "elapsed": 44
+        "elapsed": 46
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.31558416965538083,
+        "minWalkQuality": 0.06814858145656626,
+        "totalProd": 756.1999999999999,
+        "totalUnprod": 2295.3,
+        "maxWalk": 542.1999999999999,
+        "maxTime": 176.72926917076683,
+        "timeSpread": 129.60638425537022,
+        "addrCounts": [
+          25,
+          35,
+          12,
+          13,
+          9,
+          16,
+          16,
+          22,
+          25,
+          20
+        ],
+        "elapsed": 46
       },
       "BFS": {
         "walkQuality": 0.1514887792752924,
@@ -711,24 +784,24 @@
           12,
           20
         ],
-        "elapsed": 4
+        "elapsed": 8
       },
       "Random": {
-        "walkQuality": 0.3577276051982459,
-        "minWalkQuality": 0.2019430950728661,
-        "totalProd": 744.1999999999999,
-        "totalUnprod": 1906.1999999999998,
-        "maxWalk": 740.8,
+        "walkQuality": 0.37322792457632303,
+        "minWalkQuality": 0.15711854792966534,
+        "totalProd": 750.1999999999999,
+        "totalUnprod": 1787.8999999999999,
+        "maxWalk": 612.8,
         "maxTime": 176.72926917076683,
-        "timeSpread": 52.83931357254289,
+        "timeSpread": 62.79791191647665,
         "addrCounts": [
-          25,
-          25,
+          22,
           35,
-          26,
-          23,
-          28,
-          31,
+          22,
+          25,
+          32,
+          25,
+          32,
           0,
           0,
           0
@@ -808,7 +881,7 @@
           104,
           101
         ],
-        "elapsed": 63
+        "elapsed": 75
       },
       "Bisect": {
         "walkQuality": 0.562158562471076,
@@ -823,7 +896,7 @@
           102,
           101
         ],
-        "elapsed": 0
+        "elapsed": 3
       },
       "Voronoi": {
         "walkQuality": 0.53189296534358,
@@ -838,7 +911,22 @@
           105,
           99
         ],
-        "elapsed": 24
+        "elapsed": 21
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.5672217236387244,
+        "minWalkQuality": 0.47270102659815677,
+        "totalProd": 6648.142580000001,
+        "totalUnprod": 5179.1,
+        "maxWalk": 4429.176080000001,
+        "maxTime": 592.2445136205448,
+        "timeSpread": 49.092274570982795,
+        "addrCounts": [
+          98,
+          109,
+          105
+        ],
+        "elapsed": 18
       },
       "BFS": {
         "walkQuality": 0.6200454200837763,
@@ -853,7 +941,7 @@
           103,
           68
         ],
-        "elapsed": 1
+        "elapsed": 0
       },
       "DFS": {
         "walkQuality": 0.6642898689831102,
@@ -883,20 +971,20 @@
           103,
           108
         ],
-        "elapsed": 8
+        "elapsed": 7
       },
       "Random": {
-        "walkQuality": 0.4296111694141898,
-        "minWalkQuality": 0.3842264986766046,
-        "totalProd": 6751.444659999999,
-        "totalUnprod": 8983.699999999999,
-        "maxWalk": 5370.48118,
-        "maxTime": 584.4483520940837,
-        "timeSpread": 2.2608515540621283,
+        "walkQuality": 0.43049003250498274,
+        "minWalkQuality": 0.3637796668568302,
+        "totalProd": 6760.08986,
+        "totalUnprod": 9243.800000000001,
+        "maxWalk": 6680.07572,
+        "maxTime": 586.7752089283572,
+        "timeSpread": 6.611093723749036,
         "addrCounts": [
-          104,
-          104,
-          104
+          106,
+          106,
+          100
         ],
         "elapsed": 3
       },
@@ -938,7 +1026,7 @@
           97,
           0
         ],
-        "elapsed": 3
+        "elapsed": 2
       },
       "ChainRH": {
         "walkQuality": 0.5368440887246448,
@@ -972,7 +1060,7 @@
           64,
           46
         ],
-        "elapsed": 34
+        "elapsed": 35
       },
       "Bisect": {
         "walkQuality": 0.5170467452081068,
@@ -989,24 +1077,41 @@
           61,
           52
         ],
-        "elapsed": 0
+        "elapsed": 1
       },
       "Voronoi": {
-        "walkQuality": 0.4911202339219738,
-        "minWalkQuality": 0.39452713471460593,
-        "totalProd": 6801.2896599999995,
-        "totalUnprod": 7353,
-        "maxWalk": 3701.9000000000005,
-        "maxTime": 364.36877475099004,
-        "timeSpread": 40.47484723388936,
+        "walkQuality": 0.5494384932921387,
+        "minWalkQuality": 0.39074197270782957,
+        "totalProd": 6750.09702,
+        "totalUnprod": 5811.800000000001,
+        "maxWalk": 2919.78098,
+        "maxTime": 359.5883835353414,
+        "timeSpread": 41.248019200768,
         "addrCounts": [
-          58,
           66,
-          60,
-          61,
-          67
+          59,
+          59,
+          65,
+          63
         ],
         "elapsed": 46
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.5757698991386904,
+        "minWalkQuality": 0.42952471397254877,
+        "totalProd": 6762.24356,
+        "totalUnprod": 5244.4,
+        "maxWalk": 2955.78098,
+        "maxTime": 357.3962337693508,
+        "timeSpread": 28.80347701908073,
+        "addrCounts": [
+          61,
+          62,
+          61,
+          65,
+          63
+        ],
+        "elapsed": 41
       },
       "BFS": {
         "walkQuality": 0.5304747023421619,
@@ -1023,7 +1128,7 @@
           91,
           42
         ],
-        "elapsed": 0
+        "elapsed": 1
       },
       "DFS": {
         "walkQuality": 0.5440206747176104,
@@ -1043,36 +1148,36 @@
         "elapsed": 1
       },
       "BFS+SA": {
-        "walkQuality": 0.5573731831569905,
+        "walkQuality": 0.5566077107383807,
         "minWalkQuality": 0.4202877703544017,
         "totalProd": 6697.54242,
         "totalUnprod": 5526.9,
-        "maxWalk": 2768.5,
-        "maxTime": 393.22332893315735,
-        "timeSpread": 100.52027841113647,
+        "maxWalk": 2725.1452,
+        "maxTime": 442.6101044041762,
+        "timeSpread": 156.7590416416657,
         "addrCounts": [
-          61,
+          51,
           66,
           52,
           61,
-          72
+          82
         ],
         "elapsed": 5
       },
       "Random": {
-        "walkQuality": 0.4010159554669272,
-        "minWalkQuality": 0.3167725660961244,
-        "totalProd": 6822.957880000001,
-        "totalUnprod": 10597.5,
-        "maxWalk": 4253.78118,
-        "maxTime": 371.04741605664225,
-        "timeSpread": 57.16466074642983,
+        "walkQuality": 0.3619782543072933,
+        "minWalkQuality": 0.24452552054911803,
+        "totalProd": 6677.8823999999995,
+        "totalUnprod": 12231.7,
+        "maxWalk": 4146.79792,
+        "maxTime": 381.21384855394217,
+        "timeSpread": 71.45028297131887,
         "addrCounts": [
           64,
           65,
-          63,
-          63,
-          57
+          67,
+          64,
+          52
         ],
         "elapsed": 2
       },
@@ -1187,6 +1292,25 @@
         "timeSpread": 63.0378701548062,
         "addrCounts": [
           44,
+          49,
+          48,
+          44,
+          46,
+          45,
+          36
+        ],
+        "elapsed": 73
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.5010233700593419,
+        "minWalkQuality": 0.3894180721953548,
+        "totalProd": 6790.74222,
+        "totalUnprod": 6955.700000000001,
+        "maxWalk": 2337.3,
+        "maxTime": 268.03490531621264,
+        "timeSpread": 62.02261346453858,
+        "addrCounts": [
+          44,
           48,
           49,
           44,
@@ -1194,7 +1318,7 @@
           45,
           36
         ],
-        "elapsed": 72
+        "elapsed": 73
       },
       "BFS": {
         "walkQuality": 0.4165362200230277,
@@ -1235,39 +1359,39 @@
         "elapsed": 1
       },
       "BFS+SA": {
-        "walkQuality": 0.4208121272357586,
-        "minWalkQuality": 0.29546949324009647,
+        "walkQuality": 0.4230491055029129,
+        "minWalkQuality": 0.18814101252160464,
         "totalProd": 6697.54242,
-        "totalUnprod": 9517.4,
-        "maxWalk": 3599.56024,
-        "maxTime": 332.4816992679707,
-        "timeSpread": 204.56195175807034,
+        "totalUnprod": 9517.400000000001,
+        "maxWalk": 2757.8,
+        "maxTime": 337.64373646945876,
+        "timeSpread": 194.78449921996878,
         "addrCounts": [
-          22,
+          62,
           42,
-          60,
+          50,
           47,
           36,
-          52,
+          22,
           53
         ],
         "elapsed": 5
       },
       "Random": {
-        "walkQuality": 0.3505586175330934,
-        "minWalkQuality": 0.23026528086652678,
-        "totalProd": 6687.640219999999,
-        "totalUnprod": 13068.099999999999,
-        "maxWalk": 4922.3452,
-        "maxTime": 345.4770190807632,
-        "timeSpread": 76.32185287411494,
+        "walkQuality": 0.33919869684354303,
+        "minWalkQuality": 0.24126821110872287,
+        "totalProd": 6851.3587800000005,
+        "totalUnprod": 14308.3,
+        "maxWalk": 4582.9,
+        "maxTime": 351.89847593903755,
+        "timeSpread": 81.27264010560424,
         "addrCounts": [
+          59,
+          47,
           49,
-          52,
+          45,
           48,
-          53,
-          62,
-          48,
+          64,
           0
         ],
         "elapsed": 2
@@ -1319,7 +1443,7 @@
           0,
           0
         ],
-        "elapsed": 2
+        "elapsed": 3
       },
       "ChainRH": {
         "walkQuality": 0.5145152000223627,
@@ -1363,7 +1487,7 @@
           0,
           0
         ],
-        "elapsed": 34
+        "elapsed": 35
       },
       "Bisect": {
         "walkQuality": 0.4421765585055663,
@@ -1385,29 +1509,51 @@
           27,
           25
         ],
-        "elapsed": 1
+        "elapsed": 0
       },
       "Voronoi": {
-        "walkQuality": 0.4430374180266595,
-        "minWalkQuality": 0.30166902795535433,
-        "totalProd": 6724.464779999999,
-        "totalUnprod": 9319.4,
-        "maxWalk": 2893.9,
-        "maxTime": 225.64202568102723,
-        "timeSpread": 103.86974174966998,
+        "walkQuality": 0.4671948052821663,
+        "minWalkQuality": 0.26858212365305256,
+        "totalProd": 6692.394040000001,
+        "totalUnprod": 8093.000000000001,
+        "maxWalk": 2167.60428,
+        "maxTime": 247.83903396135844,
+        "timeSpread": 138.0307037081483,
         "addrCounts": [
-          37,
-          25,
-          22,
-          36,
-          31,
+          30,
+          45,
+          19,
+          29,
           30,
           29,
-          41,
+          25,
+          44,
+          25,
+          36
+        ],
+        "elapsed": 173
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.44896227471683614,
+        "minWalkQuality": 0.3138796166684613,
+        "totalProd": 6837.76686,
+        "totalUnprod": 9378.8,
+        "maxWalk": 2786.1,
+        "maxTime": 219.2235689427577,
+        "timeSpread": 97.45128501140046,
+        "addrCounts": [
+          37,
+          40,
+          32,
+          22,
+          34,
+          28,
+          27,
           26,
+          31,
           35
         ],
-        "elapsed": 194
+        "elapsed": 173
       },
       "BFS": {
         "walkQuality": 0.34460967566007933,
@@ -1451,7 +1597,7 @@
           31,
           56
         ],
-        "elapsed": 0
+        "elapsed": 1
       },
       "BFS+SA": {
         "walkQuality": 0.34661662830937745,
@@ -1473,25 +1619,25 @@
           12,
           28
         ],
-        "elapsed": 6
+        "elapsed": 5
       },
       "Random": {
-        "walkQuality": 0.38105349241346315,
-        "minWalkQuality": 0.22389790690094352,
-        "totalProd": 6754.97302,
-        "totalUnprod": 11874.9,
-        "maxWalk": 4017.51268,
-        "maxTime": 278.66974678987157,
-        "timeSpread": 82.93576647065879,
+        "walkQuality": 0.3321587968712778,
+        "minWalkQuality": 0.21687473770226515,
+        "totalProd": 6714.699299999999,
+        "totalUnprod": 14445.1,
+        "maxWalk": 3775.71488,
+        "maxTime": 316.40045601824073,
+        "timeSpread": 112.88690243609744,
         "addrCounts": [
-          37,
-          51,
-          41,
-          37,
+          36,
           38,
-          35,
-          40,
-          33,
+          41,
+          34,
+          57,
+          37,
+          37,
+          32,
           0,
           0
         ],
@@ -1540,7 +1686,7 @@
           182,
           180
         ],
-        "elapsed": 42
+        "elapsed": 41
       },
       "ChainRH": {
         "walkQuality": 0.6118571745521773,
@@ -1555,7 +1701,7 @@
           184,
           177
         ],
-        "elapsed": 76
+        "elapsed": 75
       },
       "TwoOpt": {
         "walkQuality": 0.6586273094706192,
@@ -1570,7 +1716,7 @@
           183,
           179
         ],
-        "elapsed": 564
+        "elapsed": 674
       },
       "Bisect": {
         "walkQuality": 0.6297592893278362,
@@ -1585,7 +1731,7 @@
           179,
           179
         ],
-        "elapsed": 3
+        "elapsed": 5
       },
       "Voronoi": {
         "walkQuality": 0.6409631259514591,
@@ -1600,7 +1746,22 @@
           183,
           179
         ],
-        "elapsed": 46
+        "elapsed": 53
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.6114802356146279,
+        "minWalkQuality": 0.5772434593176198,
+        "totalProd": 11905.61874,
+        "totalUnprod": 7760.699999999999,
+        "maxWalk": 7603.84116,
+        "maxTime": 996.2497439097564,
+        "timeSpread": 32.13676851074035,
+        "addrCounts": [
+          180,
+          183,
+          181
+        ],
+        "elapsed": 63
       },
       "BFS": {
         "walkQuality": 0.598378194081986,
@@ -1615,7 +1776,7 @@
           194,
           175
         ],
-        "elapsed": 3
+        "elapsed": 4
       },
       "DFS": {
         "walkQuality": 0.6539309463403123,
@@ -1645,22 +1806,22 @@
           176,
           193
         ],
-        "elapsed": 6
+        "elapsed": 8
       },
       "Random": {
-        "walkQuality": 0.46246721731672696,
-        "minWalkQuality": 0.4068799267768326,
-        "totalProd": 11776.68486,
-        "totalUnprod": 13840.100000000002,
-        "maxWalk": 9290.69888,
-        "maxTime": 1010.5858319932797,
-        "timeSpread": 4.092985719428725,
+        "walkQuality": 0.42949380494773487,
+        "minWalkQuality": 0.38048773807191066,
+        "totalProd": 11928.67386,
+        "totalUnprod": 15915.9,
+        "maxWalk": 9581.291379999999,
+        "maxTime": 1024.9800957638306,
+        "timeSpread": 11.137601584063418,
         "addrCounts": [
-          183,
           182,
-          179
+          182,
+          180
         ],
-        "elapsed": 29
+        "elapsed": 30
       },
       "Oracle": {
         "walkQuality": 0.623049300836541,
@@ -1700,7 +1861,7 @@
           109,
           105
         ],
-        "elapsed": 27
+        "elapsed": 28
       },
       "ChainRH": {
         "walkQuality": 0.591582377608724,
@@ -1717,7 +1878,7 @@
           114,
           101
         ],
-        "elapsed": 73
+        "elapsed": 72
       },
       "TwoOpt": {
         "walkQuality": 0.6263040497778605,
@@ -1734,7 +1895,7 @@
           112,
           101
         ],
-        "elapsed": 559
+        "elapsed": 548
       },
       "Bisect": {
         "walkQuality": 0.5906618019317338,
@@ -1751,24 +1912,41 @@
           102,
           100
         ],
-        "elapsed": 3
+        "elapsed": 2
       },
       "Voronoi": {
-        "walkQuality": 0.5986896394155378,
+        "walkQuality": 0.6066527395740263,
+        "minWalkQuality": 0.5196389481581744,
+        "totalProd": 11877.064800000002,
+        "totalUnprod": 7910.000000000001,
+        "maxWalk": 5040.3753400000005,
+        "maxTime": 631.731208448338,
+        "timeSpread": 78.5536887075483,
+        "addrCounts": [
+          102,
+          108,
+          117,
+          112,
+          105
+        ],
+        "elapsed": 122
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.5935173814832432,
         "minWalkQuality": 0.5321375857654782,
-        "totalProd": 11921.860440000002,
-        "totalUnprod": 8132.5,
+        "totalProd": 11967.82704,
+        "totalUnprod": 8350.2,
         "maxWalk": 5243.208100000001,
         "maxTime": 657.3351465258611,
-        "timeSpread": 172.68454962198496,
+        "timeSpread": 192.79615408616348,
         "addrCounts": [
-          90,
-          111,
-          121,
+          86,
           114,
-          108
+          121,
+          111,
+          112
         ],
-        "elapsed": 113
+        "elapsed": 108
       },
       "BFS": {
         "walkQuality": 0.5386858661013663,
@@ -1802,39 +1980,39 @@
           117,
           94
         ],
-        "elapsed": 5
+        "elapsed": 4
       },
       "BFS+SA": {
-        "walkQuality": 0.5574390842965405,
-        "minWalkQuality": 0.4546786282365265,
-        "totalProd": 11756.79992,
-        "totalUnprod": 9898.699999999999,
-        "maxWalk": 5110.56442,
-        "maxTime": 624.6535605424217,
-        "timeSpread": 63.32433433337337,
+        "walkQuality": 0.5571499151209118,
+        "minWalkQuality": 0.42807124158008386,
+        "totalProd": 11756.799920000001,
+        "totalUnprod": 9898.7,
+        "maxWalk": 5267.2644199999995,
+        "maxTime": 647.7730853234129,
+        "timeSpread": 112.24989823592944,
         "addrCounts": [
-          110,
+          119,
           115,
-          113,
-          100,
-          106
+          118,
+          95,
+          97
         ],
         "elapsed": 6
       },
       "Random": {
-        "walkQuality": 0.36842232747375103,
-        "minWalkQuality": 0.35388779984747604,
-        "totalProd": 11979.581040000001,
-        "totalUnprod": 20562.100000000006,
-        "maxWalk": 6771.066200000001,
-        "maxTime": 635.8275852634106,
-        "timeSpread": 34.57154062162488,
+        "walkQuality": 0.3350665197436303,
+        "minWalkQuality": 0.3027862691409664,
+        "totalProd": 11853.94128,
+        "totalUnprod": 23662.2,
+        "maxWalk": 7873.05206,
+        "maxTime": 639.4804039361575,
+        "timeSpread": 22.973725909036375,
         "addrCounts": [
-          111,
           109,
           109,
-          111,
-          104
+          109,
+          109,
+          108
         ],
         "elapsed": 17
       },
@@ -1880,7 +2058,7 @@
           80,
           69
         ],
-        "elapsed": 29
+        "elapsed": 28
       },
       "ChainRH": {
         "walkQuality": 0.5750803721713952,
@@ -1918,7 +2096,7 @@
           80,
           69
         ],
-        "elapsed": 554
+        "elapsed": 565
       },
       "Bisect": {
         "walkQuality": 0.5790220776090627,
@@ -1940,23 +2118,42 @@
         "elapsed": 2
       },
       "Voronoi": {
-        "walkQuality": 0.577536491673565,
-        "minWalkQuality": 0.39688802266345485,
-        "totalProd": 11816.27934,
-        "totalUnprod": 9017.199999999999,
-        "maxWalk": 3877.38942,
-        "maxTime": 482.53210128405135,
-        "timeSpread": 91.61529821192846,
+        "walkQuality": 0.6005196992771072,
+        "minWalkQuality": 0.47850861729791233,
+        "totalProd": 11882.53868,
+        "totalUnprod": 8442.3,
+        "maxWalk": 3866.79448,
+        "maxTime": 464.2948186727469,
+        "timeSpread": 76.65171294851791,
         "addrCounts": [
           78,
+          72,
+          72,
           80,
-          70,
-          71,
-          90,
-          82,
-          73
+          87,
+          76,
+          79
         ],
-        "elapsed": 208
+        "elapsed": 228
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.6130213019686893,
+        "minWalkQuality": 0.5038449733200915,
+        "totalProd": 11902.57068,
+        "totalUnprod": 8066.9,
+        "maxWalk": 3808.4150800000007,
+        "maxTime": 437.6077424696988,
+        "timeSpread": 23.95119620784834,
+        "addrCounts": [
+          77,
+          77,
+          79,
+          77,
+          78,
+          78,
+          78
+        ],
+        "elapsed": 317
       },
       "BFS": {
         "walkQuality": 0.47332880471677097,
@@ -1997,42 +2194,42 @@
         "elapsed": 3
       },
       "BFS+SA": {
-        "walkQuality": 0.49568080347935145,
-        "minWalkQuality": 0.37198941914034533,
-        "totalProd": 11736.82292,
+        "walkQuality": 0.49423466662336396,
+        "minWalkQuality": 0.36042080077605043,
+        "totalProd": 11736.822919999999,
         "totalUnprod": 12749.300000000001,
-        "maxWalk": 4371.53642,
-        "maxTime": 448.48214664586584,
-        "timeSpread": 51.64727853114124,
+        "maxWalk": 4323.43642,
+        "maxTime": 450.1590010800432,
+        "timeSpread": 52.14238569542783,
         "addrCounts": [
           82,
-          70,
-          76,
+          80,
+          74,
           82,
           81,
-          82,
-          71
+          75,
+          70
         ],
-        "elapsed": 8
+        "elapsed": 7
       },
       "Random": {
-        "walkQuality": 0.3273435680816795,
-        "minWalkQuality": 0.2886842735365984,
-        "totalProd": 11881.3179,
-        "totalUnprod": 24689.600000000002,
-        "maxWalk": 6627.155600000001,
-        "maxTime": 474.5290483619345,
-        "timeSpread": 69.72533349333975,
+        "walkQuality": 0.3353712978738225,
+        "minWalkQuality": 0.2675170048089604,
+        "totalProd": 11920.76158,
+        "totalUnprod": 24414.6,
+        "maxWalk": 6694.35336,
+        "maxTime": 470.3354537381495,
+        "timeSpread": 48.60864802592101,
         "addrCounts": [
-          79,
-          81,
-          79,
           78,
           78,
           78,
-          71
+          82,
+          78,
+          78,
+          72
         ],
-        "elapsed": 13
+        "elapsed": 12
       },
       "Oracle": {
         "walkQuality": 0.5788917736013379,
@@ -2081,7 +2278,7 @@
           72,
           0
         ],
-        "elapsed": 29
+        "elapsed": 26
       },
       "ChainRH": {
         "walkQuality": 0.5352831176862505,
@@ -2103,7 +2300,7 @@
           74,
           0
         ],
-        "elapsed": 75
+        "elapsed": 72
       },
       "TwoOpt": {
         "walkQuality": 0.578026533863436,
@@ -2125,7 +2322,7 @@
           65,
           0
         ],
-        "elapsed": 563
+        "elapsed": 539
       },
       "Bisect": {
         "walkQuality": 0.5826664920784153,
@@ -2147,29 +2344,51 @@
           56,
           51
         ],
-        "elapsed": 2
+        "elapsed": 1
       },
       "Voronoi": {
-        "walkQuality": 0.5634910545593009,
-        "minWalkQuality": 0.4010304524167098,
-        "totalProd": 11829.30912,
-        "totalUnprod": 9888.1,
-        "maxWalk": 3309.68412,
-        "maxTime": 329.7177981519261,
-        "timeSpread": 64.7477993519741,
+        "walkQuality": 0.5512590937220255,
+        "minWalkQuality": 0.4230148196726273,
+        "totalProd": 11858.088960000001,
+        "totalUnprod": 10029.2,
+        "maxWalk": 2768.52258,
+        "maxTime": 336.8285587423497,
+        "timeSpread": 72.65567790711629,
         "addrCounts": [
-          53,
-          52,
           57,
+          62,
+          51,
+          48,
+          56,
+          54,
+          54,
+          47,
+          59,
+          56
+        ],
+        "elapsed": 490
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.5582055407319164,
+        "minWalkQuality": 0.3474294298985722,
+        "totalProd": 11941.802720000002,
+        "totalUnprod": 10810.100000000002,
+        "maxWalk": 3425.07018,
+        "maxTime": 352.15828633145327,
+        "timeSpread": 96.45745829833194,
+        "addrCounts": [
+          55,
+          65,
+          57,
+          54,
+          54,
+          50,
+          47,
           56,
           55,
-          58,
-          49,
-          53,
-          59,
-          52
+          51
         ],
-        "elapsed": 480
+        "elapsed": 494
       },
       "BFS": {
         "walkQuality": 0.4480010289196727,
@@ -2213,51 +2432,51 @@
           50,
           45
         ],
-        "elapsed": 3
+        "elapsed": 4
       },
       "BFS+SA": {
-        "walkQuality": 0.46856234857180806,
-        "minWalkQuality": 0.32260037858523605,
+        "walkQuality": 0.4654668053806742,
+        "minWalkQuality": 0.3085841537398369,
         "totalProd": 11792.38808,
         "totalUnprod": 14875.500000000002,
         "maxWalk": 3928.42984,
-        "maxTime": 338.71371990879635,
-        "timeSpread": 59.73182791311655,
+        "maxTime": 330.468632425297,
+        "timeSpread": 68.74289523580944,
         "addrCounts": [
-          56,
-          49,
-          57,
+          46,
+          58,
+          59,
           55,
           54,
           52,
           53,
-          54,
-          61,
-          53
+          60,
+          50,
+          57
         ],
         "elapsed": 7
       },
       "Random": {
-        "walkQuality": 0.29209369452203293,
-        "minWalkQuality": 0.2470795422846845,
-        "totalProd": 11989.173660000002,
-        "totalUnprod": 29183.6,
-        "maxWalk": 5291.528420000001,
-        "maxTime": 395.8244425777031,
-        "timeSpread": 65.67983679347174,
+        "walkQuality": 0.307435990028021,
+        "minWalkQuality": 0.2535195555531753,
+        "totalProd": 11879.85634,
+        "totalUnprod": 27481.9,
+        "maxWalk": 5344.98812,
+        "maxTime": 424.14242313692546,
+        "timeSpread": 101.62502724108964,
         "addrCounts": [
-          64,
+          63,
+          55,
+          55,
+          56,
           57,
-          58,
-          68,
-          64,
-          57,
-          61,
-          58,
-          57,
+          59,
+          60,
+          67,
+          72,
           0
         ],
-        "elapsed": 10
+        "elapsed": 11
       },
       "Oracle": {
         "walkQuality": 0.578026533863436,
@@ -2302,7 +2521,7 @@
           216,
           177
         ],
-        "elapsed": 537
+        "elapsed": 545
       },
       "ChainRH": {
         "walkQuality": 0.2616598796210332,
@@ -2317,7 +2536,7 @@
           226,
           166
         ],
-        "elapsed": 827
+        "elapsed": 819
       },
       "TwoOpt": {
         "walkQuality": 0.25461375367594347,
@@ -2332,7 +2551,7 @@
           204,
           189
         ],
-        "elapsed": 17455
+        "elapsed": 17354
       },
       "Bisect": {
         "walkQuality": 0.23871315615696478,
@@ -2347,22 +2566,37 @@
           196,
           197
         ],
-        "elapsed": 62
+        "elapsed": 57
       },
       "Voronoi": {
-        "walkQuality": 0.24317866186541784,
-        "minWalkQuality": 0.20234839427138213,
-        "totalProd": 17149.578559999994,
-        "totalUnprod": 59188.700000000004,
-        "maxWalk": 37026.56622,
-        "maxTime": 1514.3365681027242,
-        "timeSpread": 449.9861185647426,
+        "walkQuality": 0.2410398280783481,
+        "minWalkQuality": 0.19893214149700872,
+        "totalProd": 17461.583619999998,
+        "totalUnprod": 60118.100000000006,
+        "maxWalk": 36601.643280000004,
+        "maxTime": 1444.2372888515542,
+        "timeSpread": 368.16797743909774,
         "addrCounts": [
-          214,
-          183,
-          193
+          193,
+          201,
+          196
         ],
-        "elapsed": 166
+        "elapsed": 182
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.24211960882558894,
+        "minWalkQuality": 0.19696805612235355,
+        "totalProd": 17371.48656,
+        "totalUnprod": 59830.899999999994,
+        "maxWalk": 36489.831099999996,
+        "maxTime": 1492.8954890195607,
+        "timeSpread": 470.67854314172564,
+        "addrCounts": [
+          211,
+          192,
+          187
+        ],
+        "elapsed": 223
       },
       "BFS": {
         "walkQuality": 0.20282636498267695,
@@ -2377,7 +2611,7 @@
           161,
           278
         ],
-        "elapsed": 51
+        "elapsed": 52
       },
       "DFS": {
         "walkQuality": 0.2555055934395995,
@@ -2392,37 +2626,37 @@
           169,
           217
         ],
-        "elapsed": 53
+        "elapsed": 55
       },
       "BFS+SA": {
-        "walkQuality": 0.20484554565490495,
-        "minWalkQuality": 0.1831244619157282,
-        "totalProd": 17074.635879999998,
+        "walkQuality": 0.20500772278999016,
+        "minWalkQuality": 0.17968925569434105,
+        "totalProd": 17074.63588,
         "totalUnprod": 67040.7,
-        "maxWalk": 34652.554299999996,
-        "maxTime": 1322.1028249129965,
-        "timeSpread": 5.628527781111416,
+        "maxWalk": 34062.82338000001,
+        "maxTime": 1321.8749069962798,
+        "timeSpread": 3.104675627025017,
         "addrCounts": [
-          181,
-          184,
+          183,
+          182,
           225
         ],
-        "elapsed": 49
+        "elapsed": 48
       },
       "Random": {
-        "walkQuality": 0.13294116226583574,
-        "minWalkQuality": 0.11879662389556081,
-        "totalProd": 17296.005419999998,
-        "totalUnprod": 112446.4,
-        "maxWalk": 48252.51428,
-        "maxTime": 1529.0533334933398,
-        "timeSpread": 40.28312660506435,
+        "walkQuality": 0.14912545155132517,
+        "minWalkQuality": 0.1481844939535817,
+        "totalProd": 17578.497339999998,
+        "totalUnprod": 100321.7,
+        "maxWalk": 44877.1383,
+        "maxTime": 1523.5472014880595,
+        "timeSpread": 105.12064586583483,
         "addrCounts": [
           197,
-          203,
-          190
+          197,
+          196
         ],
-        "elapsed": 429
+        "elapsed": 442
       },
       "Oracle": {
         "walkQuality": 0.2616598796210332,
@@ -2462,7 +2696,7 @@
           132,
           104
         ],
-        "elapsed": 527
+        "elapsed": 524
       },
       "ChainRH": {
         "walkQuality": 0.2543738215201005,
@@ -2479,7 +2713,7 @@
           121,
           75
         ],
-        "elapsed": 801
+        "elapsed": 816
       },
       "TwoOpt": {
         "walkQuality": 0.24269506779145736,
@@ -2496,7 +2730,7 @@
           118,
           118
         ],
-        "elapsed": 17298
+        "elapsed": 17404
       },
       "Bisect": {
         "walkQuality": 0.23127739519897386,
@@ -2516,21 +2750,38 @@
         "elapsed": 29
       },
       "Voronoi": {
-        "walkQuality": 0.23862266441795899,
-        "minWalkQuality": 0.15627983366088136,
-        "totalProd": 17498.351319999994,
-        "totalUnprod": 64344.100000000006,
-        "maxWalk": 27519.31378,
-        "maxTime": 968.9528270730829,
-        "timeSpread": 391.4817422296891,
+        "walkQuality": 0.22232671135298437,
+        "minWalkQuality": 0.15782369623791448,
+        "totalProd": 17104.81548,
+        "totalUnprod": 66060.1,
+        "maxWalk": 28514.10078,
+        "maxTime": 963.5938598343934,
+        "timeSpread": 345.7616260650426,
         "addrCounts": [
-          117,
           108,
-          138,
-          105,
-          122
+          117,
+          116,
+          139,
+          110
         ],
-        "elapsed": 283
+        "elapsed": 302
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.2349974828089425,
+        "minWalkQuality": 0.15841554634659744,
+        "totalProd": 17650.251239999998,
+        "totalUnprod": 65727.09999999999,
+        "maxWalk": 26305.38136,
+        "maxTime": 964.3273495739829,
+        "timeSpread": 454.83294995799827,
+        "addrCounts": [
+          139,
+          96,
+          123,
+          118,
+          114
+        ],
+        "elapsed": 321
       },
       "BFS": {
         "walkQuality": 0.17581923575953168,
@@ -2547,7 +2798,7 @@
           87,
           85
         ],
-        "elapsed": 35
+        "elapsed": 33
       },
       "DFS": {
         "walkQuality": 0.25143238025392256,
@@ -2567,38 +2818,38 @@
         "elapsed": 45
       },
       "BFS+SA": {
-        "walkQuality": 0.179863503681164,
-        "minWalkQuality": 0.15034809589886705,
+        "walkQuality": 0.18032103542014338,
+        "minWalkQuality": 0.1544185111058657,
         "totalProd": 17222.7669,
         "totalUnprod": 81264.5,
-        "maxWalk": 25464.663700000005,
-        "maxTime": 829.8320619224769,
-        "timeSpread": 6.997335173406896,
+        "maxWalk": 25326.653020000005,
+        "maxTime": 831.3720235209407,
+        "timeSpread": 8.658797791911638,
         "addrCounts": [
-          138,
-          113,
-          127,
-          108,
+          137,
+          115,
+          128,
+          106,
           104
         ],
-        "elapsed": 44
+        "elapsed": 43
       },
       "Random": {
-        "walkQuality": 0.12290275281683546,
-        "minWalkQuality": 0.10922661472141287,
-        "totalProd": 17530.0204,
-        "totalUnprod": 124645.3,
-        "maxWalk": 32092.122559999996,
-        "maxTime": 975.1208755550222,
-        "timeSpread": 119.51407968318722,
+        "walkQuality": 0.11896808938374834,
+        "minWalkQuality": 0.09241316693181159,
+        "totalProd": 17828.561120000002,
+        "totalUnprod": 131426.5,
+        "maxWalk": 33041.00832,
+        "maxTime": 1001.5079601584064,
+        "timeSpread": 98.33061778471142,
         "addrCounts": [
-          134,
           118,
-          119,
-          120,
-          99
+          121,
+          118,
+          129,
+          104
         ],
-        "elapsed": 279
+        "elapsed": 277
       },
       "Oracle": {
         "walkQuality": 0.2543738215201005,
@@ -2642,7 +2893,7 @@
           86,
           68
         ],
-        "elapsed": 531
+        "elapsed": 533
       },
       "ChainRH": {
         "walkQuality": 0.24877236734863487,
@@ -2661,7 +2912,7 @@
           70,
           0
         ],
-        "elapsed": 803
+        "elapsed": 824
       },
       "TwoOpt": {
         "walkQuality": 0.23064196270860324,
@@ -2680,7 +2931,7 @@
           93,
           66
         ],
-        "elapsed": 17258
+        "elapsed": 17348
       },
       "Bisect": {
         "walkQuality": 0.21454993562331956,
@@ -2702,23 +2953,42 @@
         "elapsed": 20
       },
       "Voronoi": {
-        "walkQuality": 0.21397531341584441,
-        "minWalkQuality": 0.15576786348014218,
-        "totalProd": 17555.79992,
-        "totalUnprod": 69796.3,
-        "maxWalk": 21826.359939999995,
-        "maxTime": 766.6871882875315,
-        "timeSpread": 314.41252994119765,
+        "walkQuality": 0.20348692484660283,
+        "minWalkQuality": 0.15808853660119487,
+        "totalProd": 17223.95004,
+        "totalUnprod": 71877.8,
+        "maxWalk": 21488.357859999996,
+        "maxTime": 677.8706091443657,
+        "timeSpread": 156.6169129965199,
         "addrCounts": [
-          109,
-          81,
-          97,
+          92,
           82,
-          75,
-          74,
-          72
+          71,
+          84,
+          78,
+          86,
+          97
         ],
-        "elapsed": 503
+        "elapsed": 520
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.21962239085258067,
+        "minWalkQuality": 0.1681485865327999,
+        "totalProd": 17387.258899999997,
+        "totalUnprod": 67907,
+        "maxWalk": 22206.610100000005,
+        "maxTime": 626.4899807992321,
+        "timeSpread": 144.93311940477628,
+        "addrCounts": [
+          95,
+          77,
+          82,
+          72,
+          88,
+          85,
+          91
+        ],
+        "elapsed": 533
       },
       "BFS": {
         "walkQuality": 0.1474191375512719,
@@ -2737,7 +3007,7 @@
           63,
           92
         ],
-        "elapsed": 35
+        "elapsed": 37
       },
       "DFS": {
         "walkQuality": 0.24556269715540682,
@@ -2759,42 +3029,42 @@
         "elapsed": 37
       },
       "BFS+SA": {
-        "walkQuality": 0.14992393378076097,
-        "minWalkQuality": 0.12650842443459026,
+        "walkQuality": 0.1511792842840334,
+        "minWalkQuality": 0.11581664668318889,
         "totalProd": 17210.6849,
         "totalUnprod": 102405.7,
-        "maxWalk": 22851.897860000005,
+        "maxWalk": 24726.093200000003,
         "maxTime": 631.0805789031562,
-        "timeSpread": 13.132374174967026,
+        "timeSpread": 10.07434033361335,
         "addrCounts": [
-          71,
+          66,
           109,
           101,
-          76,
+          83,
           71,
-          72,
+          70,
           90
         ],
-        "elapsed": 44
+        "elapsed": 45
       },
       "Random": {
-        "walkQuality": 0.09441435266822869,
-        "minWalkQuality": 0.061822239430087994,
-        "totalProd": 17311.624880000003,
-        "totalUnprod": 159406.80000000002,
-        "maxWalk": 30402.58152,
-        "maxTime": 794.8455720628825,
-        "timeSpread": 208.32405976239045,
+        "walkQuality": 0.09937386645684285,
+        "minWalkQuality": 0.0696831842866199,
+        "totalProd": 17653.26106,
+        "totalUnprod": 155194.39999999997,
+        "maxWalk": 30877.914839999998,
+        "maxTime": 801.0472434897396,
+        "timeSpread": 213.8482664106565,
         "addrCounts": [
-          86,
-          88,
           85,
+          89,
           92,
-          85,
-          85,
-          69
+          88,
+          86,
+          87,
+          63
         ],
-        "elapsed": 221
+        "elapsed": 217
       },
       "Oracle": {
         "walkQuality": 0.23064196270860324,
@@ -2843,7 +3113,7 @@
           56,
           0
         ],
-        "elapsed": 529
+        "elapsed": 536
       },
       "ChainRH": {
         "walkQuality": 0.22394248629401142,
@@ -2865,7 +3135,7 @@
           62,
           34
         ],
-        "elapsed": 799
+        "elapsed": 816
       },
       "TwoOpt": {
         "walkQuality": 0.20263127103751274,
@@ -2887,7 +3157,7 @@
           62,
           38
         ],
-        "elapsed": 17558
+        "elapsed": 17220
       },
       "Bisect": {
         "walkQuality": 0.20753959437073882,
@@ -2909,29 +3179,51 @@
           86,
           26
         ],
-        "elapsed": 15
+        "elapsed": 16
       },
       "Voronoi": {
-        "walkQuality": 0.21156107311080094,
-        "minWalkQuality": 0.1366120626083247,
-        "totalProd": 17511.214999999997,
-        "totalUnprod": 71485.09999999999,
-        "maxWalk": 14683.765179999999,
-        "maxTime": 471.2800710428417,
-        "timeSpread": 150.4507625105004,
+        "walkQuality": 0.20092099189300625,
+        "minWalkQuality": 0.13187313826747718,
+        "totalProd": 17678.572939999995,
+        "totalUnprod": 75021.79999999999,
+        "maxWalk": 15262.70522,
+        "maxTime": 521.2536961478459,
+        "timeSpread": 218.45431081243242,
         "addrCounts": [
+          51,
+          53,
+          58,
+          51,
+          54,
+          53,
           59,
+          54,
+          60,
+          97
+        ],
+        "elapsed": 993
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.21612287498284313,
+        "minWalkQuality": 0.14433579358430162,
+        "totalProd": 17464.163439999997,
+        "totalUnprod": 73329.30000000002,
+        "maxWalk": 17050.488,
+        "maxTime": 521.2536961478459,
+        "timeSpread": 234.34623544941792,
+        "addrCounts": [
+          53,
+          59,
+          59,
+          47,
+          58,
+          54,
           57,
           54,
-          48,
-          55,
-          59,
-          58,
           52,
-          58,
-          90
+          97
         ],
-        "elapsed": 1290
+        "elapsed": 1023
       },
       "BFS": {
         "walkQuality": 0.12823802955760266,
@@ -2953,7 +3245,7 @@
           40,
           45
         ],
-        "elapsed": 33
+        "elapsed": 34
       },
       "DFS": {
         "walkQuality": 0.2059896428355592,
@@ -2975,51 +3267,51 @@
           55,
           205
         ],
-        "elapsed": 37
+        "elapsed": 36
       },
       "BFS+SA": {
-        "walkQuality": 0.12902866061539855,
-        "minWalkQuality": 0.08753952773144688,
+        "walkQuality": 0.1297088458460469,
+        "minWalkQuality": 0.09440310738406864,
         "totalProd": 17319.214519999998,
         "totalUnprod": 119812.19999999998,
         "maxWalk": 17182.982040000003,
         "maxTime": 495.24941869674785,
-        "timeSpread": 111.18081867274691,
+        "timeSpread": 90.42277115084607,
         "addrCounts": [
           69,
           57,
-          66,
-          50,
-          46,
-          56,
-          58,
+          65,
+          57,
+          54,
+          43,
+          54,
           94,
-          46,
-          48
+          44,
+          53
         ],
         "elapsed": 45
       },
       "Random": {
-        "walkQuality": 0.0869222372429892,
-        "minWalkQuality": 0.05662845867305904,
-        "totalProd": 17455.5172,
-        "totalUnprod": 182007.30000000002,
-        "maxWalk": 29228.466440000004,
-        "maxTime": 654.2910661226449,
-        "timeSpread": 137.83751086043435,
+        "walkQuality": 0.08180035093961788,
+        "minWalkQuality": 0.03111201225556457,
+        "totalProd": 17517.837719999996,
+        "totalUnprod": 187987.09999999998,
+        "maxWalk": 28907.476479999998,
+        "maxTime": 685.3551122044883,
+        "timeSpread": 193.8196507860315,
         "addrCounts": [
+          59,
+          70,
+          64,
+          77,
+          82,
           60,
-          59,
-          59,
-          91,
-          59,
-          74,
-          59,
-          74,
-          55,
+          62,
+          62,
+          54,
           0
         ],
-        "elapsed": 155
+        "elapsed": 156
       },
       "Oracle": {
         "walkQuality": 0.20263127103751274,
@@ -3064,7 +3356,7 @@
           139,
           136
         ],
-        "elapsed": 8
+        "elapsed": 6
       },
       "ChainRH": {
         "walkQuality": 0.27436172551915944,
@@ -3079,7 +3371,7 @@
           139,
           136
         ],
-        "elapsed": 13
+        "elapsed": 14
       },
       "TwoOpt": {
         "walkQuality": 0.2810982193485953,
@@ -3094,7 +3386,7 @@
           138,
           138
         ],
-        "elapsed": 54
+        "elapsed": 45
       },
       "Bisect": {
         "walkQuality": 0.2783061087345285,
@@ -3112,19 +3404,34 @@
         "elapsed": 1
       },
       "Voronoi": {
-        "walkQuality": 0.2807982787566187,
-        "minWalkQuality": 0.06323576957456115,
-        "totalProd": 5359.41642,
-        "totalUnprod": 12838.2,
-        "maxWalk": 6642.98002,
-        "maxTime": 779.71894899796,
-        "timeSpread": 36.61922500900039,
+        "walkQuality": 0.564600489555991,
+        "minWalkQuality": 0.3342500115128307,
+        "totalProd": 5375.56016,
+        "totalUnprod": 9590.2,
+        "maxWalk": 8113.556280000001,
+        "maxTime": 787.3665700228009,
+        "timeSpread": 108.62122020880838,
         "addrCounts": [
-          140,
+          141,
           138,
-          136
+          135
         ],
-        "elapsed": 20
+        "elapsed": 16
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.5871165443814563,
+        "minWalkQuality": 0.36005196543773094,
+        "totalProd": 5393.213659999999,
+        "totalUnprod": 8297.5,
+        "maxWalk": 6975.097599999999,
+        "maxTime": 786.8452665306612,
+        "timeSpread": 108.09991671666864,
+        "addrCounts": [
+          137,
+          135,
+          142
+        ],
+        "elapsed": 19
       },
       "BFS": {
         "walkQuality": 0.24342348250004123,
@@ -3139,7 +3446,7 @@
           112,
           76
         ],
-        "elapsed": 1
+        "elapsed": 0
       },
       "DFS": {
         "walkQuality": 0.2448917023152938,
@@ -3157,34 +3464,34 @@
         "elapsed": 1
       },
       "BFS+SA": {
-        "walkQuality": 0.2173145660294544,
+        "walkQuality": 0.21737475696648612,
         "minWalkQuality": 0.12166675944998054,
-        "totalProd": 5355.697859999999,
+        "totalProd": 5355.69786,
         "totalUnprod": 16809.799999999996,
-        "maxWalk": 9744.227019999998,
-        "maxTime": 785.9482880115204,
-        "timeSpread": 17.835363494539706,
+        "maxWalk": 9550.070839999997,
+        "maxTime": 799.6054342973719,
+        "timeSpread": 31.492509780391174,
         "addrCounts": [
           145,
-          136,
-          133
+          137,
+          132
         ],
-        "elapsed": 3
+        "elapsed": 2
       },
       "Random": {
-        "walkQuality": 0.22960329205595553,
-        "minWalkQuality": 0.06345721923765041,
-        "totalProd": 5389.003419999999,
-        "totalUnprod": 16789.1,
-        "maxWalk": 8672.02768,
-        "maxTime": 794.9183496939877,
-        "timeSpread": 27.757307332293294,
+        "walkQuality": 0.24026533536444408,
+        "minWalkQuality": 0.08547839585145764,
+        "totalProd": 5363.76292,
+        "totalUnprod": 15958.199999999999,
+        "maxWalk": 8403.85904,
+        "maxTime": 795.3504140165606,
+        "timeSpread": 44.500071522860935,
         "addrCounts": [
-          141,
+          145,
           139,
-          134
+          130
         ],
-        "elapsed": 6
+        "elapsed": 7
       },
       "Oracle": {
         "walkQuality": 0.2810982193485953,
@@ -3224,7 +3531,7 @@
           136,
           0
         ],
-        "elapsed": 3
+        "elapsed": 4
       },
       "ChainRH": {
         "walkQuality": 0.25239269622350535,
@@ -3241,7 +3548,7 @@
           139,
           0
         ],
-        "elapsed": 11
+        "elapsed": 10
       },
       "TwoOpt": {
         "walkQuality": 0.25147803061259966,
@@ -3278,13 +3585,30 @@
         "elapsed": 1
       },
       "Voronoi": {
-        "walkQuality": 0.4156831845260374,
-        "minWalkQuality": 0.16477081973751784,
-        "totalProd": 5415.96168,
-        "totalUnprod": 13791.9,
+        "walkQuality": 0.4058937562178725,
+        "minWalkQuality": 0.23410827674513704,
+        "totalProd": 5370.1644400000005,
+        "totalUnprod": 14673.499999999998,
+        "maxWalk": 5282.992199999999,
+        "maxTime": 678.7453498139926,
+        "timeSpread": 315.34690747629907,
+        "addrCounts": [
+          64,
+          73,
+          82,
+          60,
+          135
+        ],
+        "elapsed": 40
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.4155589325601552,
+        "minWalkQuality": 0.16728797248110394,
+        "totalProd": 5395.64914,
+        "totalUnprod": 13717.299999999997,
         "maxWalk": 4853.6276800000005,
         "maxTime": 678.7453498139926,
-        "timeSpread": 423.2407584303372,
+        "timeSpread": 424.25470538821554,
         "addrCounts": [
           81,
           40,
@@ -3292,7 +3616,7 @@
           80,
           135
         ],
-        "elapsed": 39
+        "elapsed": 41
       },
       "BFS": {
         "walkQuality": 0.16318909568794543,
@@ -3309,7 +3633,7 @@
           80,
           44
         ],
-        "elapsed": 1
+        "elapsed": 0
       },
       "DFS": {
         "walkQuality": 0.35139743212736385,
@@ -3326,41 +3650,41 @@
           75,
           59
         ],
-        "elapsed": 0
+        "elapsed": 1
       },
       "BFS+SA": {
-        "walkQuality": 0.32624291871247085,
-        "minWalkQuality": 0.09452920996186882,
+        "walkQuality": 0.32155744471045666,
+        "minWalkQuality": 0.12703130492603262,
         "totalProd": 5355.69786,
         "totalUnprod": 28134.199999999993,
-        "maxWalk": 10224.0736,
+        "maxWalk": 10091.9,
         "maxTime": 678.6253450138006,
-        "timeSpread": 310.93155406216255,
+        "timeSpread": 380.9631321252851,
         "addrCounts": [
           135,
-          49,
-          79,
-          86,
-          65
+          59,
+          85,
+          91,
+          44
         ],
         "elapsed": 2
       },
       "Random": {
-        "walkQuality": 0.45076959025642044,
-        "minWalkQuality": 0.25487598771400505,
-        "totalProd": 5406.83136,
-        "totalUnprod": 14000.9,
-        "maxWalk": 6958.036400000001,
-        "maxTime": 678.7453498139926,
-        "timeSpread": 175.97740597623908,
+        "walkQuality": 0.22869506710631252,
+        "minWalkQuality": 0.0772454844567013,
+        "totalProd": 5385.961679999999,
+        "totalUnprod": 19841.199999999997,
+        "maxWalk": 7622.9816,
+        "maxTime": 822.8999159966398,
+        "timeSpread": 332.5363950558022,
         "addrCounts": [
-          100,
-          135,
+          89,
           92,
-          87,
+          86,
+          147,
           0
         ],
-        "elapsed": 3
+        "elapsed": 6
       },
       "Oracle": {
         "walkQuality": 0.25147803061259966,
@@ -3442,7 +3766,7 @@
           0,
           0
         ],
-        "elapsed": 33
+        "elapsed": 32
       },
       "Bisect": {
         "walkQuality": 0.3276474694484855,
@@ -3461,26 +3785,45 @@
           24,
           135
         ],
-        "elapsed": 0
+        "elapsed": 1
       },
       "Voronoi": {
-        "walkQuality": 0.32027653139259044,
-        "minWalkQuality": 0.11220938487677545,
-        "totalProd": 5399.73982,
-        "totalUnprod": 19188,
+        "walkQuality": 0.31944246372374635,
+        "minWalkQuality": 0.12118515954065533,
+        "totalProd": 5425.96168,
+        "totalUnprod": 19744.500000000004,
         "maxWalk": 4713.06408,
         "maxTime": 678.7453498139926,
-        "timeSpread": 504.3939291971679,
+        "timeSpread": 467.21708868354733,
         "addrCounts": [
+          49,
           135,
+          55,
+          32,
+          33,
+          53,
+          57
+        ],
+        "elapsed": 83
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.319310272792753,
+        "minWalkQuality": 0.09716781484983568,
+        "totalProd": 5433.06408,
+        "totalUnprod": 19928.199999999997,
+        "maxWalk": 4713.06408,
+        "maxTime": 678.7453498139926,
+        "timeSpread": 520.4416176647067,
+        "addrCounts": [
+          53,
+          45,
+          21,
+          49,
           56,
           55,
-          58,
-          26,
-          33,
-          51
+          135
         ],
-        "elapsed": 85
+        "elapsed": 76
       },
       "BFS": {
         "walkQuality": 0.13049559035056837,
@@ -3521,42 +3864,42 @@
         "elapsed": 0
       },
       "BFS+SA": {
-        "walkQuality": 0.24546964039320027,
-        "minWalkQuality": 0.10191120129818444,
+        "walkQuality": 0.24755801579185815,
+        "minWalkQuality": 0.08594929751465313,
         "totalProd": 5355.69786,
         "totalUnprod": 37418.09999999999,
-        "maxWalk": 8932.52428,
+        "maxWalk": 10217.48572,
         "maxTime": 678.6253450138006,
-        "timeSpread": 425.88632905316217,
+        "timeSpread": 390.4568623544942,
         "addrCounts": [
           135,
-          63,
-          50,
-          47,
-          41,
+          53,
+          44,
+          42,
           43,
-          35
+          51,
+          46
         ],
-        "elapsed": 2
+        "elapsed": 3
       },
       "Random": {
-        "walkQuality": 0.18774045055669936,
-        "minWalkQuality": 0.08401866765316869,
-        "totalProd": 5427.23676,
-        "totalUnprod": 24404.999999999993,
-        "maxWalk": 7028.199999999998,
-        "maxTime": 829.3417736709468,
-        "timeSpread": 463.721494299772,
+        "walkQuality": 0.1812549148390657,
+        "minWalkQuality": 0.10151560873521367,
+        "totalProd": 5361.9578,
+        "totalUnprod": 25291.1,
+        "maxWalk": 7916.219879999999,
+        "maxTime": 894.9984384975398,
+        "timeSpread": 529.7254093363733,
         "addrCounts": [
-          61,
+          160,
           70,
-          149,
-          66,
-          68,
+          61,
+          60,
+          63,
           0,
           0
         ],
-        "elapsed": 3
+        "elapsed": 6
       },
       "Oracle": {
         "walkQuality": 0.23493768916011026,
@@ -3605,7 +3948,7 @@
           0,
           0
         ],
-        "elapsed": 3
+        "elapsed": 4
       },
       "ChainRH": {
         "walkQuality": 0.18712446993404983,
@@ -3627,7 +3970,7 @@
           0,
           0
         ],
-        "elapsed": 10
+        "elapsed": 11
       },
       "TwoOpt": {
         "walkQuality": 0.19350147840326923,
@@ -3649,7 +3992,7 @@
           0,
           0
         ],
-        "elapsed": 33
+        "elapsed": 34
       },
       "Bisect": {
         "walkQuality": 0.2611451822522647,
@@ -3670,29 +4013,51 @@
           19,
           135
         ],
-        "elapsed": 0
+        "elapsed": 1
       },
       "Voronoi": {
-        "walkQuality": 0.24035596823989072,
+        "walkQuality": 0.241618269426493,
         "minWalkQuality": 0.11980845969672783,
-        "totalProd": 5449.23676,
-        "totalUnprod": 27553.3,
+        "totalProd": 5461.236760000001,
+        "totalUnprod": 27348.6,
         "maxWalk": 4949.092200000001,
         "maxTime": 678.7453498139926,
         "timeSpread": 541.1538461538462,
         "addrCounts": [
-          34,
-          32,
+          41,
+          28,
           33,
-          34,
+          27,
           35,
           20,
           41,
           27,
+          27,
+          135
+        ],
+        "elapsed": 150
+      },
+      "Voronoi+BT": {
+        "walkQuality": 0.23829050206182378,
+        "minWalkQuality": 0.0718022176156086,
+        "totalProd": 5457.21366,
+        "totalUnprod": 27815.2,
+        "maxWalk": 4949.092200000001,
+        "maxTime": 678.7453498139926,
+        "timeSpread": 551.7289132365295,
+        "addrCounts": [
+          38,
+          30,
+          18,
+          32,
+          40,
+          20,
+          41,
+          37,
           23,
           135
         ],
-        "elapsed": 149
+        "elapsed": 151
       },
       "BFS": {
         "walkQuality": 0.09243208315482027,
@@ -3714,7 +4079,7 @@
           28,
           39
         ],
-        "elapsed": 1
+        "elapsed": 0
       },
       "DFS": {
         "walkQuality": 0.18465270857461133,
@@ -3736,51 +4101,51 @@
           22,
           32
         ],
-        "elapsed": 0
+        "elapsed": 1
       },
       "BFS+SA": {
-        "walkQuality": 0.17478252366103386,
+        "walkQuality": 0.17570953523274227,
         "minWalkQuality": 0.04161960428758905,
-        "totalProd": 5355.697859999999,
-        "totalUnprod": 55651.299999999996,
-        "maxWalk": 8636.8,
+        "totalProd": 5355.69786,
+        "totalUnprod": 55651.29999999999,
+        "maxWalk": 9563.216,
         "maxTime": 678.6253450138006,
         "timeSpread": 531.4370392415697,
         "addrCounts": [
           135,
-          26,
+          20,
           22,
-          29,
-          26,
-          51,
-          44,
+          22,
+          23,
+          38,
+          47,
           14,
-          28,
-          39
+          48,
+          45
         ],
         "elapsed": 3
       },
       "Random": {
-        "walkQuality": 0.29624557034615384,
-        "minWalkQuality": 0.14011988319073723,
-        "totalProd": 5454.74456,
-        "totalUnprod": 23950.899999999998,
-        "maxWalk": 5855.7,
+        "walkQuality": 0.28876548807359853,
+        "minWalkQuality": 0.11992585412308898,
+        "totalProd": 5380.16444,
+        "totalUnprod": 25115.599999999995,
+        "maxWalk": 5880.299999999999,
         "maxTime": 678.7453498139926,
-        "timeSpread": 408.8600816032641,
+        "timeSpread": 406.82661850474017,
         "addrCounts": [
-          45,
+          43,
+          42,
+          48,
           135,
-          43,
-          44,
-          50,
-          54,
-          43,
+          46,
+          52,
+          48,
           0,
           0,
           0
         ],
-        "elapsed": 3
+        "elapsed": 6
       },
       "Oracle": {
         "walkQuality": 0.19350147840326923,
