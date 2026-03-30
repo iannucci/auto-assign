@@ -258,7 +258,7 @@ The following constraints apply to all algorithms and evaluations:
 
 \textbf{Whole-segment assignment.} Each segment is assigned to exactly one ESW. No segment is split between workers. This is a hard constraint: an ESW visiting half a street while another visits the other half is operationally confusing and creates boundary disputes.
 
-\textbf{Shared starting location (huddle point).} All ESWs begin at a shared staging area --- the neighborhood intersection nearest to the serving fire station. The walk from huddle to each ESW's first segment is included in their total walking distance and time. We assume ESWs are transported to the huddle by vehicle; the walk from fire station to huddle is not counted.
+\textbf{Shared starting location (huddle point).} All ESWs begin at a shared staging area --- the neighborhood intersection nearest to the serving fire station. The walk from huddle to each ESW's first segment is included in their total walking distance and time.
 
 \textbf{Street-constrained walking.} ESWs must follow the road network at all times. They may walk along a segment, turn at an intersection, or cross a street, but may not jump over houses or cut through properties. All inter-segment distances use Dijkstra shortest paths on the road network.
 
@@ -1252,7 +1252,7 @@ We formulate all discovered constraints simultaneously and attempt to solve with
 
 The infeasibility is structural. The median walking quality across all ESWs is only 24\% --- meaning 76\% of walking is transitions. The dominant factor is the \textbf{walk from the fire station huddle to the neighborhood}, which is unavoidable overhead. For neighborhoods far from their fire station (e.g., Southgate: 1.6\,km to Station~1), this single walk consumes most of the walking budget.
 
-\textbf{The fundamental tension:} Walkable contiguity + time balance is achievable (chain+slice produces 70\,min average spread). Walking quality $\geq 50\%$ requires that most walking is productive, which is impossible when the huddle-to-neighborhood distance is large. The resolution depends on operational context: if ESWs are \emph{driven} to the neighborhood, the walk-to-first vanishes and walking quality jumps. If they walk from the station, the quality floor must be relaxed.
+\textbf{The fundamental tension:} Walkable contiguity + time balance is achievable (chain+slice produces 70\,min average spread). Walking quality $\geq 50\%$ requires that most walking is productive, which is difficult when the huddle-to-neighborhood distance is large relative to the intra-neighborhood walking. The quality floor may need to be relaxed on neighborhoods far from their fire station.
 
 %% ==================================================================
 \section{Discussion}
@@ -1369,16 +1369,14 @@ Across all analyses, algorithms that build assignments as walk-ordered sequences
 The analyses converge on a concrete operational procedure:
 
 \begin{enumerate}
-\item \textbf{Transport ESWs to the neighborhood.} The constraint tension analysis (Section~\ref{sec:constraint-results}) shows that the walk from fire station to neighborhood dominates walking quality, making the 50\% quality floor infeasible in 94\% of cases. Driving ESWs to a fan-out point at the neighborhood edge eliminates this overhead and makes all other constraints achievable.
-
-\item \textbf{Run the oracle at the fan-out point.} Chain+slice with 2-opt, starting from the fan-out point, produces walk-ordered, geographically contiguous assignments in under one second. The oracle tries all strategies and selects the best by score.
+\item \textbf{Run the oracle.} Chain+slice with 2-opt produces walk-ordered, geographically contiguous assignments in under one second. The oracle tries all strategies and selects the best by score.
 
 \item \textbf{Check finish-time spread.} Compute $T_k$ for each ESW (Eq.~\ref{eq:finish-time}) with the NPC's estimated $t_{\text{assess}}$. If the spread exceeds the NPC's tolerance (e.g., 30 minutes), manually transfer one or two boundary segments from the slowest ESW to the fastest.
 
 \item \textbf{Brief ESWs using the trail maps.} Show each ESW their walking trail (blue = productive segments, red = transitions). ESWs who can see that their route is logical and efficient --- mostly blue, minimal red --- will work with confidence rather than frustration.
 \end{enumerate}
 
-This procedure addresses every constraint discovered: walkable contiguity (chain+slice), time balance (oracle scoring + manual adjustment), walking quality (transport to fan-out), and ESW morale (trail visualization).
+This procedure addresses the key constraints: walkable contiguity (chain+slice), time balance (oracle scoring + manual adjustment), and ESW morale (trail visualization).
 
 \subsection{Limitations}
 
@@ -1424,11 +1422,11 @@ We presented a practical system for assigning addresses to emergency services wo
 
 \textbf{C7 (Voronoi with balanced seeds).} Balanced seed search transforms Voronoi from a failure (Lloyd's produces unbalanced cells) into a competitive approach. Adding boundary transfers (Voronoi+BT) wins decisively on elongated neighborhoods (59\% on Southgate vs.\ 28\% for chain methods). Seed placement matters far more than the assignment metric.
 
-\textbf{C8 (Constraint tension).} Walkable contiguity + time balance + walking quality $\geq$ 50\% is feasible in only 6\% of cases. The walk from the fire station to the neighborhood dominates walking quality (median 24\%). The resolution is operational: transport ESWs to the neighborhood.
+\textbf{C8 (Constraint tension).} Walkable contiguity + time balance + walking quality $\geq$ 50\% is feasible in only 6\% of cases. The walk from the fire station huddle to the first assigned segment dominates walking quality (median 24\%), particularly for neighborhoods far from their fire station.
 
 \textbf{Cross-study insight.} The productive-distance invariant reveals that algorithms can only reduce waste, not work. This reframes future research: the objective is not ``better routing'' but ``less unproductive walking.'' Promising directions include Voronoi + chain+slice hybrids (Voronoi for geographic partitioning, chain+slice for intra-cell routing), constraint-solver formulations that explicitly balance walk quality and time spread, and field validation with ESW teams.
 
-Future work includes: incorporating ESW transport (drive vs.\ walk to neighborhood) as a decision variable; adaptive $Q_{\min}$ based on huddle-to-neighborhood distance; field validation with ESW teams; and testing on cities with different street geometries.
+Future work includes: adaptive $Q_{\min}$ based on huddle-to-neighborhood distance; field validation with ESW teams; and testing on cities with different street geometries.
 
 \begin{thebibliography}{00}
 
