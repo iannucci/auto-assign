@@ -352,7 +352,7 @@ The total productive walking distance $\sum_k W_k^{\text{prod}}$ is determined b
 \label{eq:invariant}
 \end{equation}
 
-\textbf{Significance.} Algorithms can only reduce unproductive walking, not productive walking. This reframes the optimization: instead of ``minimize total distance,'' the objective is ``minimize waste.'' Every comparison confirms this: the productive column in Table~\ref{tab:master} is constant within each neighborhood; the unproductive column tells the entire story.
+\textbf{Significance.} Algorithms can only reduce unproductive walking, not productive walking. This reframes the optimization: instead of ``minimize total distance,'' the objective is ``minimize waste.'' Every comparison confirms this: the productive column in Table~\ref{tab:master} is nearly constant within each neighborhood; the unproductive column tells the entire story.
 
 %% ==================================================================
 \section{The Neighborhoods}
@@ -560,7 +560,7 @@ Starting from the best NN chain, iteratively improve segment ordering by reversi
 \addplot[idealgreen!70!black, thick, opacity=0.7] table[x=lon,y=lat] {data/alg-twoopt-esw2.dat};
 \end{axis}
 \end{tikzpicture}
-\caption{2-Opt on Fairmeadow, $N=3$ (107/104/101). Local search ``uncrosses'' the NN chain's transitions, producing the most balanced partition (73\% walk quality) with visibly more contiguous regions than raw Chain+Slice.}
+\caption{2-Opt on Fairmeadow, $N=3$ (107/104/101). Local search ``uncrosses'' the NN chain's transitions, producing a well-balanced partition (60\% walk quality) with visibly more contiguous regions than raw Chain+Slice.}
 \end{figure}
 
 \subsection{Recursive Bisection}
@@ -776,7 +776,7 @@ where $\text{frontier}_k$ is ESW $k$'s current exit port and $n_s$ is the segmen
 
 \subsection{DFS (Depth-First Search)}
 
-Build one ESW's assignment at a time. Compute a target finish time $T^* = (\text{total walk time} + A \cdot t_{\text{assess}}) / N$. For ESW 1, greedily add nearest segments until $T_1 \approx T^*$. Repeat for ESW 2 from the huddle with remaining segments. The last ESW takes all remaining segments. Suffers from the ``dregs problem'': the last ESW inherits scattered remnants, producing time spreads of 100--500\,min.
+Build one ESW's assignment at a time. Compute a target finish time $T^* = (\text{total walk time} + A \cdot t_{\text{assess}}) / N$. For ESW 1, greedily add nearest segments until $T_1 \approx T^*$. Repeat for ESW 2 from the huddle with remaining segments. The last ESW takes all remaining segments. Suffers from the ``dregs problem'': the last ESW inherits scattered remnants, producing time spreads up to 391\,min on sparse neighborhoods.
 
 \begin{algorithm}[htbp]
 \caption{DFS}
@@ -917,7 +917,7 @@ Shuffle segments, partition by address count, NN chain within each group. Run 30
 
 \subsection{Master Comparison ($N = 3$)}
 
-Table~\ref{tab:master} shows walk quality for all algorithms on all neighborhoods at $N = 3$. The productive distance row confirms the invariant: within each neighborhood, it is constant ($\pm$5\%) regardless of algorithm.
+Table~\ref{tab:master} shows walk quality for all algorithms on all neighborhoods at $N = 3$. The productive distance row confirms the invariant: within each neighborhood, it is approximately constant regardless of algorithm.
 
 \begin{table}[htbp]
 \caption{Walk quality (\%) by algorithm and neighborhood ($N=3$). Productive distance is invariant (shown once per neighborhood). Best per neighborhood in bold.}
@@ -975,7 +975,7 @@ Oracle   & 52 & \textbf{6} & \textbf{10} & \textbf{95} & \textbf{18} \\
 
 \textbf{Key findings:}
 \begin{itemize}
-\item \textbf{Productive distance is constant} within each neighborhood ($\pm$5\%), confirming the invariant (Eq.~\ref{eq:invariant}).
+\item \textbf{Productive distance is approximately constant} within each neighborhood, confirming the invariant (Eq.~\ref{eq:invariant}). Variation is $\leq$5\% on dense neighborhoods; on sparse layouts like Research Park, port-choice differences widen the tolerance to $\sim$10\%.
 \item \textbf{DFS and 2-opt achieve highest walk quality} on most neighborhoods (DFS: FM 66\%, CC 65\%; 2-opt: PAC 59\%, CC 66\%).
 \item \textbf{Voronoi+BT wins on Southgate} (59\%) by 31 points over chain methods (28\%). The elongated shape aligns naturally with Euclidean partitioning; boundary transfers further improve balance.
 \item \textbf{Research Park defeats all algorithms}: best is 26\% (ChainRH, DFS). At 70 addresses/km$^2$, most walking is unproductive regardless of strategy.
@@ -1067,7 +1067,7 @@ Fig.~\ref{fig:wq-comparison} shows the productive-distance invariant visually: p
 
 \subsection{Time Spread}
 
-Fig.~\ref{fig:spread} shows time spread for key algorithms at $N = 3$. BFS produces catastrophic spreads (255--739\,min) because its round-robin pattern creates wildly unbalanced address counts. Chain methods maintain spreads under 55\,min on most neighborhoods; Voronoi+BT has moderate spreads (32--471\,min) that vary with neighborhood geometry.
+Fig.~\ref{fig:spread} shows time spread for key algorithms at $N = 3$. BFS produces extreme spreads (96--739\,min) because its round-robin pattern creates unbalanced address counts. Chain methods maintain spreads under 55\,min on most neighborhoods; Voronoi+BT has moderate spreads (32--471\,min) that vary with neighborhood geometry.
 
 \begin{figure}[htbp]
 \centering
@@ -1130,7 +1130,7 @@ Figs.~\ref{fig:trails-fm} and \ref{fig:trails-cp} show per-ESW walking trails fo
 \addplot[unprodred, thick, opacity=0.5, dashed] table[x=lon,y=lat] {data/fairmeadow-esw2-transitions.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Fairmeadow (307 addresses, $N=3$, 2-opt winner). Each panel is one ESW's route. Blue = productive walking within road segments. Red dashed = unproductive transitions following the road network. Gray dots = all addresses. Fairmeadow's compact cul-de-sac layout keeps transitions short. ESW~3 has only 6 segments, reflecting a naturally isolated cul-de-sac cluster.}
+\caption{Fairmeadow (307 addresses, $N=3$, 2-opt result). Each panel is one ESW's route. Blue = productive walking within road segments. Red dashed = unproductive transitions following the road network. Gray dots = all addresses. Fairmeadow's compact cul-de-sac layout keeps transitions short. ESW~3 has only 6 segments, reflecting a naturally isolated cul-de-sac cluster.}
 \label{fig:trails-fm}
 \end{figure*}
 
@@ -1161,7 +1161,7 @@ Figs.~\ref{fig:trails-fm} and \ref{fig:trails-cp} show per-ESW walking trails fo
 \addplot[unprodred, thick, opacity=0.4, dashed] table[x=lon,y=lat] {data/crescentpark-esw2-transitions.dat};
 \end{groupplot}
 \end{tikzpicture}
-\caption{Crescent Park (1,476 addresses, $N=3$, 2-opt winner). The 2-opt-improved chain produces geographically contiguous assignments on this rectilinear grid. Red transition paths follow actual streets through intersections --- not straight-line jumps --- reflecting road-network-constrained routing.}
+\caption{Crescent Park (1,476 addresses, $N=3$, 2-opt result). The 2-opt-improved chain produces geographically contiguous assignments on this rectilinear grid. Red transition paths follow actual streets through intersections --- not straight-line jumps --- reflecting road-network-constrained routing.}
 \label{fig:trails-cp}
 \end{figure*}
 
@@ -1387,7 +1387,7 @@ Fig.~\ref{fig:comparison} shows the productive/unproductive breakdown visually.
 
 \subsection{The Productive-Distance Invariant}
 
-Table~\ref{tab:master} confirms that productive distance is invariant ($\pm$5\%) across all algorithms within each neighborhood. This is the paper's deepest insight: \textbf{algorithms cannot reduce work --- they can only reduce waste.} The practical implication: when evaluating a new algorithm, compare its \emph{unproductive} distance to the best known, not its total distance.
+Table~\ref{tab:master} confirms that productive distance is approximately invariant across all algorithms within each neighborhood ($\leq$5\% variation on dense neighborhoods; up to $\sim$10\% on sparse layouts where port-choice effects are amplified). This is the paper's deepest insight: \textbf{algorithms cannot reduce work --- they can only reduce waste.} The practical implication: when evaluating a new algorithm, compare its \emph{unproductive} distance to the best known, not its total distance.
 
 \subsection{Score vs.\ Walk Quality}
 
@@ -1397,7 +1397,7 @@ This tension arises because walk quality and worst-case distance measure differe
 
 \subsection{Walk-Ordered Sequences vs.\ Geographic Partitions}
 
-Across all analyses, algorithms that build assignments as walk-ordered sequences of segments (chain+slice, 2-opt, DFS) consistently outperform those that partition geographic space first (BFS, Voronoi, bisect at small $N$). The reason: walking is inherently sequential --- an ESW visits one address, then the next, along a street. Algorithms that respect this sequential structure produce lower unproductive walking because consecutive segments in the chain are geographically adjacent.
+On compact, cul-de-sac, and grid neighborhoods, algorithms that build assignments as walk-ordered sequences of segments (chain+slice, 2-opt, DFS) outperform those that partition geographic space first (BFS, Voronoi, bisect at small $N$). The reason: walking is inherently sequential --- an ESW visits one address, then the next, along a street. Algorithms that respect this sequential structure produce lower unproductive walking because consecutive segments in the chain are geographically adjacent. The exception is elongated neighborhoods, where geographic partitioning (Voronoi+BT) produces superior walk quality because the Euclidean partition aligns with the dominant axis (Section~\ref{sec:voronoi-results}).
 
 \subsection{Recommended Practice}
 
