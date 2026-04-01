@@ -310,7 +310,7 @@ where $v = 5$\,km/h is walking speed and $|P_k|$ is the address count. Assessmen
 
 \subsection{Data}
 
-Segments are extracted from OpenStreetMap via \texttt{osm2pgsql} (Geofabrik California PBF, 1.3\,GB) filtered to the Palo Alto bounding box ($37.35$--$37.48^\circ$N, $122.05$--$122.20^\circ$W). From 35,912 OSM road ways and 146,957 nodes, we identify 54,854 intersections and build 64,482 segments. Of these, 7,430 have at least one snapped address. Road-network shortest paths are precomputed by Dijkstra within each neighborhood (2--14\,s depending on size). Huddle points use 6 Palo Alto Fire Department stations, assigned to neighborhoods by centroid proximity.
+Segments are extracted from OpenStreetMap via \texttt{osm2pgsql} (Geofabrik California PBF, 1.3\,GB) filtered to the Palo Alto bounding box ($37.35$--$37.48^\circ$N, $122.05$--$122.20^\circ$W). From 35,912 OSM road ways and 146,957 nodes, we identify 54,854 intersections and build 64,482 segments. Of these, 7,430 have at least one snapped address. Road-network shortest paths are precomputed by Dijkstra within each neighborhood (2--31\,s depending on size). Huddle points use 6 Palo Alto Fire Department stations, assigned to neighborhoods by centroid proximity.
 
 
 %% ==================================================================
@@ -920,7 +920,7 @@ Shuffle segments, partition by address count, NN chain within each group. Run 30
 Table~\ref{tab:master} shows walk quality for all algorithms on all neighborhoods at $N = 3$. The productive distance row confirms the invariant: within each neighborhood, it is approximately constant regardless of algorithm.
 
 \begin{table}[htbp]
-\caption{Walk quality (\%) by algorithm and neighborhood ($N=3$). Productive distance is invariant (shown once per neighborhood). Best per neighborhood in bold.}
+\caption{Walk quality (\%) by algorithm and neighborhood ($N=3$). Productive distance is invariant (shown once per neighborhood). Best per neighborhood in bold. Address counts shown are per-neighborhood; algorithm figures may report slightly higher totals because boundary-straddling segments include addresses from adjacent neighborhoods.}
 \label{tab:master}
 \begin{center}
 \begin{tabular}{l ccccc}
@@ -937,7 +937,7 @@ Bisect   & 29 & 56 & 63 & 24 & 28 \\
 Voronoi  & 29 & 53 & 64 & 24 & \textbf{56} \\
 Vor+BT   & 29 & 57 & 61 & 24 & \textbf{59} \\
 BFS      & 35 & 62 & 60 & 20 & 24 \\
-DFS      & 53 & \textbf{66} & \textbf{65} & \textbf{26} & 24 \\
+DFS      & 53 & \textbf{66} & 65 & \textbf{26} & 24 \\
 BFS+SA   & 34 & 64 & 60 & 21 & 22 \\
 Random   & 25 & 43 & 43 & 15 & 24 \\
 \midrule
@@ -957,7 +957,7 @@ Oracle   & 56 & 58 & 62 & \textbf{26} & 28 \\
 \textbf{Algorithm} & 145a & 307a & 489a & 584a & 268a \\
 \midrule
 ChainNN  & 55 & 43 & \textbf{10} & 128 & 24 \\
-ChainRH  & 52 & \textbf{6} & 12 & \textbf{95} & 25 \\
+ChainRH  & 52 & \textbf{6} & 12 & 95 & 25 \\
 2-Opt    & 55 & 23 & 12 & 138 & \textbf{18} \\
 Bisect   & 167 & 39 & 32 & 330 & 20 \\
 Voronoi  & \textbf{35} & 42 & 37 & 368 & 109 \\
@@ -967,7 +967,7 @@ DFS      & 51 & 32 & 173 & 391 & 60 \\
 BFS+SA   & 102 & 55 & 95 & \textbf{3} & 31 \\
 Random   & 54 & 7 & 11 & 105 & 45 \\
 \midrule
-Oracle   & 52 & \textbf{6} & \textbf{10} & \textbf{95} & \textbf{18} \\
+Oracle   & 52 & \textbf{6} & \textbf{10} & 95 & \textbf{18} \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -979,7 +979,7 @@ Oracle   & 52 & \textbf{6} & \textbf{10} & \textbf{95} & \textbf{18} \\
 \item \textbf{DFS and 2-opt achieve highest walk quality} on most neighborhoods (DFS: FM 66\%, CC 65\%; 2-opt: PAC 59\%, CC 66\%).
 \item \textbf{Voronoi+BT wins on Southgate} (59\%) by 31 points over chain methods (28\%). The elongated shape aligns naturally with Euclidean partitioning; boundary transfers further improve balance.
 \item \textbf{Research Park defeats all algorithms}: best is 26\% (ChainRH, DFS). At 70 addresses/km$^2$, most walking is unproductive regardless of strategy.
-\item \textbf{BFS is consistently worst}: 20--62\% walk quality. Round-robin fan-out interleaves territories.
+\item \textbf{BFS is consistently among the worst}: 20--62\% walk quality (only the random baseline is worse). Round-robin fan-out interleaves territories.
 \item \textbf{Oracle improvement over random}: the oracle achieves 26--62\% walk quality vs.\ 15--43\% for random.
 \end{itemize}
 
@@ -1067,7 +1067,7 @@ Fig.~\ref{fig:wq-comparison} shows the productive-distance invariant visually: p
 
 \subsection{Time Spread}
 
-Fig.~\ref{fig:spread} shows time spread for key algorithms at $N = 3$. BFS produces extreme spreads (96--739\,min) because its round-robin pattern creates unbalanced address counts. Chain methods maintain spreads under 55\,min on most neighborhoods; Voronoi+BT has moderate spreads (32--471\,min) that vary with neighborhood geometry.
+Fig.~\ref{fig:spread} shows time spread for key algorithms at $N = 3$. BFS produces extreme spreads (96--739\,min) because its round-robin pattern creates unbalanced address counts. Chain methods maintain spreads at or below 55\,min on most neighborhoods; Voronoi+BT has moderate spreads (32--471\,min) that vary with neighborhood geometry.
 
 \begin{figure}[htbp]
 \centering
@@ -1080,7 +1080,7 @@ Fig.~\ref{fig:spread} shows time spread for key algorithms at $N = 3$. BFS produ
   symbolic x coords={PAC, FM, CC, RP, SG},
   xtick=data,
   x tick label style={font=\small},
-  ymin=0, ymax=400,
+  ymin=0, ymax=800,
   width=\columnwidth,
   height=5.5cm,
   legend style={at={(0.02,0.98)},anchor=north west,font=\tiny, legend columns=2},
@@ -1095,7 +1095,7 @@ Fig.~\ref{fig:spread} shows time spread for key algorithms at $N = 3$. BFS produ
 \legend{2-Opt, Vor+BT, Oracle, BFS}
 \end{axis}
 \end{tikzpicture}
-\caption{Time spread (max -- min ESW finish time) at $N = 3$. Blue = 2-Opt, orange = Vor+BT, green = Oracle, gray = BFS. BFS produces catastrophic spreads due to address-count imbalance. The oracle achieves low spreads on all neighborhoods except Research Park (sparse campus where all methods struggle).}
+\caption{Time spread (max -- min ESW finish time) at $N = 3$. Blue = 2-Opt, orange = Vor+BT, green = Oracle, gray = BFS. BFS produces extreme spreads due to address-count imbalance. The oracle achieves low spreads on all neighborhoods except Research Park (sparse campus where all methods struggle).}
 \label{fig:spread}
 \end{figure}
 
@@ -1233,18 +1233,19 @@ Fig.~\ref{fig:s2-trails-fm} shows the DFS assignment for Fairmeadow under the ti
 We trace simulated annealing on Greater Miranda, a small Palo Alto neighborhood (54 addresses, 14 segments) chosen because its compact size makes the SA trajectory easy to follow ($N = 3$). Starting from BFS's result (ESW times: 106/142/75\,min, max = 142\,min), SA searches for boundary transfers that reduce the maximum. Table~\ref{tab:sa-trace} shows the critical two-move sequence.
 
 \begin{table*}[htbp]
-\caption{SA backtracking trace on Greater Miranda. At iteration~14, SA accepts a \emph{worsening} move (max increases from 124 to 135) because the Boltzmann probability $e^{-\Delta/T}$ is high. This enables iteration~18: moving Moana~Ct from the now-heavy ESW~3 to the now-light ESW~2 drops the maximum to 124\,min. The two-move sequence achieves a 12.5\% improvement that no single greedy transfer could find.}
+\caption{SA backtracking trace on Greater Miranda. After early iterations reduce the maximum from 142 to 124\,min, SA accepts a \emph{worsening} move (max increases from 124 to 135) because the Boltzmann probability $e^{-\Delta/T}$ is high. This enables the next key move: transferring Moana~Ct from the now-heavy ESW~3 to the now-light ESW~2 drops the maximum back to 124\,min. The two-move sequence achieves a 12.5\% improvement over the BFS starting point that no single greedy transfer could find.}
 \label{tab:sa-trace}
 \begin{center}
-\begin{tabular}{cllll}
+\begin{tabular}{llll}
 \toprule
-\textbf{Iter} & \textbf{Move} & \textbf{ESW Times Before} & \textbf{After} & \textbf{$\Delta$} \\
+\textbf{Step} & \textbf{ESW Times Before} & \textbf{After} & \textbf{$\Delta$max} \\
 \midrule
-  & \emph{(start)} & [106, 142, 75] & & max = 142 \\
-14 & Miranda Grn (14a): ESW2$\to$ESW1 & [106, 142, 75] & [124, 64, 135] & +11 (accepted) \\
-18 & Moana Ct (11a): ESW3$\to$ESW2 & [124, 64, 135] & [\textbf{124, 124}, 75] & \textbf{--11} \\
+\emph{BFS start} & & [106, 142, 75] & max = 142 \\
+\emph{After early iterations} & [106, 142, 75] & [124, 68, 124] & --18 \\
+Miranda Grn (14a): ESW2$\to$ESW1 & [124, 68, 124] & [124, 64, 135] & +11 (accepted) \\
+Moana Ct (11a): ESW3$\to$ESW2 & [124, 64, 135] & [\textbf{124, 124}, 75] & \textbf{--11} \\
 \midrule
-  & \emph{(final)} & & [124, 124, 75] & max = \textbf{124} (--12.5\%) \\
+\emph{Final} & & [124, 124, 75] & max = \textbf{124} (--12.5\%) \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -1255,7 +1256,7 @@ Final result: ESW~1 = 124\,min (21 addrs), ESW~2 = 124\,min (21 addrs), ESW~3 = 
 \subsection{Voronoi Analysis}
 \label{sec:voronoi-results}
 
-Voronoi with balanced seeds achieves 29--64\% walk quality at $N = 3$; adding boundary transfers (Voronoi+BT) improves this to 29--61\% on most neighborhoods and 59\% on Southgate. The comparison with naive Lloyd's iteration remains dramatic: seed placement matters far more than the assignment metric.
+Voronoi with balanced seeds achieves 24--64\% walk quality at $N = 3$; adding boundary transfers (Voronoi+BT) improves this to 29--61\% on most neighborhoods and 59\% on Southgate. The comparison with naive Lloyd's iteration remains dramatic: seed placement matters far more than the assignment metric.
 
 Two factors determine whether Voronoi methods succeed:
 
