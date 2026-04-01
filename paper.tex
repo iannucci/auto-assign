@@ -1270,9 +1270,9 @@ We formulate all discovered constraints simultaneously and attempt to solve with
 
 \textbf{Objective}: Minimize finish-time spread subject to constraints 1--3.
 
-\textbf{Result: only 6\% of cases are feasible.} With $Q_{\min} = 50\%$ across 19 neighborhoods at $N = 3, 5$ (36 test cases), SA rejects nearly all transfers because moving a boundary segment creates long unproductive transitions that violate the quality floor.
+\textbf{Result: only 9\% of algorithm-cases are feasible.} Across 5 neighborhoods at $N = 3, 5, 7, 10$ (220 algorithm-cases), only 19 achieve $Q_{\min} \geq 50\%$ for the worst ESW. Only 4 of 20 test configurations (neighborhood $\times$ $N$) have \emph{any} feasible algorithm --- 3 on Community Center (the regular grid) and 1 on Fairmeadow.
 
-The infeasibility is structural. The median walking quality across all ESWs is only 24\% --- meaning 76\% of walking is transitions. The dominant factor is the \textbf{walk from the huddle point to each ESW's first assigned segment}, which is unavoidable overhead.
+The infeasibility is structural. The median walk quality of the worst ESW is only 20\%. The dominant factor is the \textbf{walk from the huddle point to each ESW's first assigned segment}, which is unavoidable unproductive overhead.
 
 \textbf{The fundamental tension:} Walkable contiguity + time balance is achievable (chain+slice produces 70\,min average spread). Walking quality $\geq 50\%$ requires that most walking is productive, which is difficult when the huddle-to-first-segment distance is large relative to the intra-neighborhood walking.
 
@@ -1417,11 +1417,13 @@ This procedure addresses the key constraints: walkable contiguity (chain+slice),
 
 The Capacitated Vehicle Routing Problem (CVRP)~\cite{toth2014} distributes service locations among vehicles from a depot. Our problem has no depot, requires balance, and uses walking-speed traversal.
 
-Postal delivery route optimization~\cite{eiselt1995} is the most closely analogous domain: letter carriers walk along street segments visiting addresses on both sides, with route design that must balance workload and minimize deadheading (our ``unproductive walking''). Our cost matrix formulation is equivalent to the carrier's side-of-street decision at each block. Census enumeration area delineation~\cite{taylor2012} similarly partitions addresses into balanced geographic groups, though without the sequential ordering requirement.
+Postal delivery route optimization~\cite{eiselt1995} is the most closely analogous domain: letter carriers walk along street segments visiting addresses on both sides, with route design that must balance workload and minimize deadheading (our ``unproductive walking''). Our cost matrix formulation is equivalent to the carrier's side-of-street decision at each block, and our sub-segment analysis (Section~\ref{sec:seg-vs-subseg}) formalizes when assigning opposite sides independently could reduce total walking. Census enumeration area delineation~\cite{taylor2012} similarly partitions addresses into balanced geographic groups, though without the sequential ordering requirement.
 
-K-means~\cite{lloyd1982} and balanced variants~\cite{malinen2014} cluster geographically but ignore street connectivity. The nearest-neighbor TSP heuristic~\cite{rosenkrantz1977} produces $O(\log n)$-competitive tours. Our within-segment problem is a special case of the TSP on parallel lines~\cite{frederickson1978}.
+The within-segment traversal problem --- visiting addresses on both sides of a street --- relates to the Chinese Postman Problem~\cite{edmonds1973}, which seeks the shortest closed walk traversing every edge of a graph. Our formulation differs in that only address-bearing portions of each edge require traversal, and the entry/exit ports are degrees of freedom. The within-segment problem is also a special case of the TSP on parallel lines~\cite{frederickson1978}.
 
-Recursive bisection~\cite{berger1987, karypis1998} is standard for balanced spatial decomposition. Our application to road-network segments with port-aware traversal costs appears novel. Simulated annealing~\cite{kirkpatrick1983} provides the post-optimization framework.
+Voronoi diagrams~\cite{aurenhammer1991} provide a natural spatial partitioning where each cell contains the points closest to one seed. Our application uses Euclidean Voronoi for segment assignment with balanced seed search, followed by contiguity-preserving boundary transfers (Section~\ref{sec:seg-vs-subseg}). The key finding --- that seed placement matters far more than the assignment metric --- echoes results in facility location~\cite{lloyd1982}, where Lloyd's iteration minimizes variance but not balance.
+
+K-means~\cite{lloyd1982} and balanced variants~\cite{malinen2014} cluster geographically but ignore street connectivity. The nearest-neighbor TSP heuristic~\cite{rosenkrantz1977} produces $O(\log n)$-competitive tours. Recursive bisection~\cite{berger1987, karypis1998} is standard for balanced spatial decomposition. Our application to road-network segments with port-aware traversal costs appears novel. Simulated annealing~\cite{kirkpatrick1983} provides the post-optimization framework.
 
 %% ==================================================================
 \section{Conclusion and Future Work}
@@ -1444,7 +1446,7 @@ We presented a practical system for assigning addresses to emergency services wo
 
 \textbf{C7 (Voronoi with balanced seeds).} Balanced seed search transforms Voronoi from a failure (Lloyd's produces unbalanced cells) into a competitive approach. Adding boundary transfers (Voronoi+BT) wins decisively on elongated neighborhoods (59\% on Southgate vs.\ 28\% for chain methods). Seed placement matters far more than the assignment metric.
 
-\textbf{C8 (Constraint tension).} Walkable contiguity + time balance + walking quality $\geq$ 50\% is feasible in only 6\% of cases. The walk from the huddle to the first assigned segment dominates walking quality (median 24\%).
+\textbf{C8 (Constraint tension).} Walkable contiguity + time balance + walking quality $\geq$ 50\% is feasible in only 9\% of algorithm-cases. The walk from the huddle to the first assigned segment dominates walking quality (median worst-ESW quality 20\%).
 
 \textbf{Cross-study insight.} The productive-distance invariant reveals that algorithms can only reduce waste, not work. This reframes future research: the objective is not ``better routing'' but ``less unproductive walking.'' Promising directions include Voronoi + chain+slice hybrids (Voronoi for geographic partitioning, chain+slice for intra-cell routing), constraint-solver formulations that explicitly balance walk quality and time spread, and field validation with ESW teams.
 
@@ -1493,6 +1495,12 @@ G.~Karypis and V.~Kumar, ``Multilevel algorithms for multi-constraint graph part
 
 \bibitem{kirkpatrick1983}
 S.~Kirkpatrick, C.~D.~Gelatt, and M.~P.~Vecchi, ``Optimization by simulated annealing,'' \emph{Science}, vol.~220, no.~4598, pp.~671--680, 1983.
+
+\bibitem{edmonds1973}
+J.~Edmonds and E.~L.~Johnson, ``Matching, Euler tours and the Chinese postman,'' \emph{Math. Programming}, vol.~5, no.~1, pp.~88--124, 1973.
+
+\bibitem{aurenhammer1991}
+F.~Aurenhammer, ``Voronoi diagrams --- a survey of a fundamental geometric data structure,'' \emph{ACM Comput. Surv.}, vol.~23, no.~3, pp.~345--405, 1991.
 
 \end{thebibliography}
 
